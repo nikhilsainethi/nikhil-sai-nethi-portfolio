@@ -1,20 +1,22 @@
 import { CertificationsEducation } from "@/components/portfolio/CertificationsEducation";
 import { Contact } from "@/components/portfolio/Contact";
-import { EngineeringLogs } from "@/components/portfolio/EngineeringLogs";
+import { Projects } from "@/components/portfolio/Projects";
 import { ExperienceTimeline } from "@/components/portfolio/ExperienceTimeline";
 import { Header } from "@/components/portfolio/Header";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { Skills } from "@/components/portfolio/Skills";
+import { HeroAnimation } from "@/components/portfolio/HeroAnimation";
 import { resumePath } from "@/lib/site";
 
 export default function Home() {
   return (
-    <div className="grain-overlay min-h-screen">
+    <div className="grain-overlay min-h-screen relative overflow-hidden">
+      <HeroAnimation />
       <Header />
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 pb-16 pt-10 sm:px-8 lg:px-12">
         <section
           id="about"
-          className="grid gap-10 border-b border-border pb-16 pt-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:gap-16 lg:pb-24"
+          className="grid gap-10 border-b border-border pb-16 pt-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:gap-16 lg:pb-24 relative"
         >
           <Reveal className="space-y-8">
             <div className="space-y-4">
@@ -80,7 +82,7 @@ export default function Home() {
 
         <ExperienceTimeline />
         <Skills />
-        <EngineeringLogs />
+        <Projects />
         <CertificationsEducation />
         <Contact />
       </main>

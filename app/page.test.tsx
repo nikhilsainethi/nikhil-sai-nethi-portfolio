@@ -18,9 +18,9 @@ describe("Home page", () => {
       "href",
       "#tech-stack",
     );
-    expect(screen.getByRole("link", { name: "Updates" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Projects" })).toHaveAttribute(
       "href",
-      "#updates",
+      "#projects",
     );
     expect(screen.getByRole("link", { name: "Contact" })).toHaveAttribute(
       "href",
@@ -33,7 +33,7 @@ describe("Home page", () => {
     expect(screen.getByRole("heading", { name: "Experience" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Tech Stack" })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Recent Engineering Logs" }),
+      screen.getByRole("heading", { name: "Internal RAG Search Engine" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Contact" })).toBeInTheDocument();
 
@@ -71,18 +71,14 @@ describe("Home page", () => {
     expect(moodysContent.getByText("LangChain")).toBeInTheDocument();
   });
 
-  it("shows recent engineering logs in descending date order", () => {
+  it("shows the projects section with the RAG search engine", () => {
     render(<Home />);
 
-    const updateTitles = screen
-      .getAllByRole("heading", { level: 3 })
-      .slice(3)
-      .map((heading) => heading.textContent);
+    const projectHeading = screen.getByRole("heading", {
+      level: 2,
+      name: "Internal RAG Search Engine",
+    });
 
-    expect(updateTitles).toEqual([
-      "Designed and shipped internal RAG search engine",
-      "Earned CKA Certification",
-      "AWS Developer Associate Certification",
-    ]);
+    expect(projectHeading).toBeInTheDocument();
   });
 });

@@ -41,12 +41,14 @@ const education = [
   {
     degree: "MS in Computer Science",
     school: "California State University East Bay",
+    domain: "csueastbay.edu",
     location: "Hayward, California, USA",
     period: "Jan 2022 - Dec 2023",
   },
   {
     degree: "B.Tech",
     school: "Vellore Institute of Technology",
+    domain: "vit.ac.in",
     location: "Vellore, India",
     period: "2016 - 2021",
   },
@@ -132,14 +134,23 @@ export function CertificationsEducation() {
                 className="rounded-[1.25rem] border border-border bg-surface-strong p-5"
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="text-base font-semibold text-foreground">
-                      {item.degree}
-                    </p>
-                    <p className="mt-1 text-sm text-muted">{item.school}</p>
-                    <p className="mt-2 text-sm text-muted">{item.location}</p>
+                  <div className="flex items-start gap-3">
+                    {item.domain && (
+                      <img
+                        src={`https://logo.clearbit.com/${item.domain}`}
+                        alt={`${item.school} logo`}
+                        className="h-10 w-10 rounded bg-white object-contain p-1 border border-border shadow-sm shrink-0"
+                      />
+                    )}
+                    <div>
+                      <p className="text-base font-semibold text-foreground">
+                        {item.degree}
+                      </p>
+                      <p className="mt-1 text-sm text-muted">{item.school}</p>
+                      <p className="mt-2 text-sm text-muted">{item.location}</p>
+                    </div>
                   </div>
-                  <p className="font-mono text-xs text-muted">{item.period}</p>
+                  <p className="font-mono text-xs text-muted shrink-0">{item.period}</p>
                 </div>
               </article>
             ))}
