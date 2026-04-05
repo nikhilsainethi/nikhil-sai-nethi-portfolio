@@ -48,4 +48,19 @@ describe("ExperienceTimeline", () => {
       screen.getByText(/Documented and tracked 100\+ defects in Jira/i),
     ).toBeInTheDocument();
   });
+
+  it("uses local identity marks instead of remote company logos", () => {
+    render(<ExperienceTimeline />);
+
+    expect(
+      screen.getByLabelText("Moody's Corporation mark"),
+    ).toHaveTextContent("MO");
+    expect(screen.getByLabelText("Verisk Analytics mark")).toHaveTextContent(
+      "VE",
+    );
+    expect(
+      screen.getByLabelText("Nokia Solutions & Networks mark"),
+    ).toHaveTextContent("NO");
+    expect(screen.queryByRole("img", { name: /logo/i })).not.toBeInTheDocument();
+  });
 });

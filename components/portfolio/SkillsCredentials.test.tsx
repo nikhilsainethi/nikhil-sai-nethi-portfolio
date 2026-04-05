@@ -36,6 +36,13 @@ describe("CertificationsEducation", () => {
     expect(screen.getByText("Vellore Institute of Technology")).toBeInTheDocument();
     expect(screen.getByText("Vellore, India")).toBeInTheDocument();
     expect(screen.getByText("2016 - 2021")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("California State University East Bay mark"),
+    ).toHaveTextContent("CS");
+    expect(
+      screen.getByLabelText("Vellore Institute of Technology mark"),
+    ).toHaveTextContent("VIT");
+    expect(screen.queryByRole("img", { name: /logo/i })).not.toBeInTheDocument();
   });
 
   it("links each certification card directly to the credential badge", () => {

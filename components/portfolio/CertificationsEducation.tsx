@@ -1,3 +1,4 @@
+import { IdentityMark } from "@/components/portfolio/IdentityMark";
 import { SectionHeading } from "@/components/portfolio/SectionHeading";
 import { FaAws, FaGraduationCap } from "react-icons/fa6";
 import { SiCisco, SiKubernetes } from "react-icons/si";
@@ -41,14 +42,14 @@ const education = [
   {
     degree: "MS in Computer Science",
     school: "California State University East Bay",
-    domain: "csueastbay.edu",
+    mark: "CS",
     location: "Hayward, California, USA",
     period: "Jan 2022 - Dec 2023",
   },
   {
     degree: "B.Tech",
     school: "Vellore Institute of Technology",
-    domain: "vit.ac.in",
+    mark: "VIT",
     location: "Vellore, India",
     period: "2016 - 2021",
   },
@@ -135,13 +136,11 @@ export function CertificationsEducation() {
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex items-start gap-3">
-                    {item.domain && (
-                      <img
-                        src={`https://logo.clearbit.com/${item.domain}`}
-                        alt={`${item.school} logo`}
-                        className="h-10 w-10 rounded bg-white object-contain p-1 border border-border shadow-sm shrink-0"
-                      />
-                    )}
+                    <IdentityMark
+                      label={item.school}
+                      mark={item.mark}
+                      className="h-10 w-10 rounded-[0.9rem] text-xs tracking-[0.15em]"
+                    />
                     <div>
                       <p className="text-base font-semibold text-foreground">
                         {item.degree}

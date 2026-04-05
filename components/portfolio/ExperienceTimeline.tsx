@@ -1,10 +1,11 @@
+import { IdentityMark } from "@/components/portfolio/IdentityMark";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { SectionHeading } from "@/components/portfolio/SectionHeading";
 
 const experiences = [
   {
     company: "Moody's Corporation",
-    domain: "moodys.com",
+    mark: "MO",
     role: "Software Engineer",
     period: "Aug 2024 - Present",
     location: "Charlotte, NC",
@@ -29,7 +30,7 @@ const experiences = [
   },
   {
     company: "Verisk Analytics",
-    domain: "verisk.com",
+    mark: "VE",
     role: "Software Development Co-op",
     period: "Sep 2023 - Dec 2023",
     location: "Boston, MA",
@@ -41,7 +42,7 @@ const experiences = [
   },
   {
     company: "Nokia Solutions & Networks",
-    domain: "nokia.com",
+    mark: "NO",
     role: "Software Engineer",
     period: "Sep 2020 - Dec 2021",
     location: "Bangalore, India",
@@ -73,26 +74,15 @@ export function ExperienceTimeline() {
               <article className="card-hover rounded-[1.5rem] border border-border bg-surface p-6 sm:p-7">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex items-start gap-4">
-                    {experience.domain && (
-                      <img
-                        src={`https://logo.clearbit.com/${experience.domain}`}
-                        alt={`${experience.company} logo`}
-                        className="h-12 w-12 rounded bg-white object-contain p-1 border border-border shadow-sm hidden sm:block"
-                      />
-                    )}
+                    <IdentityMark
+                      label={experience.company}
+                      mark={experience.mark}
+                      className="h-12 w-12 rounded-[1rem]"
+                    />
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        {experience.domain && (
-                          <img
-                            src={`https://logo.clearbit.com/${experience.domain}`}
-                            alt={`${experience.company} logo`}
-                            className="h-8 w-8 rounded bg-white object-contain p-0.5 border border-border shadow-sm block sm:hidden"
-                          />
-                        )}
-                        <p className="mono-label text-[11px] text-muted">
-                          {experience.period}
-                        </p>
-                      </div>
+                      <p className="mono-label text-[11px] text-muted">
+                        {experience.period}
+                      </p>
                       <h3 className="text-2xl font-semibold tracking-[-0.03em] text-foreground">
                         {experience.company}
                       </h3>
