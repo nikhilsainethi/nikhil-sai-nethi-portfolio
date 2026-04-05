@@ -8,5 +8,7 @@ describe("site metadata", () => {
     expect(siteUrl).toBe(
       "https://nikhilsainethi.github.io/nikhil-sai-nethi-portfolio/",
     );
+    expect(basePath.startsWith("/")).toBe(true);
+    expect(siteUrl.endsWith("/")).toBe(true);
   });
 });
