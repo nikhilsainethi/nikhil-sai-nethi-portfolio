@@ -8,6 +8,7 @@ const certifications: Array<{
   title: string;
   subtitle: string;
   issuer: string;
+  link: string;
   icon: IconType;
 }> = [
   {
@@ -15,6 +16,7 @@ const certifications: Array<{
     title: "Certified Kubernetes Administrator",
     subtitle: "CKA · Jun 2024",
     issuer: "Linux Foundation",
+    link: "https://www.credly.com/badges/55e7e691-b5df-4be7-87f4-da042a70b5b2/linked_in_profile",
     icon: SiKubernetes,
   },
   {
@@ -22,6 +24,7 @@ const certifications: Array<{
     title: "AWS Certified Developer - Associate",
     subtitle: "AWS · Mar 2024",
     issuer: "Amazon Web Services",
+    link: "https://www.credly.com/badges/2ef43aed-5ff7-46da-acb9-bab22d26b784/linked_in_profile",
     icon: FaAws,
   },
   {
@@ -29,6 +32,7 @@ const certifications: Array<{
     title: "Cisco Certified Network Associate",
     subtitle: "CCNA · Dec 2025",
     issuer: "Cisco",
+    link: "https://www.credly.com/badges/5d44ead0-d834-459c-9431-4c8546c665c8/linked_in_profile",
     icon: SiCisco,
   },
 ];
@@ -76,9 +80,12 @@ export function CertificationsEducation() {
               const Icon = certification.icon;
 
               return (
-                <article
+                <a
                   key={certification.title}
-                  className="card-hover rounded-[1.25rem] border border-border bg-surface-strong p-5"
+                  className="card-hover block rounded-[1.25rem] border border-border bg-surface-strong p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  href={certification.link}
+                  rel="noreferrer"
+                  target="_blank"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex h-11 w-11 items-center justify-center rounded-sm border border-border bg-white text-accent">
@@ -95,8 +102,13 @@ export function CertificationsEducation() {
                   <p className="mt-2 font-mono text-xs text-muted">
                     {certification.subtitle}
                   </p>
-                  <p className="mt-3 text-xs text-muted">{certification.issuer}</p>
-                </article>
+                  <div className="mt-3 flex items-center justify-between gap-3">
+                    <p className="text-xs text-muted">{certification.issuer}</p>
+                    <span className="link-underline text-xs font-medium text-accent">
+                      View badge
+                    </span>
+                  </div>
+                </a>
               );
             })}
           </div>

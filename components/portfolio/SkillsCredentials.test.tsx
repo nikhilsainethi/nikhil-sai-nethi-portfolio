@@ -37,4 +37,29 @@ describe("CertificationsEducation", () => {
     expect(screen.getByText("Vellore, India")).toBeInTheDocument();
     expect(screen.getByText("2016 - 2021")).toBeInTheDocument();
   });
+
+  it("links each certification card directly to the credential badge", () => {
+    render(<CertificationsEducation />);
+
+    expect(
+      screen.getByRole("link", { name: /Certified Kubernetes Administrator/i }),
+    ).toHaveAttribute(
+      "href",
+      "https://www.credly.com/badges/55e7e691-b5df-4be7-87f4-da042a70b5b2/linked_in_profile",
+    );
+    expect(
+      screen.getByRole("link", {
+        name: /AWS Certified Developer - Associate/i,
+      }),
+    ).toHaveAttribute(
+      "href",
+      "https://www.credly.com/badges/2ef43aed-5ff7-46da-acb9-bab22d26b784/linked_in_profile",
+    );
+    expect(
+      screen.getByRole("link", { name: /Cisco Certified Network Associate/i }),
+    ).toHaveAttribute(
+      "href",
+      "https://www.credly.com/badges/5d44ead0-d834-459c-9431-4c8546c665c8/linked_in_profile",
+    );
+  });
 });
