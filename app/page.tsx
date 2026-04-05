@@ -5,6 +5,7 @@ import { ExperienceTimeline } from "@/components/portfolio/ExperienceTimeline";
 import { Header } from "@/components/portfolio/Header";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { Skills } from "@/components/portfolio/Skills";
+import { resumePath } from "@/lib/site";
 
 export default function Home() {
   return (
@@ -35,7 +36,7 @@ export default function Home() {
               </a>
               <a
                 className="inline-flex items-center justify-center rounded-sm border border-border bg-surface px-5 py-3 text-sm font-medium text-foreground hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                href="/nikhil-sai-nethi-resume.pdf"
+                href={resumePath}
               >
                 Download Resume
               </a>

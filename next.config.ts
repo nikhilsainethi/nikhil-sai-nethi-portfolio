@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   },
   trailingSlash: true,
   basePath: isProduction ? basePath : undefined,
+  turbopack: {
+    root: process.cwd(),
+  },
 };
 
 export default nextConfig;

@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
+import { resumePath } from "@/lib/site";
 import Home from "./page";
 
 describe("Home page", () => {
@@ -38,7 +39,7 @@ describe("Home page", () => {
 
     expect(screen.getByRole("link", { name: "Download Resume" })).toHaveAttribute(
       "href",
-      "/nikhil-sai-nethi-resume.pdf",
+      resumePath,
     );
   });
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { basePath, repoName, siteUrl } from "./site";
+import { basePath, repoName, resumePath, siteUrl, withBasePath } from "./site";
 
 describe("site metadata", () => {
   it("defines the GitHub Pages repository path and absolute site URL", () => {
@@ -10,5 +10,9 @@ describe("site metadata", () => {
     );
     expect(basePath.startsWith("/")).toBe(true);
     expect(siteUrl.endsWith("/")).toBe(true);
+    expect(withBasePath("/nikhil-sai-nethi-resume.pdf")).toBe(resumePath);
+    expect(resumePath).toBe(
+      "/nikhil-sai-nethi-portfolio/nikhil-sai-nethi-resume.pdf",
+    );
   });
 });
