@@ -12,7 +12,6 @@ const foreground = "#15181d";
 const muted = "#596272";
 const accent = "#c77434";
 const border = "rgba(21, 24, 29, 0.12)";
-const surface = "#ffffff";
 const softSurface = "#eef1f5";
 
 export function createSocialImage(kicker: string) {
