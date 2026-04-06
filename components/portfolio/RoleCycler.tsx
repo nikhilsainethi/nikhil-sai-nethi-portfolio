@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 const roles = [
   "Software Engineer",
@@ -12,6 +13,16 @@ const roles = [
 ];
 
 export function RoleCycler() {
+  const shouldSimplifyMotion = useShouldSimplifyMotion();
+
+  if (shouldSimplifyMotion) {
+    return <span className="accent-gradient">{roles[0]}</span>;
+  }
+
+  return <AnimatedRoleCycler />;
+}
+
+function AnimatedRoleCycler() {
   const [idx, setIdx] = useState(0);
 
   useEffect(() => {

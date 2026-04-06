@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type SplitTextProps = {
   text: string;
@@ -22,9 +23,10 @@ export function SplitText({
   stagger = 0.06,
 }: SplitTextProps) {
   const reduceMotion = useReducedMotion();
+  const shouldSimplifyMotion = useShouldSimplifyMotion();
   const words = text.split(" ");
 
-  if (reduceMotion) {
+  if (reduceMotion || shouldSimplifyMotion) {
     return <span className={className}>{text}</span>;
   }
 

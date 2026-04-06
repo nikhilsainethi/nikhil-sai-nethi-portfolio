@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type RevealProps = {
   children: ReactNode;
@@ -11,8 +12,9 @@ type RevealProps = {
 
 export function Reveal({ children, className, delay = 0 }: RevealProps) {
   const reduceMotion = useReducedMotion();
+  const shouldSimplifyMotion = useShouldSimplifyMotion();
 
-  if (reduceMotion) {
+  if (reduceMotion || shouldSimplifyMotion) {
     return <div className={className}>{children}</div>;
   }
 

@@ -2,12 +2,23 @@
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import type { ReactNode } from "react";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type MagneticButtonProps = {
   children: ReactNode;
 };
 
 export function MagneticButton({ children }: MagneticButtonProps) {
+  const shouldSimplifyMotion = useShouldSimplifyMotion();
+
+  if (shouldSimplifyMotion) {
+    return <div className="inline-flex">{children}</div>;
+  }
+
+  return <AnimatedMagneticButton>{children}</AnimatedMagneticButton>;
+}
+
+function AnimatedMagneticButton({ children }: MagneticButtonProps) {
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
   const x = useSpring(rawX, { stiffness: 280, damping: 18 });

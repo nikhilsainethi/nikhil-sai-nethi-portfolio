@@ -52,9 +52,7 @@ export function Header() {
           </div>
 
           <div
-            className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-200 ease-out lg:contents ${
-              menuOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 lg:opacity-100"
-            }`}
+            className={`${menuOpen ? "block" : "hidden"} lg:contents`}
             data-open={menuOpen ? "true" : "false"}
             data-testid="mobile-nav-panel"
             id="site-nav-panel"

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type MarqueeStripProps = {
   items: string[];
@@ -12,6 +13,20 @@ type MarqueeStripProps = {
 const SEPARATOR = "·";
 
 export function MarqueeStrip({ items, speed = 55, className }: MarqueeStripProps) {
+  const shouldSimplifyMotion = useShouldSimplifyMotion();
+
+  if (shouldSimplifyMotion) {
+    return <StaticMarqueeStrip items={items} className={className} />;
+  }
+
+  return <AnimatedMarqueeStrip items={items} speed={speed} className={className} />;
+}
+
+function AnimatedMarqueeStrip({
+  items,
+  speed = 55,
+  className,
+}: MarqueeStripProps) {
   const baseX = useMotionValue(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
@@ -33,6 +48,8 @@ export function MarqueeStrip({ items, speed = 55, className }: MarqueeStripProps
       ref={containerRef}
       className={`overflow-hidden ${className ?? ""}`}
       aria-hidden
+      data-motion="animated"
+      data-testid="marquee-strip"
     >
       <motion.div
         ref={innerRef}
@@ -48,6 +65,29 @@ export function MarqueeStrip({ items, speed = 55, className }: MarqueeStripProps
           </span>
         ))}
       </motion.div>
+    </div>
+  );
+}
+
+function StaticMarqueeStrip({
+  items,
+  className,
+}: Pick<MarqueeStripProps, "items" | "className">) {
+  return (
+    <div
+      className={`overflow-hidden ${className ?? ""}`}
+      data-motion="static"
+      data-testid="marquee-strip"
+    >
+      <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
+        {items.map((item) => (
+          <span key={item} className="flex items-center">
+            <span className="px-3 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/60">
+              {item}
+            </span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { ReactNode } from "react";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type TiltCardProps = {
   children: ReactNode;
@@ -9,6 +10,16 @@ type TiltCardProps = {
 };
 
 export function TiltCard({ children, className }: TiltCardProps) {
+  const shouldSimplifyMotion = useShouldSimplifyMotion();
+
+  if (shouldSimplifyMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return <AnimatedTiltCard className={className}>{children}</AnimatedTiltCard>;
+}
+
+function AnimatedTiltCard({ children, className }: TiltCardProps) {
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
 

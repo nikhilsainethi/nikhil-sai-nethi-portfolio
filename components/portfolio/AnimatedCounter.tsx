@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type AnimatedCounterProps = {
   value: number;
@@ -14,6 +15,27 @@ function easeOutCubic(t: number): number {
 }
 
 export function AnimatedCounter({ value, suffix = "", duration = 1600 }: AnimatedCounterProps) {
+  const shouldSimplifyMotion = useShouldSimplifyMotion();
+
+  if (shouldSimplifyMotion) {
+    return (
+      <span>
+        {value}
+        {suffix}
+      </span>
+    );
+  }
+
+  return (
+    <AnimatedCounterValue value={value} suffix={suffix} duration={duration} />
+  );
+}
+
+function AnimatedCounterValue({
+  value,
+  suffix = "",
+  duration = 1600,
+}: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
