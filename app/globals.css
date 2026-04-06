@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
   --background: #cdd9f0;
-  --foreground: #07101f;
-  --muted: #3b5272;
+  --foreground: #040c1c;
+  --muted: #283d58;
   --surface: rgba(255, 255, 255, 0.72);
   --surface-strong: rgba(255, 255, 255, 0.92);
   --surface-soft: rgba(228, 238, 255, 0.96);
@@ -16,31 +17,6 @@
   --shadow-card: 0 24px 58px rgba(10, 35, 90, 0.18);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0d1421;
-    --foreground: #dde8ff;
-    --muted: #7a98c4;
-    --surface: rgba(255, 255, 255, 0.05);
-    --surface-strong: rgba(255, 255, 255, 0.08);
-    --surface-soft: rgba(18, 28, 52, 0.96);
-    --border: rgba(120, 155, 210, 0.14);
-    --accent: #8b84ff;
-    --accent-strong: #6c63ff;
-    --accent-soft: rgba(139, 132, 255, 0.14);
-    --warm-accent: #ff9a50;
-    --warm-accent-strong: #ff8a3d;
-    --shadow-card: 0 24px 58px rgba(0, 0, 0, 0.45);
-  }
-
-  body {
-    background-image:
-      radial-gradient(circle at 8% 15%, rgba(40, 55, 110, 0.55), transparent 18rem),
-      radial-gradient(circle at 85% 8%, rgba(50, 65, 130, 0.45), transparent 24rem),
-      radial-gradient(circle at 18% 72%, rgba(70, 50, 20, 0.25), transparent 18rem),
-      linear-gradient(180deg, #0d1421 0%, #0b1220 48%, #0d1421 100%);
-  }
-}
 
 @theme inline {
   --color-background: var(--background);
