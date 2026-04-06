@@ -48,6 +48,20 @@ body {
     linear-gradient(180deg, #c8d8f4 0%, #c2d0f0 48%, #c8d8f4 100%);
 }
 
+@media (max-width: 639px) {
+  body {
+    background-image:
+      radial-gradient(circle at 8% 14%, rgba(186, 210, 255, 0.74), transparent 12rem),
+      radial-gradient(circle at 84% 7%, rgba(164, 182, 255, 0.5), transparent 13rem),
+      radial-gradient(circle at 16% 76%, rgba(255, 215, 120, 0.28), transparent 12rem),
+      linear-gradient(180deg, #d4def1 0%, #ccd8ef 48%, #d4def1 100%);
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(16px);
+  }
+}
+
 * {
   border-color: var(--border);
 }

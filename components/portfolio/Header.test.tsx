@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { AnchorHTMLAttributes } from "react";
 import { vi } from "vitest";
 import { resumePath } from "@/lib/site";
@@ -78,6 +78,30 @@ describe("Header", () => {
     render(<Header />);
 
     expect(screen.getByRole("link", { name: "Experience" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+  });
+
+  it("supports a compact mobile menu toggle without duplicating nav state logic", () => {
+    usePathnameMock.mockReturnValue("/contact");
+
+    render(<Header />);
+
+    const toggle = screen.getByRole("button", { name: /open navigation menu/i });
+    const menuPanel = screen.getByTestId("mobile-nav-panel");
+
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(menuPanel).toHaveAttribute("data-open", "false");
+
+    fireEvent.click(toggle);
+
+    expect(screen.getByRole("button", { name: /close navigation menu/i })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+    expect(menuPanel).toHaveAttribute("data-open", "true");
+    expect(screen.getByRole("link", { name: "Contact" })).toHaveAttribute(
       "aria-current",
       "page",
     );

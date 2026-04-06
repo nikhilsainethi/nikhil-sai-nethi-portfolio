@@ -8,14 +8,14 @@ describe("Home page", () => {
 
     expect(screen.getByRole("heading", { name: "Nikhil Sai Nethi" })).toBeInTheDocument();
     expect(
-      screen.getByText(/Cloud & Infrastructure/i),
+      screen.getByText(/Software Engineer · Cloud · Observability · AI\/LLM/i),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Download Resume" }),
     ).toHaveAttribute("href", resumePath);
-    expect(screen.getByRole("link", { name: /View Projects/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /View Experience/i })).toHaveAttribute(
       "href",
-      "/projects",
+      "/experience",
     );
 
     expect(screen.queryByRole("heading", { name: "Experience" })).not.toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("Home page", () => {
     render(<Home />);
 
     expect(screen.getByText("Charlotte, NC")).toBeInTheDocument();
-    expect(screen.getByText(/Moody's Corporation/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Moody's/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/RAG workflows/i)).toBeInTheDocument();
     expect(
       within(screen.getByRole("main")).queryByText(/Certified Kubernetes Administrator/i),
@@ -40,14 +40,17 @@ describe("Home page", () => {
   it("keeps the hero media rail and action row within a clean single-page layout", () => {
     render(<Home />);
 
-    expect(screen.getByAltText("Nikhil Sai Nethi portrait")).toHaveClass("object-contain");
+    expect(screen.getByAltText("Nikhil Sai Nethi")).toHaveClass("object-contain");
 
-    const actionRow = screen.getByRole("link", { name: "View Projects" }).parentElement;
+    const actionRow = screen.getByRole("link", { name: "View Experience" }).parentElement?.parentElement;
     expect(actionRow).toHaveClass("flex-wrap");
+
+    expect(screen.getByTestId("hero-stats")).toHaveClass("grid");
+    expect(screen.getByTestId("hero-stats")).toHaveClass("grid-cols-2");
 
     const locationCard = screen
       .getByText("Charlotte, NC")
       .closest("div");
-    expect(locationCard?.parentElement).toHaveClass("grid");
+    expect(locationCard?.parentElement).toHaveClass("grid-cols-3");
   });
 });

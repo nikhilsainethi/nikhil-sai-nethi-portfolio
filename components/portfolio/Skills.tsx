@@ -110,7 +110,7 @@ const groups: Array<{
 
 export function Skills() {
   return (
-    <section id="tech-stack" className="py-8 sm:py-10">
+    <section id="tech-stack" className="py-4 sm:py-10">
       <SectionHeading
         eyebrow="Tech Stack"
         title="Tech Stack"
@@ -118,18 +118,18 @@ export function Skills() {
         index="01"
       />
 
-      <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid items-stretch gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
         {groups.map((group) => {
           const Icon = group.icon;
 
           return (
             <div
               key={group.title}
-              className="card-hover glass-panel flex min-h-[18rem] flex-col rounded-[2rem] border border-white/75 p-6 shadow-[0_22px_54px_rgba(82,101,142,0.11)]"
+              className="card-hover glass-panel flex min-h-0 flex-col rounded-[1.75rem] border border-white/75 p-5 shadow-[0_18px_42px_rgba(82,101,142,0.10)] sm:min-h-[18rem] sm:rounded-[2rem] sm:p-6 sm:shadow-[0_22px_54px_rgba(82,101,142,0.11)]"
             >
               <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/85 bg-white/80 text-accent shadow-[0_10px_24px_rgba(88,107,144,0.12)]">
-                  <Icon size={18} />
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/85 bg-white/80 text-accent shadow-[0_10px_24px_rgba(88,107,144,0.12)] sm:h-12 sm:w-12">
+                  <Icon size={17} />
                 </div>
                 <div className="space-y-1">
                   <p className="mono-label text-[11px] text-muted">
@@ -141,13 +141,13 @@ export function Skills() {
                 </div>
               </div>
 
-              <div className="mt-5 flex flex-wrap content-start gap-2.5">
+              <div className="mt-4 flex flex-wrap content-start gap-2.5 sm:mt-5">
                 {group.items.map((item) => {
                   const ItemIcon = item.icon;
                   return (
                     <span
                       key={item.name}
-                      className="flex items-center gap-2 rounded-full border border-white/80 bg-white/72 px-3 py-2 text-sm text-muted shadow-[0_10px_22px_rgba(89,108,144,0.08)] transition-colors hover:border-accent/30 hover:text-accent-strong"
+                      className="flex items-center gap-2 rounded-full border border-white/80 bg-white/72 px-3 py-2 text-[13px] text-muted shadow-[0_10px_22px_rgba(89,108,144,0.08)] transition-colors hover:border-accent/30 hover:text-accent-strong sm:text-sm"
                     >
                       {ItemIcon && <ItemIcon size={14} className="text-accent" />}
                       {item.name}

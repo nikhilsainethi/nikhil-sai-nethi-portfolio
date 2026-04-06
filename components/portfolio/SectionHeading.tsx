@@ -12,8 +12,8 @@ export function SectionHeading({
   index,
 }: SectionHeadingProps) {
   return (
-    <div className="mb-10 grid gap-5 border-b border-border/75 pb-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(18rem,1.05fr)] lg:items-end">
-      <div className="space-y-3">
+    <div className="mb-8 grid gap-4 border-b border-border/75 pb-6 sm:mb-10 sm:gap-5 sm:pb-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(18rem,1.05fr)] lg:items-end">
+      <div className="space-y-2.5 sm:space-y-3">
         <div className="flex items-center gap-4">
           {index && (
             <span className="font-mono text-[11px] tracking-[0.22em] text-foreground/28 select-none">
@@ -22,7 +22,7 @@ export function SectionHeading({
           )}
           <p className="mono-label text-xs text-[var(--warm-accent)]">{eyebrow}</p>
         </div>
-        <h2 className="text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl">
+        <h2 className="text-3xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl">
           {title}
         </h2>
       </div>

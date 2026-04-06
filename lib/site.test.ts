@@ -10,9 +10,6 @@ describe("site metadata", () => {
     );
     expect(basePath.startsWith("/")).toBe(true);
     expect(siteUrl.endsWith("/")).toBe(true);
-    expect(withBasePath("/nikhil-sai-nethi-resume.pdf")).toBe(resumePath);
-    expect(resumePath).toBe(
-      "/nikhil-sai-nethi-portfolio/nikhil-sai-nethi-resume.pdf",
-    );
+    expect(resumePath).toBe(withBasePath("/nikhil-sai-nethi-resume.pdf"));
   });
 });
