@@ -14,7 +14,7 @@ type ScrambleTextProps = {
 /**
  * On hover, letters scramble randomly then resolve back to the original text.
  */
-export function ScrambleText({ text, className, frames = 8 }: ScrambleTextProps) {
+export function ScrambleText({ text, className }: ScrambleTextProps) {
   const [display, setDisplay] = useState(text);
   const rafRef = useRef<number | null>(null);
   const iterRef = useRef(0);

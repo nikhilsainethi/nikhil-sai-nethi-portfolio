@@ -8,9 +8,6 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
  * each with different spring configs for a layered parallax feel.
  */
 export function HeroAnimation() {
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-
   const springA = { stiffness: 18, damping: 14 };
   const springB = { stiffness: 10, damping: 12 };
   const springC = { stiffness: 7, damping: 10 };

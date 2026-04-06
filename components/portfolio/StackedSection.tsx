@@ -18,7 +18,7 @@ type Props = {
  * fades in, creating a clean "card rising into view" feel with no
  * overlays, dead space, or sticky pinning artifacts.
  */
-export function StackedSection({ children, id, transparent = false, isLast = false }: Props) {
+export function StackedSection({ children, id, transparent = false }: Props) {
   const ref = useRef<HTMLElement>(null);
   const shouldSimplify = useShouldSimplifyMotion();
   const isInView = useInView(ref, { once: true, margin: "-8% 0px" });

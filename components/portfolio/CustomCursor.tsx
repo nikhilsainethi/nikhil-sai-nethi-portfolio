@@ -26,10 +26,12 @@ export function CustomCursor() {
   const ringY = useSpring(mouseY, { stiffness: 180, damping: 20 });
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: fine)").matches) {
-      setIsTouchDevice(false);
+    // Only set if needed, though testing window.matchMedia generally happens only once here.
+    const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+    if (hasFinePointer && isTouchDevice) {
+      setTimeout(() => setIsTouchDevice(false), 0);
     }
-  }, []);
+  }, [isTouchDevice]);
 
   useEffect(() => {
     if (isTouchDevice) return;

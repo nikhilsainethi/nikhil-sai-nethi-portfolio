@@ -4,8 +4,6 @@ import { MagneticButton } from "@/components/portfolio/MagneticButton";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { RoleCycler } from "@/components/portfolio/RoleCycler";
 import { CharReveal } from "@/components/portfolio/CharReveal";
-import { ScrambleText } from "@/components/portfolio/ScrambleText";
-import { SplitText } from "@/components/portfolio/SplitText";
 import { StackedSection } from "@/components/portfolio/StackedSection";
 import { TiltCard } from "@/components/portfolio/TiltCard";
 import Image from "next/image";
@@ -173,7 +171,7 @@ export default function Home() {
                   </div>
 
                   {/* Stats */}
-                  <div className="flex flex-wrap items-center gap-6 border-y border-border/60 py-3">
+                  <div data-testid="hero-stats" className="grid grid-cols-2 flex-wrap items-center gap-6 border-y border-border/60 py-3 sm:flex">
                     {[
                       { value: 2, suffix: "+", label: "Yrs Experience" },
                       { value: 3, suffix: "", label: "Companies" },
@@ -181,7 +179,7 @@ export default function Home() {
                       { value: 150, suffix: "+", label: "Bugs Resolved" },
                     ].map(({ value, suffix, label }, i) => (
                       <div key={label} className="flex items-center gap-6">
-                        {i > 0 && <div className="h-7 w-px bg-border/80" />}
+                        {i > 0 && <div className="hidden h-7 w-px bg-border/80 sm:block" />}
                         <div>
                           <p className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
                             <AnimatedCounter value={value} suffix={suffix} />
