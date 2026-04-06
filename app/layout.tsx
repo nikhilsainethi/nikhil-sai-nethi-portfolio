@@ -5,6 +5,7 @@ import { CursorSpotlight } from "@/components/portfolio/CursorSpotlight";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { Header } from "@/components/portfolio/Header";
 import { HeroAnimation } from "@/components/portfolio/HeroAnimation";
+import { PageIntro } from "@/components/portfolio/PageIntro";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
 import "./globals.css";
@@ -58,6 +59,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <PageIntro />
         <ScrollProgress />
         <CustomCursor />
         <CursorSpotlight />

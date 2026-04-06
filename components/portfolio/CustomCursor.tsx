@@ -1,26 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
+const TRAIL_LENGTH = 8;
+
+type TrailDot = { x: number; y: number; id: number };
+
 /**
- * Custom dot + ring cursor.
- * - Dot: 8px, follows instantly
- * - Ring: 36px, follows with spring lag
- * - On hover over interactive elements: ring expands + fills, dot hides
- * - Hidden on touch/mobile (requires pointer: fine)
+ * Premium cursor: dot + spring-lag ring + fading trail dots.
+ * Ring morphs on hover over interactive elements.
+ * Only on pointer:fine (desktop) devices.
  */
 export function CustomCursor() {
+  const [isTouchDevice, setIsTouchDevice] = useState(true);
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(true);
+  const [trail, setTrail] = useState<TrailDot[]>([]);
+  const counterRef = useRef(0);
 
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
+  const mouseX = useMotionValue(-200);
+  const mouseY = useMotionValue(-200);
 
-  const springConfig = { stiffness: 200, damping: 22, mass: 0.5 };
-  const ringX = useSpring(mouseX, springConfig);
-  const ringY = useSpring(mouseY, springConfig);
+  const ringX = useSpring(mouseX, { stiffness: 180, damping: 20 });
+  const ringY = useSpring(mouseY, { stiffness: 180, damping: 20 });
 
   useEffect(() => {
     if (window.matchMedia("(pointer: fine)").matches) {
@@ -35,6 +38,14 @@ export function CustomCursor() {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
       setVisible(true);
+
+      // Add trail dot
+      counterRef.current += 1;
+      const id = counterRef.current;
+      setTrail((prev) => {
+        const next = [{ x: e.clientX, y: e.clientY, id }, ...prev];
+        return next.slice(0, TRAIL_LENGTH);
+      });
     };
 
     const onLeave = () => setVisible(false);
@@ -42,13 +53,13 @@ export function CustomCursor() {
 
     const onOver = (e: MouseEvent) => {
       const t = e.target as Element;
-      setHovering(!!t.closest("a, button, [role='button'], input, textarea, select, label"));
+      setHovering(!!t.closest("a, button, [role='button'], input, textarea, select, label, [data-hover]"));
     };
 
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseleave", onLeave);
     document.addEventListener("mouseenter", onEnter);
-    document.addEventListener("mouseover", onOver);
+    document.addEventListener("mouseover", onOver, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", onMove);
@@ -62,23 +73,50 @@ export function CustomCursor() {
 
   return (
     <>
+      {/* Trail dots */}
+      {trail.map((dot, i) => (
+        <motion.div
+          key={dot.id}
+          className="pointer-events-none fixed z-[9997] rounded-full bg-accent hidden lg:block"
+          style={{
+            left: dot.x,
+            top: dot.y,
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+          initial={{ opacity: 0.5, scale: 1 }}
+          animate={{ opacity: 0, scale: 0 }}
+          transition={{ duration: 0.5, delay: i * 0.015, ease: "easeOut" }}
+          // Size decreases with index
+        >
+          <div
+            style={{
+              width: Math.max(2, 6 - i * 0.5),
+              height: Math.max(2, 6 - i * 0.5),
+              borderRadius: "50%",
+            }}
+          />
+        </motion.div>
+      ))}
+
       {/* Ring — spring lag */}
       <motion.div
         className="pointer-events-none fixed z-[9999] rounded-full border hidden lg:block"
         style={{ left: ringX, top: ringY, translateX: "-50%", translateY: "-50%" }}
         animate={{
           opacity: visible ? 1 : 0,
-          width: hovering ? 52 : 36,
-          height: hovering ? 52 : 36,
-          backgroundColor: hovering ? "rgba(84,80,245,0.10)" : "transparent",
-          borderColor: hovering ? "rgba(84,80,245,0.65)" : "rgba(84,80,245,0.40)",
+          width: hovering ? 56 : 38,
+          height: hovering ? 56 : 38,
+          backgroundColor: hovering ? "rgba(84,80,245,0.12)" : "transparent",
+          borderColor: hovering ? "rgba(84,80,245,0.7)" : "rgba(84,80,245,0.45)",
+          borderWidth: hovering ? 1.5 : 1,
         }}
         transition={{ duration: 0.15, ease: "easeOut" }}
       />
 
       {/* Dot — instant */}
       <motion.div
-        className="pointer-events-none fixed z-[9999] h-2 w-2 rounded-full bg-accent hidden lg:block"
+        className="pointer-events-none fixed z-[9999] h-[7px] w-[7px] rounded-full bg-accent hidden lg:block"
         style={{ left: mouseX, top: mouseY, translateX: "-50%", translateY: "-50%" }}
         animate={{
           opacity: hovering ? 0 : visible ? 1 : 0,
