@@ -30,6 +30,7 @@ export function Contact() {
         eyebrow="Contact"
         title="Contact"
         description="Open to conversations around platform engineering, observability, cloud-native delivery, and AI tooling that helps engineers move faster with less guesswork."
+        index="04"
       />
 
       <div className="grid gap-4 md:grid-cols-2">

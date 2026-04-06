@@ -44,6 +44,7 @@ export function Projects() {
         eyebrow="Projects"
         title="Selected Engineering Work"
         description="A flagship case study plus supporting engineering logs that highlight cloud infrastructure, observability, and AI application work grounded in production needs."
+        index="01"
       />
 
       <Reveal>

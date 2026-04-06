@@ -1,7 +1,9 @@
 import { AnimatedCounter } from "@/components/portfolio/AnimatedCounter";
+import { MarqueeStrip } from "@/components/portfolio/MarqueeStrip";
 import { MagneticButton } from "@/components/portfolio/MagneticButton";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { RoleCycler } from "@/components/portfolio/RoleCycler";
+import { SplitText } from "@/components/portfolio/SplitText";
 import { TiltCard } from "@/components/portfolio/TiltCard";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,12 +28,12 @@ export default function Home() {
             <div className="glass-panel shimmer-card relative w-full overflow-hidden rounded-[2.2rem] border border-white/80 p-5 shadow-[0_30px_80px_rgba(20,50,110,0.22)]">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.82),transparent_60%)]" />
               <div className="relative space-y-4">
-                {/* Photo */}
+                {/* Photo — clip-path wipe reveal */}
                 <div className="overflow-hidden rounded-[1.8rem] border border-white/70 bg-[linear-gradient(160deg,#c8d8ff_0%,#f0f6ff_45%,#eae4ff_100%)] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
                   <div className="relative overflow-hidden rounded-[1.4rem]">
                     <Image
                       alt="Nikhil Sai Nethi"
-                      className="aspect-[4/5] h-auto w-full object-cover object-top"
+                      className="aspect-[4/5] h-auto w-full object-cover object-top [clip-path:inset(0_0_0_0_round_1.4rem)] motion-safe:[animation:portrait-wipe_0.9s_cubic-bezier(0.22,1,0.36,1)_0.2s_both]"
                       height={960}
                       priority
                       src={heroPortraitPath}
@@ -98,11 +100,32 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Hero headline */}
-              <p className="max-w-3xl text-4xl font-semibold leading-[0.95] tracking-[-0.06em] text-foreground sm:text-5xl lg:text-[5.3rem]">
-                Building resilient{" "}
-                <span className="accent-gradient">cloud systems</span> and practical{" "}
-                <span className="accent-gradient">AI tooling.</span>
+              {/* Hero headline — word-by-word reveal */}
+              <p className="max-w-3xl text-4xl font-semibold leading-[1.0] tracking-[-0.06em] text-foreground sm:text-5xl lg:text-[5.3rem]">
+                <SplitText
+                  text="Building resilient"
+                  delay={0.1}
+                  stagger={0.07}
+                />
+                {" "}
+                <SplitText
+                  text="cloud systems"
+                  className="accent-gradient"
+                  delay={0.38}
+                  stagger={0.08}
+                />
+                <SplitText
+                  text=" and practical"
+                  delay={0.6}
+                  stagger={0.07}
+                />
+                {" "}
+                <SplitText
+                  text="AI tooling."
+                  className="accent-gradient"
+                  delay={0.82}
+                  stagger={0.09}
+                />
               </p>
 
               <p className="max-w-2xl text-base leading-8 text-muted sm:text-lg">
@@ -157,8 +180,20 @@ export default function Home() {
         </Reveal>
       </section>
 
+      {/* Marquee tech strip */}
+      <div className="w-full max-w-none border-y border-border/50 py-3 -mx-4 sm:-mx-6 lg:-mx-8 px-0 mt-2">
+        <MarqueeStrip
+          items={[
+            "AWS", "Kubernetes", "Python", "TypeScript", "pgvector",
+            "LangChain", "OpenTelemetry", "Terraform", "Jenkins", "Linux",
+            "RAG", "LLM Tooling", "Observability", "EKS", "PostgreSQL",
+          ]}
+          speed={48}
+        />
+      </div>
+
       {/* Scroll indicator */}
-      <div className="flex justify-center pb-4 pt-2 opacity-40">
+      <div className="flex justify-center pb-4 pt-4 opacity-40">
         <div className="animate-bounce text-muted">
           <FaArrowDown size={14} />
         </div>

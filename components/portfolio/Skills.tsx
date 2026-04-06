@@ -115,6 +115,7 @@ export function Skills() {
         eyebrow="Tech Stack"
         title="Tech Stack"
         description="Grouped strengths across cloud platforms, AI application layers, programming languages, and the networking fundamentals that keep production systems observable and dependable."
+        index="01"
       />
 
       <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
