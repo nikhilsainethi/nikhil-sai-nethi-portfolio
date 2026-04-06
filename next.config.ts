@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 import { basePath } from "./lib/site";
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -11,7 +12,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   basePath: isProduction ? basePath : undefined,
   turbopack: {
-    root: process.cwd(),
+    root: path.resolve(__dirname, "../../.."),
   },
 };
 
