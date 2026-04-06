@@ -12,7 +12,7 @@ import Link from "next/link";
 import {
   FaArrowDown,
   FaArrowRight,
-  FaArrowUpRight,
+  FaUpRightFromSquare,
   FaEnvelope,
   FaGithub,
   FaLinkedin,
@@ -246,7 +246,7 @@ export default function Home() {
                 href="/projects"
                 className="hidden items-center gap-1.5 rounded-full border border-border bg-white/60 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:flex"
               >
-                All projects <FaArrowUpRight size={10} />
+                All projects <FaUpRightFromSquare size={10} />
               </Link>
             </div>
 
@@ -305,7 +305,7 @@ export default function Home() {
                   href="/projects"
                   className="mt-1 flex items-center justify-center gap-1.5 rounded-[1.2rem] border border-dashed border-border/80 py-3 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:hidden"
                 >
-                  All projects <FaArrowUpRight size={10} />
+                  All projects <FaUpRightFromSquare size={10} />
                 </Link>
               </div>
             </div>
@@ -329,7 +329,7 @@ export default function Home() {
                 href="/experience"
                 className="hidden items-center gap-1.5 rounded-full border border-border bg-white/60 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:flex"
               >
-                Full timeline <FaArrowUpRight size={10} />
+                Full timeline <FaUpRightFromSquare size={10} />
               </Link>
             </div>
 
@@ -400,7 +400,7 @@ export default function Home() {
                 href="/tech-stack"
                 className="hidden items-center gap-1.5 rounded-full border border-border bg-white/60 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:flex"
               >
-                Full stack <FaArrowUpRight size={10} />
+                Full stack <FaUpRightFromSquare size={10} />
               </Link>
             </div>
 
