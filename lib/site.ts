@@ -8,12 +8,14 @@ export const siteTitle = `${siteName} | Software Engineer`;
 export const siteDescription =
   "Portfolio for Nikhil Sai Nethi, a software engineer focused on cloud infrastructure, observability, and AI/LLM applications.";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export function withBasePath(path: `/${string}`) {
-  return `${basePath}${path}`;
+  return isProduction ? `${basePath}${path}` : path;
 }
 
 export const resumePath = withBasePath("/nikhil-sai-nethi-resume.pdf");
-export const heroPortraitPath = withBasePath("/images/nikhil-hero-placeholder.svg");
+export const heroPortraitPath = withBasePath("/images/nikhil-hero.jpg");
 
 export const primaryNavItems = [
   { href: "/" as const, label: "Home" },

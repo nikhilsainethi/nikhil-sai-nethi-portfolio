@@ -72,7 +72,16 @@ export function ExperienceTimeline() {
       <ol className="relative ml-3 border-l border-border/70 pl-7">
         {experiences.map((experience, index) => (
           <li key={experience.company} className="relative pb-10 last:pb-0">
-            <span className="absolute -left-[2.18rem] top-7 h-4 w-4 rounded-full border border-accent/35 bg-white shadow-[0_10px_18px_rgba(94,116,160,0.16)]" />
+            {index === 0 ? (
+              /* Current role: filled dot with pulse ring */
+              <span className="absolute -left-[2.18rem] top-7 flex h-4 w-4 items-center justify-center">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/40" />
+                <span className="relative h-3 w-3 rounded-full bg-accent shadow-[0_0_10px_rgba(108,99,255,0.55)]" />
+              </span>
+            ) : (
+              /* Past roles: hollow ring */
+              <span className="absolute -left-[2.18rem] top-7 h-4 w-4 rounded-full border-2 border-accent/40 bg-white shadow-[0_4px_10px_rgba(94,116,160,0.12)]" />
+            )}
             <Reveal delay={index * 0.06}>
               <article className="card-hover glass-panel rounded-[2rem] border border-white/70 p-6 shadow-[0_24px_60px_rgba(71,94,136,0.12)] sm:p-7">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
