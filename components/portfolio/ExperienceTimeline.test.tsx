@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
+import { withBasePath } from "@/lib/site";
 import { ExperienceTimeline } from "./ExperienceTimeline";
 
 describe("ExperienceTimeline", () => {
@@ -49,18 +50,19 @@ describe("ExperienceTimeline", () => {
     ).toBeInTheDocument();
   });
 
-  it("uses local identity marks instead of remote company logos", () => {
+  it("renders checked-in local company logos instead of remote logo services", () => {
     render(<ExperienceTimeline />);
 
-    expect(
-      screen.getByLabelText("Moody's Corporation mark"),
-    ).toHaveTextContent("MO");
-    expect(screen.getByLabelText("Verisk Analytics mark")).toHaveTextContent(
-      "VE",
+    expect(screen.getByAltText("Moody's Corporation logo")).toHaveAttribute(
+      "src",
+      withBasePath("/logos/moodys-wordmark.svg"),
+    );
+    expect(screen.getByAltText("Verisk Analytics logo")).toHaveAttribute(
+      "src",
+      withBasePath("/logos/verisk-wordmark.svg"),
     );
     expect(
-      screen.getByLabelText("Nokia Solutions & Networks mark"),
-    ).toHaveTextContent("NO");
-    expect(screen.queryByRole("img", { name: /logo/i })).not.toBeInTheDocument();
+      screen.getByAltText("Nokia Solutions & Networks logo"),
+    ).toHaveAttribute("src", withBasePath("/logos/nokia-brand.svg"));
   });
 });

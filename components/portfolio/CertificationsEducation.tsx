@@ -43,6 +43,7 @@ const education = [
     degree: "MS in Computer Science",
     school: "California State University East Bay",
     mark: "CS",
+    logoPath: "/logos/csueb-seal.svg" as const,
     location: "Hayward, California, USA",
     period: "Jan 2022 - Dec 2023",
   },
@@ -50,6 +51,7 @@ const education = [
     degree: "B.Tech",
     school: "Vellore Institute of Technology",
     mark: "VIT",
+    logoPath: "/logos/vit-seal.svg" as const,
     location: "Vellore, India",
     period: "2016 - 2021",
   },
@@ -138,8 +140,9 @@ export function CertificationsEducation() {
                   <div className="flex items-start gap-3">
                     <IdentityMark
                       label={item.school}
+                      logoPath={item.logoPath}
                       mark={item.mark}
-                      className="h-10 w-10 rounded-[0.9rem] text-xs tracking-[0.15em]"
+                      className="h-14 w-14 rounded-[1rem] p-1.5"
                     />
                     <div>
                       <p className="text-base font-semibold text-foreground">

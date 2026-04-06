@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" role="img" aria-labelledby="title desc">
+  <title id="title">Moody's wordmark</title>
+  <desc id="desc">A navy Moody's wordmark on a transparent background.</desc>
+  <text
+    x="12"
+    y="84"
+    fill="#143b8f"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="76"
+    font-weight="800"
+    letter-spacing="1.5"
+  >
+    MOODY'S
+  </text>
+</svg>

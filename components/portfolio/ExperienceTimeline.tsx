@@ -6,6 +6,7 @@ const experiences = [
   {
     company: "Moody's Corporation",
     mark: "MO",
+    logoPath: "/logos/moodys-wordmark.svg" as const,
     role: "Software Engineer",
     period: "Aug 2024 - Present",
     location: "Charlotte, NC",
@@ -31,6 +32,7 @@ const experiences = [
   {
     company: "Verisk Analytics",
     mark: "VE",
+    logoPath: "/logos/verisk-wordmark.svg" as const,
     role: "Software Development Co-op",
     period: "Sep 2023 - Dec 2023",
     location: "Boston, MA",
@@ -43,6 +45,7 @@ const experiences = [
   {
     company: "Nokia Solutions & Networks",
     mark: "NO",
+    logoPath: "/logos/nokia-brand.svg" as const,
     role: "Software Engineer",
     period: "Sep 2020 - Dec 2021",
     location: "Bangalore, India",
@@ -76,8 +79,9 @@ export function ExperienceTimeline() {
                   <div className="flex items-start gap-4">
                     <IdentityMark
                       label={experience.company}
+                      logoPath={experience.logoPath}
                       mark={experience.mark}
-                      className="h-12 w-12 rounded-[1rem]"
+                      className="h-14 w-24 rounded-[1rem] p-2 sm:w-28"
                     />
                     <div className="space-y-3">
                       <p className="mono-label text-[11px] text-muted">

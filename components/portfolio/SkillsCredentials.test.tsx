@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { withBasePath } from "@/lib/site";
 import { CertificationsEducation } from "./CertificationsEducation";
 import { Skills } from "./Skills";
 
@@ -37,12 +38,11 @@ describe("CertificationsEducation", () => {
     expect(screen.getByText("Vellore, India")).toBeInTheDocument();
     expect(screen.getByText("2016 - 2021")).toBeInTheDocument();
     expect(
-      screen.getByLabelText("California State University East Bay mark"),
-    ).toHaveTextContent("CS");
+      screen.getByAltText("California State University East Bay logo"),
+    ).toHaveAttribute("src", withBasePath("/logos/csueb-seal.svg"));
     expect(
-      screen.getByLabelText("Vellore Institute of Technology mark"),
-    ).toHaveTextContent("VIT");
-    expect(screen.queryByRole("img", { name: /logo/i })).not.toBeInTheDocument();
+      screen.getByAltText("Vellore Institute of Technology logo"),
+    ).toHaveAttribute("src", withBasePath("/logos/vit-seal.svg"));
   });
 
   it("links each certification card directly to the credential badge", () => {
