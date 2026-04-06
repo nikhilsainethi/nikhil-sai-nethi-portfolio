@@ -3,82 +3,37 @@ import { resumePath } from "@/lib/site";
 import Home from "./page";
 
 describe("Home page", () => {
-  it("renders the required navigation, sections, and resume download link", () => {
+  it("renders only the hero content and route-level calls to action", () => {
     render(<Home />);
 
-    expect(screen.getByRole("link", { name: "About" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { name: "Nikhil Sai Nethi" })).toBeInTheDocument();
+    expect(
+      screen.getByText(/Cloud & Infrastructure/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Download Resume" }),
+    ).toHaveAttribute("href", resumePath);
+    expect(screen.getByRole("link", { name: /View Projects/i })).toHaveAttribute(
       "href",
-      "#about",
-    );
-    expect(screen.getByRole("link", { name: "Experience" })).toHaveAttribute(
-      "href",
-      "#experience",
-    );
-    expect(screen.getByRole("link", { name: "Tech Stack" })).toHaveAttribute(
-      "href",
-      "#tech-stack",
-    );
-    expect(screen.getByRole("link", { name: "Projects" })).toHaveAttribute(
-      "href",
-      "#projects",
-    );
-    expect(screen.getByRole("link", { name: "Contact" })).toHaveAttribute(
-      "href",
-      "#contact",
+      "/projects",
     );
 
+    expect(screen.queryByRole("heading", { name: "Experience" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Tech Stack" })).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Nikhil Sai Nethi" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Experience" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Tech Stack" })).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Internal RAG Search Engine" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Contact" })).toBeInTheDocument();
-
-    expect(screen.getByRole("link", { name: "Download Resume" })).toHaveAttribute(
-      "href",
-      resumePath,
-    );
+      screen.queryByRole("heading", { name: "Internal RAG Search Engine" }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Contact" })).not.toBeInTheDocument();
   });
 
-  it("renders the experience timeline in the intended order with the Moody's focus technologies", () => {
+  it("keeps the hero focused on summary information rather than embedded sections", () => {
     render(<Home />);
 
-    const companyNames = screen
-      .getAllByRole("heading", { level: 3 })
-      .slice(0, 3)
-      .map((heading) => heading.textContent);
-
-    expect(companyNames).toEqual([
-      "Moody's Corporation",
-      "Verisk Analytics",
-      "Nokia Solutions & Networks",
-    ]);
-
-    const moodysCard = screen
-      .getByRole("heading", { name: "Moody's Corporation" })
-      .closest("article");
-
-    expect(moodysCard).not.toBeNull();
-
-    const moodysContent = within(moodysCard as HTMLElement);
-    expect(moodysContent.getByText("EKS")).toBeInTheDocument();
-    expect(moodysContent.getByText("Prometheus")).toBeInTheDocument();
-    expect(moodysContent.getByText("OpenTelemetry")).toBeInTheDocument();
-    expect(moodysContent.getByText("RAG")).toBeInTheDocument();
-    expect(moodysContent.getByText("LangChain")).toBeInTheDocument();
-  });
-
-  it("shows the projects section with the RAG search engine", () => {
-    render(<Home />);
-
-    const projectHeading = screen.getByRole("heading", {
-      level: 2,
-      name: "Internal RAG Search Engine",
-    });
-
-    expect(projectHeading).toBeInTheDocument();
+    expect(screen.getByText("Charlotte, NC")).toBeInTheDocument();
+    expect(screen.getByText(/Moody's Corporation/i)).toBeInTheDocument();
+    expect(screen.getByText(/RAG workflows/i)).toBeInTheDocument();
+    expect(
+      within(screen.getByRole("main")).queryByText(/Certified Kubernetes Administrator/i),
+    ).not.toBeInTheDocument();
   });
 });

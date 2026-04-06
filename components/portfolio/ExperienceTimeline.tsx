@@ -62,19 +62,19 @@ const experiences = [
 
 export function ExperienceTimeline() {
   return (
-    <section id="experience" className="section-rule py-16 sm:py-20">
+    <section id="experience" className="py-8 sm:py-10">
       <SectionHeading
         eyebrow="Experience"
         title="Experience"
         description="A focused timeline of infrastructure, observability, and platform work spanning production reliability, cloud migration, and AI-enabled engineering workflows."
       />
 
-      <ol className="relative ml-2 border-l border-border pl-7">
+      <ol className="relative ml-3 border-l border-border/70 pl-7">
         {experiences.map((experience, index) => (
           <li key={experience.company} className="relative pb-10 last:pb-0">
-            <span className="absolute -left-[2.05rem] top-5 h-4 w-4 rounded-sm border border-accent bg-accent-soft" />
+            <span className="absolute -left-[2.18rem] top-7 h-4 w-4 rounded-full border border-accent/35 bg-white shadow-[0_10px_18px_rgba(94,116,160,0.16)]" />
             <Reveal delay={index * 0.06}>
-              <article className="card-hover rounded-[1.5rem] border border-border bg-surface p-6 sm:p-7">
+              <article className="card-hover glass-panel rounded-[2rem] border border-white/70 p-6 shadow-[0_24px_60px_rgba(71,94,136,0.12)] sm:p-7">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex items-start gap-4">
                     <IdentityMark
@@ -100,7 +100,7 @@ export function ExperienceTimeline() {
                     {experience.highlights.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-accent/30 bg-accent-soft px-3 py-1 font-mono text-xs text-accent-strong shadow-sm"
+                        className="rounded-full border border-accent/20 bg-accent-soft px-3 py-1 font-mono text-xs text-accent-strong shadow-sm"
                       >
                         {tag}
                       </span>
@@ -115,7 +115,7 @@ export function ExperienceTimeline() {
                 >
                   {experience.bullets.map((bullet) => (
                     <li key={bullet} className="flex gap-3">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-accent" />
+                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--warm-accent)]" />
                       <span>{bullet}</span>
                     </li>
                   ))}

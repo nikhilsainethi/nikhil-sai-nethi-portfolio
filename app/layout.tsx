@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { siteDescription, siteTitle, siteUrl } from "@/lib/site";
+import { Header } from "@/components/portfolio/Header";
+import { HeroAnimation } from "@/components/portfolio/HeroAnimation";
+import { SiteFooter } from "@/components/portfolio/SiteFooter";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -52,7 +55,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+        <div className="grain-overlay relative min-h-screen overflow-hidden">
+          <HeroAnimation />
+          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[90rem] flex-col px-4 sm:px-6 lg:px-8">
+            <Header />
+            <div className="flex-1">{children}</div>
+            <SiteFooter />
+          </div>
+        </div>
       </body>
     </html>
   );

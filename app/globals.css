@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f5f7;
-  --foreground: #15181d;
-  --muted: #596272;
-  --surface: rgba(255, 255, 255, 0.72);
-  --surface-strong: #ffffff;
-  --surface-soft: #eceff3;
-  --border: rgba(21, 24, 29, 0.1);
-  --accent: #c77434;
-  --accent-strong: #9a5724;
-  --accent-soft: rgba(199, 116, 52, 0.14);
-  --shadow-card: 0 20px 50px rgba(17, 24, 39, 0.08);
+  --background: #eaf3ff;
+  --foreground: #0f1d36;
+  --muted: #5d6e88;
+  --surface: rgba(255, 255, 255, 0.64);
+  --surface-strong: rgba(255, 255, 255, 0.88);
+  --surface-soft: rgba(245, 248, 255, 0.92);
+  --border: rgba(85, 103, 138, 0.16);
+  --accent: #6c63ff;
+  --accent-strong: #4e46e8;
+  --accent-soft: rgba(108, 99, 255, 0.12);
+  --warm-accent: #ff8a3d;
+  --warm-accent-strong: #ef6b18;
+  --shadow-card: 0 24px 58px rgba(63, 86, 128, 0.12);
 }
 
 @theme inline {
@@ -38,8 +40,10 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   background-image:
-    radial-gradient(circle at top left, rgba(199, 116, 52, 0.08), transparent 22rem),
-    linear-gradient(180deg, #fafbfc 0%, #f1f3f6 100%);
+    radial-gradient(circle at 8% 15%, rgba(255, 255, 255, 0.78), transparent 18rem),
+    radial-gradient(circle at 85% 8%, rgba(211, 221, 255, 0.72), transparent 24rem),
+    radial-gradient(circle at 18% 72%, rgba(255, 243, 186, 0.45), transparent 18rem),
+    linear-gradient(180deg, #edf5ff 0%, #e5f0ff 48%, #edf6ff 100%);
 }
 
 * {
@@ -61,7 +65,7 @@ a {
 
 .glass-panel {
   background: color-mix(in srgb, var(--surface-strong) 82%, transparent);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(22px);
 }
 
 .section-rule {
@@ -108,7 +112,7 @@ a {
 .card-hover:focus-within {
   transform: translateY(-3px);
   box-shadow: var(--shadow-card);
-  background: color-mix(in srgb, var(--surface-strong) 92%, white);
+  background: color-mix(in srgb, var(--surface-strong) 94%, white);
 }
 
 .grain-overlay {
@@ -120,11 +124,11 @@ a {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.22;
+  opacity: 0.18;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: 1.5rem 1.5rem;
+  background-size: 1.75rem 1.75rem;
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 90%);
 }
 

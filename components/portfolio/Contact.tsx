@@ -25,7 +25,7 @@ const contactLinks = [
 
 export function Contact() {
   return (
-    <section id="contact" className="section-rule py-16 sm:py-20">
+    <section id="contact" className="py-8 sm:py-10">
       <SectionHeading
         eyebrow="Contact"
         title="Contact"
@@ -36,7 +36,8 @@ export function Contact() {
         {contactLinks.map((link) => (
           <a
             key={link.label}
-            className="card-hover rounded-[1.3rem] border border-border bg-surface p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            aria-label={link.value}
+            className="card-hover glass-panel rounded-[1.8rem] border border-white/75 p-6 shadow-[0_22px_48px_rgba(82,101,142,0.11)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             href={link.href}
             rel={link.href.startsWith("http") ? "noreferrer" : undefined}
             target={link.href.startsWith("http") ? "_blank" : undefined}
