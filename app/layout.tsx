@@ -61,12 +61,16 @@ export default function RootLayout({
         <ScrollProgress />
         <CustomCursor />
         <CursorSpotlight />
-        <div className="grain-overlay relative min-h-screen overflow-hidden">
+        <div className="grain-overlay relative min-h-screen [overflow:clip]">
           <HeroAnimation />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[90rem] flex-col px-4 sm:px-6 lg:px-8">
-            <Header />
+          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[90rem] flex-col">
+            <div className="px-4 sm:px-6 lg:px-8">
+              <Header />
+            </div>
             <div className="flex-1">{children}</div>
-            <SiteFooter />
+            <div className="px-4 sm:px-6 lg:px-8">
+              <SiteFooter />
+            </div>
           </div>
         </div>
       </body>
