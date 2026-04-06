@@ -3,6 +3,7 @@ import { MarqueeStrip } from "@/components/portfolio/MarqueeStrip";
 import { MagneticButton } from "@/components/portfolio/MagneticButton";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { RoleCycler } from "@/components/portfolio/RoleCycler";
+import { ScrambleText } from "@/components/portfolio/ScrambleText";
 import { SplitText } from "@/components/portfolio/SplitText";
 import { TiltCard } from "@/components/portfolio/TiltCard";
 import Image from "next/image";
@@ -81,9 +82,9 @@ export default function Home() {
             </div>
 
             <div className="space-y-4">
-              {/* Name */}
+              {/* Name — scrambles on hover */}
               <h1 className="text-4xl font-semibold tracking-[-0.06em] text-foreground sm:text-6xl lg:text-7xl">
-                Nikhil Sai Nethi
+                <ScrambleText text="Nikhil Sai Nethi" />
               </h1>
 
               {/* Cycling role + open badge */}

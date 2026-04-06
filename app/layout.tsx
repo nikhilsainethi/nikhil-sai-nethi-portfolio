@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { siteDescription, siteTitle, siteUrl } from "@/lib/site";
 import { CursorSpotlight } from "@/components/portfolio/CursorSpotlight";
+import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { Header } from "@/components/portfolio/Header";
 import { HeroAnimation } from "@/components/portfolio/HeroAnimation";
+import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
 import "./globals.css";
 
@@ -56,6 +58,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <ScrollProgress />
+        <CustomCursor />
         <CursorSpotlight />
         <div className="grain-overlay relative min-h-screen overflow-hidden">
           <HeroAnimation />
