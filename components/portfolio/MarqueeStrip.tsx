@@ -1,12 +1,20 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
+import {
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useScroll,
+  useVelocity,
+  useTransform,
+  useSpring,
+} from "framer-motion";
 import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type MarqueeStripProps = {
   items: string[];
-  speed?: number; // px per second
+  speed?: number; // base px per second
   className?: string;
 };
 
@@ -22,30 +30,31 @@ export function MarqueeStrip({ items, speed = 55, className }: MarqueeStripProps
   return <AnimatedMarqueeStrip items={items} speed={speed} className={className} />;
 }
 
-function AnimatedMarqueeStrip({
-  items,
-  speed = 55,
-  className,
-}: MarqueeStripProps) {
+function AnimatedMarqueeStrip({ items, speed = 55, className }: MarqueeStripProps) {
   const baseX = useMotionValue(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll velocity and add it to marquee speed
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, { stiffness: 50, damping: 20 });
+  // Map velocity to an extra speed boost (capped at ±6x)
+  const velocityFactor = useTransform(smoothVelocity, [-3000, 0, 3000], [-6, 0, 6]);
 
   useAnimationFrame((_, delta) => {
     const inner = innerRef.current;
     if (!inner) return;
     const halfWidth = inner.scrollWidth / 2;
-    let next = baseX.get() - (speed * delta) / 1000;
+    const boost = velocityFactor.get();
+    let next = baseX.get() - ((speed + Math.abs(boost) * speed) * delta) / 1000;
     if (next <= -halfWidth) next += halfWidth;
     baseX.set(next);
   });
 
-  // Duplicate items so the marquee loops seamlessly
   const allItems = [...items, ...items];
 
   return (
     <div
-      ref={containerRef}
       className={`overflow-hidden ${className ?? ""}`}
       aria-hidden
       data-motion="animated"

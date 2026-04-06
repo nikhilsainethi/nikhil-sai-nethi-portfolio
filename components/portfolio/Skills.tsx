@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/portfolio/SectionHeading";
+import { StaggerChildren, StaggerItem } from "@/components/portfolio/StaggerChildren";
 import { FaAws, FaDocker, FaJava } from "react-icons/fa6";
 import {
   SiOpenai,
@@ -118,13 +119,13 @@ export function Skills() {
         index="01"
       />
 
-      <div className="grid items-stretch gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <StaggerChildren className="grid items-stretch gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3" stagger={0.09}>
         {groups.map((group) => {
           const Icon = group.icon;
 
           return (
+            <StaggerItem key={group.title}>
             <div
-              key={group.title}
               className="card-hover glass-panel flex min-h-0 flex-col rounded-[1.75rem] border border-white/75 p-5 shadow-[0_18px_42px_rgba(82,101,142,0.10)] sm:min-h-[18rem] sm:rounded-[2rem] sm:p-6 sm:shadow-[0_22px_54px_rgba(82,101,142,0.11)]"
             >
               <div className="flex items-start gap-3">
@@ -156,9 +157,10 @@ export function Skills() {
                 })}
               </div>
             </div>
+            </StaggerItem>
           );
         })}
-      </div>
+      </StaggerChildren>
     </section>
   );
 }
