@@ -87,7 +87,7 @@ export default function Home() {
 
       {/* ══════════════════════════════════════════ 01 · HERO ══ */}
       <StackedSection id="hero" transparent>
-        <div className="flex h-full flex-col justify-center px-4 py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
 
             <section className="grid w-full items-center gap-6 lg:grid-cols-[minmax(15rem,0.6fr)_minmax(0,1.4fr)] lg:gap-12">
@@ -230,9 +230,10 @@ export default function Home() {
         </div>
       </StackedSection>
 
+      <div className="section-divider" />
       {/* ══════════════════════════════════════ 02 · PROJECTS ══ */}
       <StackedSection id="projects">
-        <div className="flex h-full flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
 
             <div className="mb-6 flex items-end justify-between border-b border-border/60 pb-5">
@@ -313,9 +314,10 @@ export default function Home() {
         </div>
       </StackedSection>
 
+      <div className="section-divider" />
       {/* ══════════════════════════════════════ 03 · EXPERIENCE ══ */}
       <StackedSection id="experience">
-        <div className="flex h-full flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
 
             <div className="mb-6 flex items-end justify-between border-b border-border/60 pb-5">
@@ -384,9 +386,10 @@ export default function Home() {
         </div>
       </StackedSection>
 
+      <div className="section-divider" />
       {/* ══════════════════════════════════════ 04 · TECH STACK ══ */}
       <StackedSection id="skills">
-        <div className="flex h-full flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
 
             <div className="mb-6 flex items-end justify-between border-b border-border/60 pb-5">
@@ -443,9 +446,10 @@ export default function Home() {
         </div>
       </StackedSection>
 
+      <div className="section-divider" />
       {/* ══════════════════════════════════════ 05 · CONTACT ══ */}
       <StackedSection id="contact" isLast>
-        <div className="flex min-h-screen flex-col justify-center px-4 py-16 sm:px-6 lg:px-8">
+        <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
 
             <div className="mb-10 border-b border-border/60 pb-8">
