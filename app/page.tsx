@@ -3,6 +3,7 @@ import { MarqueeStrip } from "@/components/portfolio/MarqueeStrip";
 import { MagneticButton } from "@/components/portfolio/MagneticButton";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { RoleCycler } from "@/components/portfolio/RoleCycler";
+import { CharReveal } from "@/components/portfolio/CharReveal";
 import { ScrambleText } from "@/components/portfolio/ScrambleText";
 import { SplitText } from "@/components/portfolio/SplitText";
 import { StackedSection } from "@/components/portfolio/StackedSection";
@@ -143,8 +144,9 @@ export default function Home() {
                   </div>
 
                   <div className="space-y-3">
+                    {/* Name — char-level reveal after intro wipe */}
                     <h1 className="text-4xl font-semibold tracking-[-0.06em] text-foreground sm:text-5xl lg:text-6xl">
-                      <ScrambleText text="Nikhil Sai Nethi" />
+                      <CharReveal text="Nikhil Sai Nethi" introDelay={2.6} stagger={0.045} />
                     </h1>
 
                     <div className="flex flex-wrap items-center gap-2.5">
@@ -161,12 +163,12 @@ export default function Home() {
                     </div>
 
                     <p className="max-w-3xl text-3xl font-semibold leading-[1.0] tracking-[-0.05em] text-foreground sm:text-4xl lg:text-5xl">
-                      <SplitText text="Building resilient" delay={0.1} stagger={0.07} />
+                      <CharReveal text="Building resilient" introDelay={2.9} stagger={0.032} />
                       {" "}
-                      <SplitText text="cloud systems" className="accent-gradient" delay={0.35} stagger={0.08} />
-                      <SplitText text=" and practical" delay={0.55} stagger={0.07} />
+                      <CharReveal text="cloud systems" className="accent-gradient" introDelay={3.45} stagger={0.04} />
+                      <CharReveal text=" and practical" introDelay={3.9} stagger={0.032} />
                       {" "}
-                      <SplitText text="AI tooling." className="accent-gradient" delay={0.72} stagger={0.09} />
+                      <CharReveal text="AI tooling." className="accent-gradient" introDelay={4.3} stagger={0.05} />
                     </p>
                   </div>
 
