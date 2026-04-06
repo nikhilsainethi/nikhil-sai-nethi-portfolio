@@ -57,4 +57,29 @@ describe("Header", () => {
       resumePath,
     );
   });
+
+  it("keeps the active state when GitHub Pages serves a trailing slash path", () => {
+    usePathnameMock.mockReturnValue("/tech-stack/");
+
+    render(<Header />);
+
+    expect(screen.getByRole("link", { name: "Tech Stack" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(screen.getByRole("link", { name: "Home" })).not.toHaveAttribute(
+      "aria-current",
+    );
+  });
+
+  it("keeps the active state when GitHub Pages includes the repository base path", () => {
+    usePathnameMock.mockReturnValue("/nikhil-sai-nethi-portfolio/experience/");
+
+    render(<Header />);
+
+    expect(screen.getByRole("link", { name: "Experience" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+  });
 });

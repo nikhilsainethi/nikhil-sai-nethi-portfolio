@@ -13,9 +13,9 @@ export const metadata = createPageMetadata({
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-1 items-center px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8">
-      <section className="grid min-h-[calc(100vh-13rem)] w-full items-center gap-10 py-8 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)] lg:gap-16 lg:py-12">
-        <Reveal className="order-2 lg:order-1">
-          <div className="glass-panel relative overflow-hidden rounded-[2.2rem] border border-white/75 p-5 shadow-[0_30px_80px_rgba(59,87,136,0.18)]">
+      <section className="grid min-h-[calc(100vh-13rem)] w-full items-center gap-10 py-8 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.12fr)] lg:gap-14 lg:py-12">
+        <Reveal className="order-2 flex justify-center lg:order-1 lg:justify-start">
+          <div className="glass-panel relative w-full max-w-[26rem] overflow-hidden rounded-[2.2rem] border border-white/75 p-5 shadow-[0_30px_80px_rgba(59,87,136,0.18)]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.78),transparent_60%)]" />
             <div className="relative space-y-5">
               <div className="overflow-hidden rounded-[1.8rem] border border-white/70 bg-[linear-gradient(160deg,#dbe7ff_0%,#f9fbff_45%,#f3efff_100%)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
@@ -23,7 +23,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.7),transparent_58%)]" />
                   <Image
                     alt="Nikhil Sai Nethi portrait"
-                    className="relative aspect-[4/5] h-auto w-full object-cover"
+                    className="relative aspect-[4/5] h-auto w-full object-contain p-3"
                     height={960}
                     priority
                     src={heroPortraitPath}
@@ -78,7 +78,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-4 sm:flex-row">
+            <div className="flex flex-wrap gap-4">
               <a
                 className="inline-flex items-center justify-center rounded-full bg-[var(--warm-accent)] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,138,61,0.26)] transition-all hover:-translate-y-0.5 hover:bg-[var(--warm-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--warm-accent)]"
                 href={resumePath}

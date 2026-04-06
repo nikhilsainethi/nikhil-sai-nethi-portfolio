@@ -36,4 +36,18 @@ describe("Home page", () => {
       within(screen.getByRole("main")).queryByText(/Certified Kubernetes Administrator/i),
     ).not.toBeInTheDocument();
   });
+
+  it("keeps the hero media rail and action row within a clean single-page layout", () => {
+    render(<Home />);
+
+    expect(screen.getByAltText("Nikhil Sai Nethi portrait")).toHaveClass("object-contain");
+
+    const actionRow = screen.getByRole("link", { name: "View Projects" }).parentElement;
+    expect(actionRow).toHaveClass("flex-wrap");
+
+    const locationCard = screen
+      .getByText("Charlotte, NC")
+      .closest("div");
+    expect(locationCard?.parentElement).toHaveClass("grid");
+  });
 });

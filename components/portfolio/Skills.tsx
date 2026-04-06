@@ -28,14 +28,12 @@ const groups: Array<{
   title: string;
   eyebrow: string;
   icon: IconType;
-  shape: string;
   items: Array<{ name: string; icon?: IconType }>;
 }> = [
   {
     title: "Languages",
     eyebrow: "Core",
     icon: SiPython,
-    shape: "rounded-[42%_58%_54%_46%/38%_42%_58%_62%]",
     items: [
       { name: "Python", icon: SiPython },
       { name: "Java", icon: FaJava },
@@ -48,7 +46,6 @@ const groups: Array<{
     title: "Cloud / Platform",
     eyebrow: "Runtime",
     icon: FaAws,
-    shape: "rounded-[50%_50%_46%_54%/46%_42%_58%_54%]",
     items: [
       { name: "AWS", icon: FaAws },
       { name: "Linux", icon: TbTerminal2 },
@@ -66,7 +63,6 @@ const groups: Array<{
     title: "Observability / Networking",
     eyebrow: "Signals",
     icon: TbActivityHeartbeat,
-    shape: "rounded-[44%_56%_48%_52%/58%_42%_58%_42%]",
     items: [
       { name: "Prometheus", icon: SiPrometheus },
       { name: "Grafana", icon: SiGrafana },
@@ -87,7 +83,6 @@ const groups: Array<{
     title: "Messaging / Data",
     eyebrow: "Storage",
     icon: TbDatabase,
-    shape: "rounded-[48%_52%_60%_40%/44%_42%_58%_56%]",
     items: [
       { name: "Kafka", icon: SiApachekafka },
       { name: "RabbitMQ", icon: SiRabbitmq },
@@ -100,7 +95,6 @@ const groups: Array<{
     title: "AI / LLM",
     eyebrow: "Applied",
     icon: SiOpenai,
-    shape: "rounded-[56%_44%_52%_48%/44%_54%_46%_56%]",
     items: [
       { name: "RAG" },
       { name: "LangChain" },
@@ -123,14 +117,14 @@ export function Skills() {
         description="Grouped strengths across cloud platforms, AI application layers, programming languages, and the networking fundamentals that keep production systems observable and dependable."
       />
 
-      <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
         {groups.map((group) => {
           const Icon = group.icon;
 
           return (
             <div
               key={group.title}
-              className={`card-hover glass-panel min-h-[19rem] border border-white/75 p-6 shadow-[0_22px_54px_rgba(82,101,142,0.11)] ${group.shape}`}
+              className="card-hover glass-panel flex min-h-[18rem] flex-col rounded-[2rem] border border-white/75 p-6 shadow-[0_22px_54px_rgba(82,101,142,0.11)]"
             >
               <div className="flex items-start gap-3">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/85 bg-white/80 text-accent shadow-[0_10px_24px_rgba(88,107,144,0.12)]">
@@ -146,7 +140,7 @@ export function Skills() {
                 </div>
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-2.5">
+              <div className="mt-5 flex flex-wrap content-start gap-2.5">
                 {group.items.map((item) => {
                   const ItemIcon = item.icon;
                   return (
