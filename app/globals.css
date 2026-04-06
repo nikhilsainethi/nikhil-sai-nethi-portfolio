@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #eaf3ff;
-  --foreground: #0f1d36;
-  --muted: #5d6e88;
-  --surface: rgba(255, 255, 255, 0.64);
-  --surface-strong: rgba(255, 255, 255, 0.88);
-  --surface-soft: rgba(245, 248, 255, 0.92);
-  --border: rgba(85, 103, 138, 0.16);
-  --accent: #6c63ff;
-  --accent-strong: #4e46e8;
-  --accent-soft: rgba(108, 99, 255, 0.12);
-  --warm-accent: #ff8a3d;
-  --warm-accent-strong: #ef6b18;
-  --shadow-card: 0 24px 58px rgba(63, 86, 128, 0.12);
+  --background: #cdd9f0;
+  --foreground: #07101f;
+  --muted: #3b5272;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(255, 255, 255, 0.92);
+  --surface-soft: rgba(228, 238, 255, 0.96);
+  --border: rgba(50, 80, 135, 0.20);
+  --accent: #5450f5;
+  --accent-strong: #3e3ae0;
+  --accent-soft: rgba(84, 80, 245, 0.13);
+  --warm-accent: #ff7820;
+  --warm-accent-strong: #e0630c;
+  --shadow-card: 0 24px 58px rgba(10, 35, 90, 0.18);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -66,10 +66,10 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   background-image:
-    radial-gradient(circle at 8% 15%, rgba(255, 255, 255, 0.78), transparent 18rem),
-    radial-gradient(circle at 85% 8%, rgba(211, 221, 255, 0.72), transparent 24rem),
-    radial-gradient(circle at 18% 72%, rgba(255, 243, 186, 0.45), transparent 18rem),
-    linear-gradient(180deg, #edf5ff 0%, #e5f0ff 48%, #edf6ff 100%);
+    radial-gradient(circle at 8% 15%, rgba(180, 208, 255, 0.88), transparent 20rem),
+    radial-gradient(circle at 85% 8%, rgba(145, 175, 255, 0.72), transparent 26rem),
+    radial-gradient(circle at 18% 72%, rgba(255, 215, 120, 0.42), transparent 20rem),
+    linear-gradient(180deg, #c8d8f4 0%, #c2d0f0 48%, #c8d8f4 100%);
 }
 
 * {
@@ -89,21 +89,57 @@ a {
   background: var(--accent-soft);
 }
 
+/* ── Glass panel ── */
 .glass-panel {
   background: color-mix(in srgb, var(--surface-strong) 82%, transparent);
   backdrop-filter: blur(22px);
 }
 
+/* ── Shimmer card ── */
+.shimmer-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+}
+
+.shimmer-card:hover::after {
+  animation: shimmer-sweep 0.72s ease forwards;
+}
+
+@keyframes shimmer-sweep {
+  0%   { left: -100%; }
+  100% { left: 160%; }
+}
+
+/* ── Section rule ── */
 .section-rule {
   border-top: 1px solid var(--border);
 }
 
+/* ── Mono label ── */
 .mono-label {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
+/* ── Animated underline link ── */
 .link-underline {
   position: relative;
 }
@@ -126,21 +162,23 @@ a {
   transform: scaleX(1);
 }
 
+/* ── Card hover lift ── */
 .card-hover {
   transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background-color 180ms ease,
-    border-color 180ms ease;
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease;
 }
 
 .card-hover:hover,
 .card-hover:focus-within {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-card);
-  background: color-mix(in srgb, var(--surface-strong) 94%, white);
+  transform: translateY(-4px);
+  box-shadow: 0 32px 72px rgba(10, 35, 90, 0.20);
+  background: color-mix(in srgb, var(--surface-strong) 96%, white);
 }
 
+/* ── Accent gradient text ── */
 .accent-gradient {
   background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
   -webkit-background-clip: text;
@@ -149,6 +187,7 @@ a {
   color: transparent;
 }
 
+/* ── Grain overlay ── */
 .grain-overlay {
   position: relative;
 }
@@ -158,14 +197,15 @@ a {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.18;
+  opacity: 0.14;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
   background-size: 1.75rem 1.75rem;
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 90%);
 }
 
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -173,7 +213,9 @@ a {
 
   a,
   .card-hover,
-  .link-underline::after {
+  .link-underline::after,
+  .shimmer-card::after {
     transition: none;
+    animation: none;
   }
 }
