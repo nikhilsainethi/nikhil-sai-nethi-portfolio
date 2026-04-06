@@ -64,6 +64,7 @@ export function CertificationsEducation() {
         eyebrow="Credentials"
         title="Certifications & Education"
         description="Foundational credentials spanning cloud platforms, Kubernetes operations, networking, and formal computer science training."
+        index="02"
       />
 
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">

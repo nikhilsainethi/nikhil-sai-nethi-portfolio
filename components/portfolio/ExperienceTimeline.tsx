@@ -67,6 +67,7 @@ export function ExperienceTimeline() {
         eyebrow="Experience"
         title="Experience"
         description="A focused timeline of infrastructure, observability, and platform work spanning production reliability, cloud migration, and AI-enabled engineering workflows."
+        index="01"
       />
 
       <ol className="relative ml-3 border-l border-border/70 pl-7">

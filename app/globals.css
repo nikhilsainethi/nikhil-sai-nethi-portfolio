@@ -181,6 +181,12 @@ a {
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 90%);
 }
 
+/* ── Portrait wipe-in ── */
+@keyframes portrait-wipe {
+  from { clip-path: inset(0 100% 0 0 round 1.4rem); }
+  to   { clip-path: inset(0 0 0 0 round 1.4rem); }
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -190,7 +196,8 @@ a {
   a,
   .card-hover,
   .link-underline::after,
-  .shimmer-card::after {
+  .shimmer-card::after,
+  img {
     transition: none;
     animation: none;
   }
