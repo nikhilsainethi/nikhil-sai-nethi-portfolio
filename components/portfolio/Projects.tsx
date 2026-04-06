@@ -1,5 +1,6 @@
 import { SectionHeading } from "@/components/portfolio/SectionHeading";
 import { Reveal } from "@/components/portfolio/Reveal";
+import { StaggerChildren, StaggerItem } from "@/components/portfolio/StaggerChildren";
 
 export function Projects() {
   const systemHighlights = [
@@ -165,9 +166,9 @@ export function Projects() {
         </article>
       </Reveal>
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-3">
-        {supportingLogs.map((item, index) => (
-          <Reveal key={item.title} delay={index * 0.05}>
+      <StaggerChildren className="mt-8 grid gap-4 lg:grid-cols-3" stagger={0.12}>
+        {supportingLogs.map((item) => (
+          <StaggerItem key={item.title}>
             <article className="card-hover glass-panel rounded-[1.8rem] border border-white/70 p-5 shadow-[0_20px_44px_rgba(82,101,142,0.1)]">
               <p className="mono-label text-[11px] text-[var(--warm-accent)]">
                 Engineering Log
@@ -187,9 +188,9 @@ export function Projects() {
                 ))}
               </div>
             </article>
-          </Reveal>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerChildren>
     </section>
   );
 }

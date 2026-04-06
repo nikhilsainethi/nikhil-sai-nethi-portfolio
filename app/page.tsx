@@ -1,6 +1,7 @@
 import { AnimatedCounter } from "@/components/portfolio/AnimatedCounter";
 import { MarqueeStrip } from "@/components/portfolio/MarqueeStrip";
 import { MagneticButton } from "@/components/portfolio/MagneticButton";
+import { ParallaxWrapper } from "@/components/portfolio/ParallaxWrapper";
 import { Reveal } from "@/components/portfolio/Reveal";
 import { RoleCycler } from "@/components/portfolio/RoleCycler";
 import { ScrambleText } from "@/components/portfolio/ScrambleText";
@@ -23,9 +24,10 @@ export default function Home() {
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-14 lg:px-8">
       <section className="grid w-full items-center gap-7 py-4 sm:gap-10 sm:py-8 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.12fr)] lg:gap-14 lg:py-12">
 
-        {/* ── Portrait card with 3-D tilt ── */}
+        {/* ── Portrait card with 3-D tilt + scroll parallax ── */}
         <Reveal className="group order-2 flex justify-center lg:order-1 lg:justify-start" delay={0.1}>
-          <TiltCard className="relative w-full max-w-[22rem] sm:max-w-[26rem]">
+          <ParallaxWrapper factor={-0.12} className="w-full max-w-[22rem] sm:max-w-[26rem]">
+          <TiltCard className="relative w-full">
             <div className="glass-panel shimmer-card relative w-full overflow-hidden rounded-[2rem] border border-white/80 p-4 shadow-[0_26px_64px_rgba(20,50,110,0.18)] sm:rounded-[2.2rem] sm:p-5 sm:shadow-[0_30px_80px_rgba(20,50,110,0.22)]">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.82),transparent_60%)]" />
               <div className="relative space-y-3 sm:space-y-4">
@@ -64,6 +66,7 @@ export default function Home() {
               </div>
             </div>
           </TiltCard>
+          </ParallaxWrapper>
         </Reveal>
 
         {/* ── Intro text ── */}
