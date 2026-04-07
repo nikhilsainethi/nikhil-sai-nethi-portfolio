@@ -26,6 +26,8 @@ describe("ThemeToggle", () => {
     const toggle = screen.getByRole("button", { name: /switch to dark mode/i });
 
     expect(toggle).toHaveClass("fixed");
+    expect(toggle).toHaveClass("h-14");
+    expect(toggle).toHaveClass("w-20");
     expect(toggle).toHaveAttribute("data-theme", "light");
     expect(toggle).toHaveAttribute("data-corner", "top-right");
   });

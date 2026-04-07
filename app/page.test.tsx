@@ -18,7 +18,7 @@ vi.mock("@/components/portfolio/CharReveal", () => ({
 
 describe("Home page", () => {
   it("renders the hero content and basic structure", () => {
-    render(<Home />);
+    const { container } = render(<Home />);
 
     expect(screen.getByText(/Nikhil/)).toBeInTheDocument();
     expect(screen.getByText(/Sai Nethi/)).toBeInTheDocument();
@@ -34,6 +34,10 @@ describe("Home page", () => {
       "href",
       "#experience",
     );
+
+    const pageShell = container.querySelector("main");
+    expect(pageShell).toHaveClass("text-foreground");
+    expect(pageShell).not.toHaveClass("text-white");
   });
 
   it("keeps the hero focused on summary information", () => {

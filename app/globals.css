@@ -31,8 +31,8 @@
   --card-hover-fill: color-mix(in srgb, var(--surface-strong) 92%, #fff7f0);
   --theme-toggle-shadow: 0 18px 34px rgba(20, 31, 48, 0.12);
   --theme-toggle-inset: inset 0 1px 0 rgba(255, 255, 255, 0.32);
-  --theme-toggle-track-bg: rgba(244, 237, 231, 0.98);
-  --theme-toggle-track-border: rgba(15, 23, 36, 0.08);
+  --theme-toggle-track-bg: rgba(252, 247, 242, 0.98);
+  --theme-toggle-track-border: rgba(15, 23, 36, 0.1);
   --theme-toggle-thumb-bg: #0c1424;
   --theme-toggle-thumb-shadow: 0 10px 18px rgba(7, 17, 32, 0.18);
 }
@@ -349,7 +349,7 @@ a {
   box-shadow:
     var(--theme-toggle-inset),
     0 10px 24px color-mix(in srgb, var(--foreground) 12%, transparent);
-  padding: 0 0.56rem;
+  padding: 0 0.72rem;
 }
 
 .theme-toggle__icon {
@@ -371,10 +371,10 @@ a {
 
 .theme-toggle__thumb {
   position: absolute;
-  left: 0.22rem;
-  top: 0.18rem;
-  height: 1.9rem;
-  width: 1.9rem;
+  left: 0.24rem;
+  top: 0.24rem;
+  height: 2.5rem;
+  width: 2.5rem;
   border-radius: 9999px;
   background: var(--theme-toggle-thumb-bg);
   box-shadow: var(--theme-toggle-thumb-shadow);
@@ -410,7 +410,7 @@ a {
 }
 
 .theme-toggle[data-theme="dark"] .theme-toggle__thumb {
-  transform: translateX(1.46rem);
+  transform: translateX(2.12rem);
 }
 
 html[data-theme="dark"] .theme-toggle__icon--sun {
