@@ -38,7 +38,7 @@ export function SiteFooter() {
                 <a
                   key={link.label}
                   aria-label={link.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white/65 text-muted transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface text-muted transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   href={link.href}
                   rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                   target={link.href.startsWith("http") ? "_blank" : undefined}

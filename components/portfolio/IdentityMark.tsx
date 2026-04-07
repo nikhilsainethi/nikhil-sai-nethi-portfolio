@@ -16,7 +16,7 @@ export function IdentityMark({
   className = "",
   imageClassName = "",
 }: IdentityMarkProps) {
-  const tileClassName = `flex shrink-0 items-center justify-center overflow-hidden rounded-[0.9rem] border border-border bg-white shadow-sm ${className}`.trim();
+  const tileClassName = `flex shrink-0 items-center justify-center overflow-hidden rounded-[0.9rem] border border-border bg-surface-strong shadow-sm ${className}`.trim();
 
   if (logoPath) {
     return (

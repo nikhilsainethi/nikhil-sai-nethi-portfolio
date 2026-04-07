@@ -68,7 +68,7 @@ export function CertificationsEducation() {
       />
 
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="glass-panel rounded-[2rem] border border-white/75 p-6 shadow-[0_26px_64px_rgba(84,103,142,0.11)]">
+        <div className="glass-panel rounded-[2rem] border border-border/80 p-6 shadow-[var(--shadow-card)]">
           <div className="flex items-center justify-between gap-4 border-b border-border/75 pb-5">
             <div>
               <p className="mono-label text-[11px] text-muted">Certifications</p>
@@ -76,7 +76,7 @@ export function CertificationsEducation() {
                 Active Credentials
               </p>
             </div>
-            <span className="rounded-full border border-border/75 bg-white/72 px-3 py-1 font-mono text-xs text-muted">
+            <span className="rounded-full border border-border/75 bg-surface-strong px-3 py-1 font-mono text-xs text-muted">
               {certifications.length} total
             </span>
           </div>
@@ -88,13 +88,13 @@ export function CertificationsEducation() {
               return (
                 <a
                   key={certification.title}
-                  className="card-hover block rounded-[1.4rem] border border-white/75 bg-white/72 p-5 shadow-[0_14px_34px_rgba(89,108,144,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="card-hover block rounded-[1.4rem] border border-border/80 bg-surface-strong p-5 shadow-[0_14px_34px_color-mix(in_srgb,var(--foreground)_10%,transparent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   href={certification.link}
                   rel="noreferrer"
                   target="_blank"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-[0.9rem] border border-border/70 bg-white text-accent">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-[0.9rem] border border-border/70 bg-surface text-accent">
                       <Icon size={18} />
                     </div>
                     <span className="rounded-full bg-accent-soft px-2.5 py-1 font-mono text-[11px] text-accent-strong">
@@ -120,9 +120,9 @@ export function CertificationsEducation() {
           </div>
         </div>
 
-        <div className="glass-panel rounded-[2rem] border border-white/75 p-6 shadow-[0_26px_64px_rgba(84,103,142,0.11)]">
+        <div className="glass-panel rounded-[2rem] border border-border/80 p-6 shadow-[var(--shadow-card)]">
           <div className="flex items-center gap-3 border-b border-border/75 pb-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[0.9rem] border border-border/70 bg-white/75 text-accent">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[0.9rem] border border-border/70 bg-surface-strong text-accent">
               <FaGraduationCap size={18} />
             </div>
             <div>
@@ -135,7 +135,7 @@ export function CertificationsEducation() {
             {education.map((item) => (
               <article
                 key={item.school}
-                className="rounded-[1.4rem] border border-white/75 bg-white/72 p-5 shadow-[0_14px_34px_rgba(89,108,144,0.08)]"
+                className="rounded-[1.4rem] border border-border/80 bg-surface-strong p-5 shadow-[0_14px_34px_color-mix(in_srgb,var(--foreground)_10%,transparent)]"
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex items-start gap-3">

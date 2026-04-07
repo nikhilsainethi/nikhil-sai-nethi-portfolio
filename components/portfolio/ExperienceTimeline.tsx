@@ -81,10 +81,10 @@ export function ExperienceTimeline() {
               </span>
             ) : (
               /* Past roles: hollow ring */
-              <span className="absolute -left-[2.18rem] top-7 h-4 w-4 rounded-full border-2 border-accent/40 bg-white shadow-[0_4px_10px_rgba(94,116,160,0.12)]" />
+              <span className="absolute -left-[2.18rem] top-7 h-4 w-4 rounded-full border-2 border-accent/40 bg-surface-strong shadow-[0_4px_10px_color-mix(in_srgb,var(--foreground)_12%,transparent)]" />
             )}
             <Reveal delay={index * 0.06}>
-              <article className="card-hover glass-panel rounded-[2rem] border border-white/70 p-6 shadow-[0_24px_60px_rgba(71,94,136,0.12)] sm:p-7">
+              <article className="card-hover glass-panel rounded-[2rem] border border-border/80 p-6 shadow-[var(--shadow-card)] sm:p-7">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex items-start gap-4">
                     <IdentityMark

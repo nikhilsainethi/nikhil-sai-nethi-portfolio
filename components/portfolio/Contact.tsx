@@ -38,7 +38,7 @@ export function Contact() {
           <a
             key={link.label}
             aria-label={link.value}
-            className="card-hover glass-panel rounded-[1.8rem] border border-white/75 p-6 shadow-[0_22px_48px_rgba(82,101,142,0.11)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="card-hover glass-panel rounded-[1.8rem] border border-border/80 p-6 shadow-[var(--shadow-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             href={link.href}
             rel={link.href.startsWith("http") ? "noreferrer" : undefined}
             target={link.href.startsWith("http") ? "_blank" : undefined}

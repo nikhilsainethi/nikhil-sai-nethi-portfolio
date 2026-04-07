@@ -126,10 +126,10 @@ export function Skills() {
           return (
             <StaggerItem key={group.title}>
             <div
-              className="card-hover glass-panel flex min-h-0 flex-col rounded-[1.75rem] border border-white/75 p-5 shadow-[0_18px_42px_rgba(82,101,142,0.10)] sm:min-h-[18rem] sm:rounded-[2rem] sm:p-6 sm:shadow-[0_22px_54px_rgba(82,101,142,0.11)]"
+              className="card-hover glass-panel flex min-h-0 flex-col rounded-[1.75rem] border border-border/80 p-5 shadow-[var(--shadow-card)] sm:min-h-[18rem] sm:rounded-[2rem] sm:p-6"
             >
               <div className="flex items-start gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/85 bg-white/80 text-accent shadow-[0_10px_24px_rgba(88,107,144,0.12)] sm:h-12 sm:w-12">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/80 bg-surface-strong text-accent shadow-[0_10px_24px_color-mix(in_srgb,var(--foreground)_12%,transparent)] sm:h-12 sm:w-12">
                   <Icon size={17} />
                 </div>
                 <div className="space-y-1">
@@ -148,7 +148,7 @@ export function Skills() {
                   return (
                     <span
                       key={item.name}
-                      className="flex items-center gap-2 rounded-full border border-white/80 bg-white/72 px-3 py-2 text-[13px] text-muted shadow-[0_10px_22px_rgba(89,108,144,0.08)] transition-colors hover:border-accent/30 hover:text-accent-strong sm:text-sm"
+                      className="flex items-center gap-2 rounded-full border border-border/80 bg-surface-strong px-3 py-2 text-[13px] text-muted shadow-[0_10px_22px_color-mix(in_srgb,var(--foreground)_10%,transparent)] transition-colors hover:border-accent/30 hover:text-accent-strong sm:text-sm"
                     >
                       {ItemIcon && <ItemIcon size={14} className="text-accent" />}
                       {item.name}

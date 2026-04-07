@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { siteDescription, siteTitle, siteUrl } from "@/lib/site";
+import { ThemeToggle } from "@/components/portfolio/ThemeToggle";
 import { CursorSpotlight } from "@/components/portfolio/CursorSpotlight";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { Header } from "@/components/portfolio/Header";
@@ -8,6 +9,7 @@ import { HeroAnimation } from "@/components/portfolio/HeroAnimation";
 import { PageIntro } from "@/components/portfolio/PageIntro";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
+import { defaultThemeMode, getThemeInitializationScript } from "@/lib/theme";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -55,10 +57,15 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      data-theme={defaultThemeMode}
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <script
+          dangerouslySetInnerHTML={{ __html: getThemeInitializationScript() }}
+        />
         <PageIntro />
         <ScrollProgress />
         <CustomCursor />
@@ -75,6 +82,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
+        <ThemeToggle />
       </body>
     </html>
   );

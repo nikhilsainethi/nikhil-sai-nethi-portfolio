@@ -49,7 +49,7 @@ export function Projects() {
       />
 
       <Reveal>
-        <article className="card-hover glass-panel rounded-[2rem] border border-white/70 p-6 shadow-[0_26px_70px_rgba(72,94,138,0.12)] sm:p-8">
+        <article className="card-hover glass-panel rounded-[2rem] border border-border/80 p-6 shadow-[var(--shadow-card)] sm:p-8">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="space-y-6">
               <div className="space-y-3">
@@ -121,13 +121,13 @@ export function Projects() {
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-[1.4rem] border border-white/80 bg-white/70 p-6 shadow-[0_18px_40px_rgba(83,102,140,0.1)]">
+              <div className="rounded-[1.4rem] border border-border/80 bg-surface-strong p-6 shadow-[0_18px_40px_color-mix(in_srgb,var(--foreground)_10%,transparent)]">
                 <p className="mono-label text-[11px] text-accent">System Highlights</p>
                 <div className="mt-5 space-y-4">
                   {systemHighlights.map((item) => (
                     <div
                       key={item.label}
-                      className="rounded-[1rem] border border-border/70 bg-white/80 px-4 py-4"
+                      className="rounded-[1rem] border border-border/70 bg-surface px-4 py-4"
                     >
                       <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
                         {item.label}
@@ -140,10 +140,10 @@ export function Projects() {
                 </div>
               </div>
 
-              <div className="rounded-[1.4rem] border border-white/80 bg-white/70 p-6 shadow-[0_18px_40px_rgba(83,102,140,0.1)]">
+              <div className="rounded-[1.4rem] border border-border/80 bg-surface-strong p-6 shadow-[0_18px_40px_color-mix(in_srgb,var(--foreground)_10%,transparent)]">
                 <p className="mono-label text-[11px] text-muted">Why It Worked</p>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[1rem] border border-border/70 bg-white/80 px-4 py-4">
+                  <div className="rounded-[1rem] border border-border/70 bg-surface px-4 py-4">
                     <p className="text-2xl font-semibold tracking-[-0.04em] text-foreground">
                       ~45%
                     </p>
@@ -151,7 +151,7 @@ export function Projects() {
                       Faster retrieval after ranking and latency optimization.
                     </p>
                   </div>
-                  <div className="rounded-[1rem] border border-border/70 bg-white/80 px-4 py-4">
+                  <div className="rounded-[1rem] border border-border/70 bg-surface px-4 py-4">
                     <p className="text-2xl font-semibold tracking-[-0.04em] text-foreground">
                       Grounded
                     </p>
@@ -169,7 +169,7 @@ export function Projects() {
       <StaggerChildren className="mt-8 grid gap-4 lg:grid-cols-3" stagger={0.12}>
         {supportingLogs.map((item) => (
           <StaggerItem key={item.title}>
-            <article className="card-hover glass-panel rounded-[1.8rem] border border-white/70 p-5 shadow-[0_20px_44px_rgba(82,101,142,0.1)]">
+            <article className="card-hover glass-panel rounded-[1.8rem] border border-border/80 p-5 shadow-[0_20px_44px_color-mix(in_srgb,var(--foreground)_10%,transparent)]">
               <p className="mono-label text-[11px] text-[var(--warm-accent)]">
                 Engineering Log
               </p>
