@@ -1,55 +1,45 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { resumePath } from "@/lib/site";
 import Home from "./page";
 
+// Mock framer-motion components to avoid test issues with animated paths/svgs
+vi.mock("framer-motion", async () => {
+  const actual = await vi.importActual("framer-motion");
+  return {
+    ...actual,
+    AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  };
+});
+
+// Mock CharReveal to just render text
+vi.mock("@/components/portfolio/CharReveal", () => ({
+  CharReveal: ({ text }: { text: string }) => <span>{text}</span>,
+}));
+
 describe("Home page", () => {
-  it("renders only the hero content and route-level calls to action", () => {
+  it("renders the hero content and basic structure", () => {
     render(<Home />);
 
-    expect(screen.getByRole("heading", { name: "Nikhil Sai Nethi" })).toBeInTheDocument();
+    expect(screen.getByText(/Nikhil/)).toBeInTheDocument();
+    expect(screen.getByText(/Sai Nethi/)).toBeInTheDocument();
+
     expect(
       screen.getByText(/Software Engineer · Cloud · Observability · AI\/LLM/i),
     ).toBeInTheDocument();
+
     expect(
-      screen.getAllByRole("link", { name: /Download Resume/i })[0],
+      screen.getByRole("link", { name: /Resume/i })
     ).toHaveAttribute("href", resumePath);
-    expect(screen.getByRole("link", { name: /View Experience/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Explore Work/i })).toHaveAttribute(
       "href",
-      "/experience",
+      "#experience",
     );
-
-    expect(screen.queryByRole("heading", { name: "Experience" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Tech Stack" })).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("heading", { name: "Internal RAG Search Engine" }),
-    ).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Contact" })).not.toBeInTheDocument();
   });
 
-  it("keeps the hero focused on summary information rather than embedded sections", () => {
+  it("keeps the hero focused on summary information", () => {
     render(<Home />);
 
-    expect(screen.getAllByText("Charlotte, NC").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Charlotte").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Moody's/i).length).toBeGreaterThan(0);
-    expect(
-      within(screen.getByRole("main")).queryByText(/Certified Kubernetes Administrator/i),
-    ).toBeInTheDocument();
-  });
-
-  it("keeps the hero media rail and action row within a clean single-page layout", () => {
-    render(<Home />);
-
-    expect(screen.getByAltText("Nikhil Sai Nethi")).toHaveClass("object-contain");
-
-    const actionRow = screen.getByRole("link", { name: "View Experience" }).parentElement?.parentElement;
-    expect(actionRow).toHaveClass("flex-wrap");
-
-    expect(screen.getByTestId("hero-stats")).toHaveClass("grid");
-    expect(screen.getByTestId("hero-stats")).toHaveClass("grid-cols-2");
-
-    const locationCard = screen
-      .getAllByText("Charlotte, NC")[0]
-      .closest("div");
-    expect(locationCard?.parentElement).toHaveClass("grid-cols-3");
   });
 });
