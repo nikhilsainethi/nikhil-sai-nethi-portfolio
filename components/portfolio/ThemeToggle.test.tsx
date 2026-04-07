@@ -20,13 +20,14 @@ describe("ThemeToggle", () => {
     document.documentElement.dataset.theme = "light";
   });
 
-  it("renders as a fixed floating control in the bottom-left corner", () => {
+  it("renders as a fixed floating control in the top-right corner", () => {
     render(<ThemeToggle />);
 
     const toggle = screen.getByRole("button", { name: /switch to dark mode/i });
 
     expect(toggle).toHaveClass("fixed");
     expect(toggle).toHaveAttribute("data-theme", "light");
+    expect(toggle).toHaveAttribute("data-corner", "top-right");
   });
 
   it("reads the stored theme on mount and syncs the root attribute", async () => {

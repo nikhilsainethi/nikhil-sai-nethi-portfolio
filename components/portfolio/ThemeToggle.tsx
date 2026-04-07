@@ -11,11 +11,6 @@ import {
   themeStorageKey,
 } from "@/lib/theme";
 
-const floatingTogglePosition = {
-  bottom: "max(1rem, env(safe-area-inset-bottom))",
-  left: "max(1rem, env(safe-area-inset-left))",
-} as const;
-
 function getInitialThemeMode(): ThemeMode {
   if (typeof document === "undefined" || typeof window === "undefined") {
     return defaultThemeMode;
@@ -45,17 +40,18 @@ export function ThemeToggle() {
     <button
       aria-label={buttonLabel}
       aria-pressed={theme === "dark"}
-      className="theme-toggle fixed z-[70] inline-flex h-14 w-14 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      className="theme-toggle fixed right-4 top-[4.75rem] z-[70] inline-flex h-12 w-[3.6rem] items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:right-5 sm:top-5 lg:right-6 lg:top-6"
+      data-corner="top-right"
       data-theme={theme}
       onClick={() => setTheme((currentTheme) => getNextThemeMode(currentTheme))}
       suppressHydrationWarning
-      style={floatingTogglePosition}
       type="button"
     >
       <span aria-hidden="true" className="theme-toggle__glow" />
-      <span aria-hidden="true" className="theme-toggle__core">
-        <FaSun className="theme-toggle__icon theme-toggle__icon--sun" size={16} />
-        <FaMoon className="theme-toggle__icon theme-toggle__icon--moon" size={15} />
+      <span aria-hidden="true" className="theme-toggle__track">
+        <FaSun className="theme-toggle__icon theme-toggle__icon--sun" size={13} />
+        <FaMoon className="theme-toggle__icon theme-toggle__icon--moon" size={13} />
+        <span className="theme-toggle__thumb" />
       </span>
       <span className="sr-only">{buttonLabel}</span>
     </button>
