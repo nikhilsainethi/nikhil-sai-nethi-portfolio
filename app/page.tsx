@@ -82,9 +82,9 @@ const contactLinks = [
 
 export default function Home() {
   return (
-    <main>
+    <main className="bg-transparent text-white">
 
-      {/* ══════════════════════════════════════════ 01 · HERO ══ */}
+      {/* ------------------------------------------ 01 · HERO -- */}
       <StackedSection id="hero" transparent>
         <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
@@ -92,34 +92,34 @@ export default function Home() {
             <section className="grid w-full items-center gap-6 lg:grid-cols-[minmax(15rem,0.6fr)_minmax(0,1.4fr)] lg:gap-12">
 
               {/* Portrait */}
-              <Reveal className="group order-2 flex justify-center lg:order-1 lg:justify-start" delay={0.1}>
+              <Reveal className="group order-2 flex justify-center lg:order-1 lg:justify-start" delay={1.2}>
                 <TiltCard className="relative w-full max-w-[18rem] sm:max-w-[20rem]">
-                  <div className="glass-panel shimmer-card relative w-full overflow-hidden rounded-[2rem] border border-white/80 p-4 shadow-[0_26px_64px_rgba(20,50,110,0.18)]">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.82),transparent_60%)]" />
+                  <div className="glass-panel shimmer-card relative w-full overflow-hidden rounded-[2rem] border border-white/20 bg-white/5 p-4 shadow-[0_26px_64px_rgba(0,0,0,0.4)]">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.1),transparent_60%)]" />
                     <div className="relative space-y-3">
-                      <div className="overflow-hidden rounded-[1.55rem] border border-white/70 bg-[linear-gradient(160deg,#c8d8ff_0%,#f0f6ff_45%,#eae4ff_100%)] p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                      <div className="overflow-hidden rounded-[1.55rem] border border-white/20 bg-white/10 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
                         <div className="relative overflow-hidden rounded-[1.4rem]">
                           <Image
                             alt="Nikhil Sai Nethi"
-                            className="aspect-[4/5] h-auto w-full object-contain object-top bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.7),transparent_55%)] [clip-path:inset(0_0_0_0_round_1.4rem)] p-1 motion-safe:[animation:portrait-wipe_0.9s_cubic-bezier(0.22,1,0.36,1)_0.2s_both]"
+                            className="aspect-[4/5] h-auto w-full object-contain object-top bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.2),transparent_55%)] [clip-path:inset(0_0_0_0_round_1.4rem)] p-1 motion-safe:[animation:portrait-wipe_1.5s_cubic-bezier(0.16,1,0.3,1)_1.4s_both]"
                             height={960}
                             priority
                             src={heroPortraitPath}
                             unoptimized
                             width={768}
                           />
-                          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/12 to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/80 to-transparent" />
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         {[
-                          { label: "Location", value: "Charlotte, NC" },
+                          { label: "Location", value: "Charlotte" },
                           { label: "Current", value: "Moody's" },
-                          { label: "Focus", value: "Practical AI" },
+                          { label: "Focus", value: "Platform" },
                         ].map(({ label, value }) => (
-                          <div key={label} className="rounded-[1rem] border border-white/80 bg-white/72 px-2.5 py-2.5 shadow-[0_8px_20px_rgba(20,50,100,0.10)]">
-                            <p className="mono-label text-[10px] text-accent">{label}</p>
-                            <p className="mt-1 text-[11px] font-semibold leading-5 text-foreground">{value}</p>
+                          <div key={label} className="rounded-[1rem] border border-white/10 bg-white/5 px-2.5 py-2.5 text-center shadow-[0_8px_20px_rgba(0,0,0,0.2)]">
+                            <p className="mono-label text-[9px] text-[#ffcc44]">{label}</p>
+                            <p className="mt-1 text-[11px] font-semibold leading-5 text-white">{value}</p>
                           </div>
                         ))}
                       </div>
@@ -129,316 +129,218 @@ export default function Home() {
               </Reveal>
 
               {/* Intro text */}
-              <Reveal className="order-1 lg:order-2" delay={0}>
-                <div className="space-y-5">
+              <Reveal className="order-1 lg:order-2" delay={1.0}>
+                <div className="space-y-6">
                   <div className="inline-flex">
-                    <div className="relative inline-flex rounded-full bg-gradient-to-r from-accent/35 via-purple-400/25 to-[var(--warm-accent)]/30 p-px shadow-[0_0_28px_rgba(84,80,245,0.28)]">
-                      <div className="inline-flex rounded-full border border-white/85 bg-white/65 px-4 py-1.5 backdrop-blur-sm">
-                        <p className="mono-label text-[11px] text-accent">
+                    <div className="relative inline-flex rounded-full bg-gradient-to-r from-accent/50 via-purple-400/30 to-[#ff7820]/40 p-[1px] shadow-[0_0_28px_rgba(84,80,245,0.4)]">
+                      <div className="inline-flex rounded-full bg-black/60 px-5 py-2 backdrop-blur-md">
+                        <p className="mono-label text-[11px] text-[#a89dff]">
                           Software Engineer · Cloud · Observability · AI/LLM
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {/* Name — char-level reveal after intro wipe */}
-                    <h1 className="text-4xl font-semibold tracking-[-0.06em] text-foreground sm:text-5xl lg:text-6xl">
-                      <CharReveal text="Nikhil Sai Nethi" introDelay={2.6} stagger={0.045} />
+                    <h1 className="text-5xl font-black tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl xl:text-8xl">
+                      <CharReveal text="Nikhil" introDelay={1.4} stagger={0.06} />
+                      <br />
+                      <CharReveal text="Sai Nethi." introDelay={1.8} stagger={0.06} />
                     </h1>
 
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <p className="text-base font-medium text-muted sm:text-lg">
-                        <RoleCycler />
-                      </p>
-                      <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/70 bg-emerald-50/70 px-3 py-1.5">
-                        <span className="relative flex h-2 w-2">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-                        </span>
-                        <p className="mono-label text-[10px] text-emerald-700">Open to opportunities</p>
-                      </div>
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
+                      <p className="text-xl text-white/70">Building</p>
+                      <RoleCycler />
+                      <p className="text-xl text-white/70">systems.</p>
                     </div>
 
-                    <p className="max-w-3xl text-3xl font-semibold leading-[1.0] tracking-[-0.05em] text-foreground sm:text-4xl lg:text-5xl">
-                      <CharReveal text="Building resilient" introDelay={2.9} stagger={0.032} />
-                      {" "}
-                      <CharReveal text="cloud systems" className="accent-gradient" introDelay={3.45} stagger={0.04} />
-                      <CharReveal text=" and practical" introDelay={3.9} stagger={0.032} />
-                      {" "}
-                      <CharReveal text="AI tooling." className="accent-gradient" introDelay={4.3} stagger={0.05} />
+                    <p className="max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
+                      Specializing in deep observability, reliable Kubernetes platforms, and practical AI integrations that make engineering teams faster and systems harder to break.
                     </p>
                   </div>
 
-                  {/* Stats */}
-                  <div data-testid="hero-stats" className="grid grid-cols-2 flex-wrap items-center gap-6 border-y border-border/60 py-3 sm:flex">
-                    {[
-                      { value: 2, suffix: "+", label: "Yrs Experience" },
-                      { value: 3, suffix: "", label: "Companies" },
-                      { value: 3, suffix: "", label: "Certifications" },
-                      { value: 150, suffix: "+", label: "Bugs Resolved" },
-                    ].map(({ value, suffix, label }, i) => (
-                      <div key={label} className="flex items-center gap-6">
-                        {i > 0 && <div className="hidden h-7 w-px bg-border/80 sm:block" />}
-                        <div>
-                          <p className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-                            <AnimatedCounter value={value} suffix={suffix} />
-                          </p>
-                          <p className="mono-label mt-0.5 text-[10px] text-muted">{label}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTAs */}
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap items-center gap-5 pt-4">
                     <MagneticButton>
                       <a
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--warm-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(255,120,32,0.34)] transition-all hover:-translate-y-0.5 hover:bg-[var(--warm-accent-strong)]"
-                        href={resumePath}
+                        href="#experience"
+                        className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-black shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all hover:scale-105"
                       >
-                        Download Resume <FaArrowRight size={11} />
+                        Explore Work <FaArrowDown size={12} />
                       </a>
                     </MagneticButton>
                     <MagneticButton>
-                      <Link
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-white/70 px-5 py-2.5 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent"
-                        href="/experience"
+                      <a
+                        href={resumePath}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-bold text-white transition-all hover:bg-white/10"
                       >
-                        View Experience <FaArrowRight size={11} />
-                      </Link>
+                        Resume <FaUpRightFromSquare size={12} />
+                      </a>
                     </MagneticButton>
                   </div>
                 </div>
               </Reveal>
+
             </section>
 
-            {/* Marquee */}
-            <div className="-mx-4 mt-4 hidden border-y border-border/50 py-3 sm:-mx-6 sm:block lg:-mx-8">
-              <MarqueeStrip
-                items={["AWS","Kubernetes","Python","TypeScript","pgvector","LangChain","OpenTelemetry","Terraform","Jenkins","Linux","RAG","LLM Tooling","Observability","EKS","PostgreSQL"]}
-                speed={48}
-              />
-            </div>
-
-            {/* Scroll indicator */}
-            <div className="mt-3 hidden items-center justify-center gap-2 opacity-35 sm:flex">
-              <FaArrowDown size={12} className="animate-bounce text-muted" />
-              <span className="mono-label text-[10px] text-muted">Scroll to explore</span>
-            </div>
           </div>
         </div>
       </StackedSection>
 
-      <div className="section-divider" />
-      {/* ══════════════════════════════════════ 02 · PROJECTS ══ */}
-      <StackedSection id="projects">
-        <div className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <div className="mx-auto w-full max-w-6xl">
+      <div className="section-divider opacity-30" />
 
-            <div className="mb-6 flex items-end justify-between border-b border-border/60 pb-5">
-              <div>
-                <p className="mono-label text-[11px] text-[var(--warm-accent)]">02 · Projects</p>
-                <h2 className="mt-1.5 text-3xl font-semibold tracking-[-0.05em] text-foreground sm:text-4xl">
-                  Selected Engineering Work
+      {/* ------------------------------------------ 02 · ABOUT -- */}
+      <StackedSection id="about">
+        <div className="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+          <div className="mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-2 lg:gap-16">
+
+            <Reveal delay={0.1}>
+              <div className="sticky top-24 space-y-6">
+                <p className="mono-label text-[11px] text-[#ff7820]">02 · The Philosophy</p>
+                <h2 className="text-3xl font-bold tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+                  Code is easy.<br/>
+                  <span className="accent-gradient">Operations</span> is hard.
                 </h2>
+                <div className="h-1 w-20 rounded-full bg-gradient-to-r from-accent to-transparent" />
+                <p className="text-lg leading-relaxed text-white/70">
+                  I started out building features, but quickly realized that the real challenge isn&apos;t writing the code—it&apos;s keeping it running. I pivot between writing distributed backend services and constructing the platforms they run on.
+                </p>
+                <p className="text-lg leading-relaxed text-white/70">
+                  Right now, I&apos;m building internal LLM tools and RAG systems at Moody&apos;s, wrapping them in heavy observability (Prometheus, OTel) to ensure we don&apos;t just ship AI, but ship it reliably.
+                </p>
               </div>
-              <Link
-                href="/projects"
-                className="hidden items-center gap-1.5 rounded-full border border-border bg-white/60 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:flex"
-              >
-                All projects <FaUpRightFromSquare size={10} />
-              </Link>
-            </div>
+            </Reveal>
 
-            <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-              {/* Flagship */}
-              <div className="card-hover glass-panel rounded-[1.8rem] border border-white/70 p-6 shadow-[0_22px_50px_rgba(72,94,138,0.11)]">
-                <p className="mono-label text-[10px] text-[var(--warm-accent)]">Flagship · RAG</p>
-                <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-foreground sm:text-2xl">
-                  Internal RAG Search Engine
-                </h3>
-                <ul className="mt-3 space-y-2 text-sm leading-7 text-muted">
-                  <li className="flex gap-2.5">
-                    <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--warm-accent)]" />
-                    Hybrid retrieval (pgvector + BM25), HyDE, reciprocal rank fusion, reranking — ~45% faster
-                  </li>
-                  <li className="flex gap-2.5">
-                    <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--warm-accent)]" />
-                    On-call assistant grounded in runbooks, postmortems, and incident tickets
-                  </li>
-                </ul>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {["pgvector", "LangChain", "HyDE", "RRF", "S3", "Lambda"].map((t) => (
-                    <span key={t} className="rounded-full border border-accent/22 bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent-strong">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div className="rounded-[1rem] border border-border/60 bg-white/70 px-3 py-3">
-                    <p className="text-lg font-bold tracking-[-0.04em] text-foreground">~45%</p>
-                    <p className="mt-0.5 text-xs text-muted">Faster retrieval after optimization</p>
-                  </div>
-                  <div className="rounded-[1rem] border border-border/60 bg-white/70 px-3 py-3">
-                    <p className="text-lg font-bold tracking-[-0.04em] text-foreground">Grounded</p>
-                    <p className="mt-0.5 text-xs text-muted">Answers tied to internal docs</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Engineering logs */}
-              <div className="flex flex-col gap-3">
-                {engineeringLogs.map((item) => (
-                  <div key={item.title} className="card-hover glass-panel rounded-[1.4rem] border border-white/70 px-5 py-4 shadow-[0_16px_36px_rgba(72,94,138,0.09)]">
-                    <p className="mono-label text-[10px] text-[var(--warm-accent)]">Engineering Log</p>
-                    <p className="mt-1.5 text-sm font-semibold text-foreground">{item.title}</p>
-                    <div className="mt-2.5 flex flex-wrap gap-1.5">
-                      {item.tags.map((t) => (
-                        <span key={t} className="rounded-full border border-accent/20 bg-accent-soft px-2 py-0.5 font-mono text-[10px] text-accent">
-                          {t}
+            <div className="space-y-6">
+              {engineeringLogs.map((log, i) => (
+                <Reveal key={log.title} delay={0.1 + i * 0.1}>
+                  <div className="card-hover glass-panel group rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-2xl transition-all hover:border-white/30 hover:bg-white/10">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-[#a89dff]">
+                          0{i + 1}
+                        </span>
+                        <p className="font-mono text-xs text-white/50">Engineering Log</p>
+                      </div>
+                      <FaArrowRight className="text-white/30 transition-transform group-hover:translate-x-1 group-hover:text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white">{log.title}</h3>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {log.tags.map(tag => (
+                        <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+                          {tag}
                         </span>
                       ))}
                     </div>
                   </div>
-                ))}
-                <Link
-                  href="/projects"
-                  className="mt-1 flex items-center justify-center gap-1.5 rounded-[1.2rem] border border-dashed border-border/80 py-3 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:hidden"
-                >
-                  All projects <FaUpRightFromSquare size={10} />
-                </Link>
-              </div>
+                </Reveal>
+              ))}
+
+              <Reveal delay={0.4}>
+                <div className="card-hover glass-panel flex flex-col items-center justify-center rounded-[2rem] border border-[#ff7820]/30 bg-gradient-to-br from-[#ff7820]/10 to-transparent p-8 text-center shadow-2xl">
+                  <AnimatedCounter value={99.99} suffix="%" />
+                  <p className="mt-2 font-mono text-sm text-[#ffcc44]">Target Uptime</p>
+                </div>
+              </Reveal>
             </div>
+
           </div>
         </div>
       </StackedSection>
 
-      <div className="section-divider" />
-      {/* ══════════════════════════════════════ 03 · EXPERIENCE ══ */}
+      {/* Marquee Strip injected here for visual break */}
+      <div className="my-10 border-y border-white/10 bg-black/40 py-6">
+        <MarqueeStrip items={["EKS", "OTel", "RAG", "LangChain", "Resilience", "Automation"]} speed={40} className="opacity-80" />
+      </div>
+
+      {/* -------------------------------------- 03 · EXPERIENCE -- */}
       <StackedSection id="experience">
         <div className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
 
-            <div className="mb-6 flex items-end justify-between border-b border-border/60 pb-5">
+            <div className="mb-10 flex items-end justify-between border-b border-white/10 pb-6">
               <div>
-                <p className="mono-label text-[11px] text-[var(--warm-accent)]">03 · Experience</p>
-                <h2 className="mt-1.5 text-3xl font-semibold tracking-[-0.05em] text-foreground sm:text-4xl">
+                <p className="mono-label text-[11px] text-[#ff7820]">03 · Experience</p>
+                <h2 className="mt-2 text-4xl font-bold tracking-[-0.04em] text-white sm:text-5xl">
                   Work History
                 </h2>
               </div>
               <Link
                 href="/experience"
-                className="hidden items-center gap-1.5 rounded-full border border-border bg-white/60 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:flex"
+                className="hidden items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-white/10 sm:flex"
               >
-                Full timeline <FaUpRightFromSquare size={10} />
+                Full timeline <FaUpRightFromSquare size={12} />
               </Link>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
-              {experiences.map((exp) => (
-                <div
-                  key={exp.company}
-                  className={`card-hover glass-panel rounded-[1.8rem] border p-5 shadow-[0_20px_46px_rgba(72,94,138,0.10)] ${
-                    exp.current ? "border-accent/30 bg-accent-soft/40" : "border-white/70"
-                  }`}
-                >
-                  {exp.current && (
-                    <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-300/70 bg-emerald-50/70 px-2.5 py-1">
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                      </span>
-                      <span className="mono-label text-[9px] text-emerald-700">Current</span>
+            <div className="grid gap-6 sm:grid-cols-3">
+              {experiences.map((exp, i) => (
+                <Reveal key={exp.company} delay={0.1 * i} className="h-full">
+                  <div className={`card-hover glass-panel flex h-full flex-col rounded-[2rem] border p-6 shadow-2xl ${
+                    exp.current ? "border-accent/50 bg-accent/10" : "border-white/10 bg-white/5"
+                  }`}>
+                    {exp.current && (
+                      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 w-fit">
+                        <span className="relative flex h-2 w-2">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                        </span>
+                        <span className="mono-label text-[10px] text-emerald-400">Current</span>
+                      </div>
+                    )}
+                    <h3 className="text-xl font-bold text-white">{exp.company}</h3>
+                    <p className="mt-1 font-mono text-sm text-[#a89dff]">{exp.role}</p>
+                    <p className="mt-2 text-sm text-white/50">{exp.period}</p>
+                    <div className="mt-auto pt-6">
+                      <div className="flex flex-wrap gap-2">
+                        {exp.tags.map((t) => (
+                          <span key={t} className="rounded-full border border-white/10 bg-black/40 px-2.5 py-1 text-[11px] font-medium text-white/70">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  )}
-                  <h3 className="text-base font-semibold tracking-[-0.02em] text-foreground">{exp.company}</h3>
-                  <p className="mt-0.5 text-sm text-muted">{exp.role}</p>
-                  <p className="mono-label mt-2 text-[10px] text-muted/70">{exp.period}</p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {exp.tags.map((t) => (
-                      <span key={t} className="rounded-full border border-accent/20 bg-accent-soft px-2 py-0.5 font-mono text-[10px] text-accent">
-                        {t}
-                      </span>
-                    ))}
                   </div>
-                </div>
+                </Reveal>
               ))}
-            </div>
-
-            <div className="mt-6 glass-panel rounded-[1.8rem] border border-white/70 p-5 shadow-[0_20px_46px_rgba(72,94,138,0.10)]">
-              <p className="mono-label text-[10px] text-accent">Moody&apos;s · Key impact</p>
-              <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {[
-                  "Designed and shipped internal RAG search engine — ~45% faster retrieval",
-                  "Built SLI/SLO observability with Prometheus, Grafana, OTel, and Datadog",
-                  "Automated release safety: smoke tests, canary checks, rollback automation",
-                ].map((b) => (
-                  <div key={b} className="flex gap-2.5">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/60" />
-                    <p className="text-xs leading-6 text-muted">{b}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
           </div>
         </div>
       </StackedSection>
 
-      <div className="section-divider" />
-      {/* ══════════════════════════════════════ 04 · TECH STACK ══ */}
+      <div className="section-divider opacity-30" />
+      {/* -------------------------------------- 04 · TECH STACK -- */}
       <StackedSection id="skills">
         <div className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">
 
-            <div className="mb-6 flex items-end justify-between border-b border-border/60 pb-5">
+            <div className="mb-10 flex items-end justify-between border-b border-white/10 pb-6">
               <div>
-                <p className="mono-label text-[11px] text-[var(--warm-accent)]">04 · Tech Stack</p>
-                <h2 className="mt-1.5 text-3xl font-semibold tracking-[-0.05em] text-foreground sm:text-4xl">
-                  Technical Skills
+                <p className="mono-label text-[11px] text-[#ff7820]">04 · Tech Stack</p>
+                <h2 className="mt-2 text-4xl font-bold tracking-[-0.04em] text-white sm:text-5xl">
+                  Capabilities
                 </h2>
               </div>
-              <Link
-                href="/tech-stack"
-                className="hidden items-center gap-1.5 rounded-full border border-border bg-white/60 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-accent/40 hover:text-accent sm:flex"
-              >
-                Full stack <FaUpRightFromSquare size={10} />
-              </Link>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              {skillGroups.map((group) => (
-                <div
-                  key={group.eyebrow}
-                  className="card-hover glass-panel rounded-[1.6rem] border border-white/70 p-4 shadow-[0_18px_40px_rgba(72,94,138,0.09)]"
-                >
-                  <p className="mono-label text-[10px] text-[var(--warm-accent)]">{group.eyebrow}</p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {group.items.map((item) => (
-                      <span
-                        key={item}
-                        className="rounded-full border border-white/80 bg-white/72 px-2.5 py-1 text-[12px] text-muted transition-colors hover:border-accent/30 hover:text-accent-strong"
-                      >
-                        {item}
-                      </span>
-                    ))}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+              {skillGroups.map((group, i) => (
+                <Reveal key={group.eyebrow} delay={i * 0.05}>
+                  <div className="card-hover glass-panel h-full rounded-[1.6rem] border border-white/10 bg-white/5 p-5 shadow-2xl">
+                    <p className="mono-label mb-4 text-[10px] text-[#ffcc44]">{group.eyebrow}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {group.items.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-white/80 transition-colors hover:border-accent/50 hover:bg-accent/20 hover:text-white"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Certifications strip */}
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              {[
-                { code: "CKA", label: "Certified Kubernetes Administrator", issuer: "Linux Foundation" },
-                { code: "AWS", label: "AWS Developer – Associate", issuer: "Amazon Web Services" },
-                { code: "CCNA", label: "Cisco CCNA", issuer: "Cisco" },
-              ].map((cert) => (
-                <div key={cert.code} className="flex items-center gap-2.5 rounded-full border border-white/80 bg-white/70 px-4 py-2 shadow-[0_10px_22px_rgba(72,94,138,0.08)]">
-                  <span className="font-mono text-[11px] font-bold text-accent">{cert.code}</span>
-                  <span className="text-xs text-muted">{cert.label}</span>
-                </div>
+                </Reveal>
               ))}
             </div>
 
@@ -446,60 +348,52 @@ export default function Home() {
         </div>
       </StackedSection>
 
-      <div className="section-divider" />
-      {/* ══════════════════════════════════════ 05 · CONTACT ══ */}
+      <div className="section-divider opacity-30" />
+      {/* ----------------------------------------- 05 · CONTACT -- */}
       <StackedSection id="contact" isLast>
-        <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-          <div className="mx-auto w-full max-w-6xl">
+        <div className="px-4 py-20 sm:px-6 sm:py-32 lg:px-8">
+          <div className="mx-auto w-full max-w-6xl text-center">
 
-            <div className="mb-10 border-b border-border/60 pb-8">
-              <p className="mono-label text-[11px] text-[var(--warm-accent)]">05 · Contact</p>
-              <h2 className="mt-2 text-4xl font-semibold tracking-[-0.06em] text-foreground sm:text-5xl lg:text-6xl">
-                Let&apos;s build something{" "}
-                <span className="accent-gradient">resilient.</span>
+            <Reveal delay={0.1}>
+              <p className="mono-label mb-6 text-[11px] text-[#ff7820]">05 · Next Steps</p>
+              <h2 className="text-5xl font-black tracking-[-0.04em] text-white sm:text-7xl lg:text-8xl">
+                Ready to scale?
               </h2>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-muted sm:text-lg">
+              <p className="mx-auto mt-6 max-w-2xl text-lg text-white/60 sm:text-xl">
                 Open to roles in platform engineering, observability, cloud-native delivery,
                 and AI tooling that helps engineers move faster.
               </p>
-            </div>
+            </Reveal>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {contactLinks.map(({ icon: Icon, label, value, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="card-hover glass-panel group rounded-[1.8rem] border border-white/75 p-6 shadow-[0_22px_48px_rgba(82,101,142,0.11)]"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/85 bg-white/80 text-accent shadow-[0_10px_24px_rgba(88,107,144,0.12)]">
-                    <Icon size={16} />
-                  </div>
-                  <p className="mono-label mt-4 text-[10px] text-muted">{label}</p>
-                  <p className="mt-1 text-sm font-semibold text-foreground">{value}</p>
-                </a>
-              ))}
-            </div>
+            <Reveal delay={0.2}>
+              <div className="mt-12 flex flex-wrap justify-center gap-6">
+                <MagneticButton>
+                  <a
+                    href="mailto:nikhilsainethi@gmail.com"
+                    className="inline-flex h-16 items-center gap-3 rounded-full bg-white px-8 text-lg font-bold text-black shadow-[0_0_40px_rgba(255,255,255,0.4)] transition-transform hover:scale-105"
+                  >
+                    Start a Conversation <FaArrowRight />
+                  </a>
+                </MagneticButton>
+              </div>
+            </Reveal>
 
-            <div className="mt-10 flex flex-wrap gap-4">
-              <MagneticButton>
-                <a
-                  href={resumePath}
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--warm-accent)] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,120,32,0.34)] transition-all hover:-translate-y-0.5 hover:bg-[var(--warm-accent-strong)]"
-                >
-                  Download Resume <FaArrowRight size={12} />
-                </a>
-              </MagneticButton>
-              <MagneticButton>
-                <a
-                  href="mailto:nikhilsainethi@gmail.com"
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-white/70 px-6 py-3 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent"
-                >
-                  Get in Touch <FaArrowRight size={12} />
-                </a>
-              </MagneticButton>
-            </div>
+            <Reveal delay={0.3}>
+              <div className="mt-20 flex flex-wrap justify-center gap-4">
+                {contactLinks.map(({ icon: Icon, label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition-all hover:border-white/30 hover:bg-white/10 hover:text-white"
+                    aria-label={label}
+                  >
+                    <Icon size={20} className="transition-transform group-hover:scale-110" />
+                  </a>
+                ))}
+              </div>
+            </Reveal>
 
           </div>
         </div>

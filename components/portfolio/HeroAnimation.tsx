@@ -1,84 +1,68 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 
 /**
- * Background orbs that drift slowly toward the cursor,
- * each with different spring configs for a layered parallax feel.
+ * Advanced Awwwards-style Parallax Hero Animation.
+ * Deep mouse interaction, huge blur orbs that react intensely to cursor,
+ * and background text that scrolls with scroll velocity/parallax.
  */
 export function HeroAnimation() {
-  const springA = { stiffness: 18, damping: 14 };
-  const springB = { stiffness: 10, damping: 12 };
-  const springC = { stiffness: 7, damping: 10 };
-  const springD = { stiffness: 5, damping: 8 };
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const xA = useSpring(useMotionValue(0), springA);
-  const yA = useSpring(useMotionValue(0), springA);
-  const xB = useSpring(useMotionValue(0), springB);
-  const yB = useSpring(useMotionValue(0), springB);
-  const xC = useSpring(useMotionValue(0), springC);
-  const yC = useSpring(useMotionValue(0), springC);
-  const xD = useSpring(useMotionValue(0), springD);
-  const yD = useSpring(useMotionValue(0), springD);
+  const springConfig = { stiffness: 40, damping: 20, mass: 1 };
+  const mouseX = useSpring(useMotionValue(0), springConfig);
+  const mouseY = useSpring(useMotionValue(0), springConfig);
 
-  const xARef = useRef(xA);
-  const yARef = useRef(yA);
-  const xBRef = useRef(xB);
-  const yBRef = useRef(yB);
-  const xCRef = useRef(xC);
-  const yCRef = useRef(yC);
-  const xDRef = useRef(xD);
-  const yDRef = useRef(yD);
+  const { scrollY } = useScroll();
+  const yParallax = useTransform(scrollY, [0, 1000], [0, 400]);
+  const yParallaxFast = useTransform(scrollY, [0, 1000], [0, 800]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Normalize to -60..60 px offset range
-      const nx = (e.clientX / window.innerWidth - 0.5) * 120;
-      const ny = (e.clientY / window.innerHeight - 0.5) * 80;
-      xARef.current.set(nx * 0.8);
-      yARef.current.set(ny * 0.8);
-      xBRef.current.set(nx * -0.5);
-      yBRef.current.set(ny * -0.5);
-      xCRef.current.set(nx * 0.6);
-      yCRef.current.set(ny * 0.6);
-      xDRef.current.set(nx * -0.4);
-      yDRef.current.set(ny * -0.4);
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 100;
+      const y = (e.clientY / innerHeight - 0.5) * 100;
+      mouseX.set(x);
+      mouseY.set(y);
     };
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [mouseX, mouseY]);
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-      {/* Top-right — vibrant indigo */}
+    <div ref={containerRef} className="absolute inset-0 -z-10 overflow-hidden bg-[#040c1c]">
+      {/* Dynamic Grid Background */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)]" />
+
+      {/* Massive glowing orbs driven by mouse parallax */}
       <motion.div
-        style={{ x: xA, y: yA }}
-        animate={{ scale: [1, 1.1, 1], opacity: [0.35, 0.55, 0.35] }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-24 right-[5%] h-[28rem] w-[28rem] rounded-full bg-[#5450f5]/22 blur-[110px]"
+        style={{ x: useTransform(mouseX, x => x * -2), y: useTransform(mouseY, y => y * -2) }}
+        className="absolute -top-32 -left-32 h-[40vw] w-[40vw] rounded-full bg-gradient-to-br from-[#5450f5]/30 to-transparent blur-[120px]"
       />
-      {/* Left-center — warm amber */}
       <motion.div
-        style={{ x: xB, y: yB }}
-        animate={{ scale: [1, 1.14, 1], opacity: [0.28, 0.48, 0.28] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute left-[3%] top-[30%] h-[26rem] w-[26rem] rounded-full bg-[#ffcc44]/40 blur-[120px]"
+        style={{ x: useTransform(mouseX, x => x * 1.5), y: useTransform(mouseY, y => y * 1.5) }}
+        className="absolute top-1/2 -right-32 h-[35vw] w-[35vw] -translate-y-1/2 rounded-full bg-gradient-to-bl from-[#ff5e62]/20 to-transparent blur-[140px]"
       />
-      {/* Bottom-center — soft violet */}
       <motion.div
-        style={{ x: xC, y: yC }}
-        animate={{ scale: [1, 1.08, 1], opacity: [0.22, 0.40, 0.22] }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-[4%] left-1/2 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-[#a89dff]/40 blur-[130px]"
+        style={{ x: useTransform(mouseX, x => x * 0.8), y: useTransform(mouseY, y => y * 0.8) }}
+        className="absolute -bottom-32 left-1/3 h-[45vw] w-[45vw] rounded-full bg-gradient-to-tr from-[#3b82f6]/20 to-transparent blur-[150px]"
       />
-      {/* Top-left — cyan tint */}
+
+      {/* Background Typography Parallax */}
       <motion.div
-        style={{ x: xD, y: yD }}
-        animate={{ scale: [1, 1.06, 1], opacity: [0.18, 0.30, 0.18] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        className="absolute -top-10 left-[10%] h-[20rem] w-[20rem] rounded-full bg-[#60a5fa]/22 blur-[100px]"
-      />
+        style={{ y: yParallaxFast, x: useTransform(mouseX, x => x * 0.5) }}
+        className="absolute top-1/4 left-0 right-0 flex justify-center pointer-events-none opacity-[0.03]"
+      >
+        <span className="text-[18vw] font-black leading-none whitespace-nowrap tracking-tighter text-white">ENGINEER</span>
+      </motion.div>
+      <motion.div
+        style={{ y: yParallax, x: useTransform(mouseX, x => x * -0.5) }}
+        className="absolute top-2/3 left-0 right-0 flex justify-center pointer-events-none opacity-[0.03]"
+      >
+        <span className="text-[18vw] font-black leading-none whitespace-nowrap tracking-tighter text-white">OBSERVABILITY</span>
+      </motion.div>
     </div>
   );
 }
