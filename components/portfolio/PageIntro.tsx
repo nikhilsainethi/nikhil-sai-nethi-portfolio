@@ -13,11 +13,15 @@ export function PageIntro() {
 
   useEffect(() => {
     // Only show on first visit per session
+    let needsIntro = false;
     if (typeof sessionStorage !== "undefined") {
       if (!sessionStorage.getItem("intro-shown")) {
-        setVisible(true);
+        needsIntro = true;
         sessionStorage.setItem("intro-shown", "1");
       }
+    }
+    if (needsIntro) {
+      setTimeout(() => setVisible(true), 0);
     }
   }, []);
 
