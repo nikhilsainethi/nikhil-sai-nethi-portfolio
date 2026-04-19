@@ -1,4 +1,4 @@
-import { Projects } from "@/components/portfolio/Projects";
+import { ProjectsSection } from "@/components/portfolio/ProjectsSection";
 import { createPageMetadata } from "@/lib/site";
 
 export const metadata = createPageMetadata({
@@ -10,8 +10,8 @@ export const metadata = createPageMetadata({
 
 export default function ProjectsPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8">
-      <Projects />
+    <main style={{ paddingTop: 96 }}>
+      <ProjectsSection />
     </main>
   );
 }

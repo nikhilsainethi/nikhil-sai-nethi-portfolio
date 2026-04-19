@@ -1,61 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useInView } from "framer-motion";
-import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
+import type { CSSProperties } from "react";
+import { useCounter } from "./useCounter";
 
 type AnimatedCounterProps = {
   value: number;
+  decimals?: number;
   suffix?: string;
   duration?: number;
+  className?: string;
+  style?: CSSProperties;
 };
 
-function easeOutCubic(t: number): number {
-  return 1 - Math.pow(1 - t, 3);
-}
-
-export function AnimatedCounter({ value, suffix = "", duration = 1600 }: AnimatedCounterProps) {
-  const shouldSimplifyMotion = useShouldSimplifyMotion();
-
-  if (shouldSimplifyMotion) {
-    return (
-      <span>
-        {value}
-        {suffix}
-      </span>
-    );
-  }
-
-  return (
-    <AnimatedCounterValue value={value} suffix={suffix} duration={duration} />
-  );
-}
-
-function AnimatedCounterValue({
+export function AnimatedCounter({
   value,
+  decimals = 0,
   suffix = "",
-  duration = 1600,
+  duration = 1700,
+  className,
+  style,
 }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-
-  useEffect(() => {
-    if (!isInView) return;
-    const steps = 55;
-    const stepMs = duration / steps;
-    let step = 0;
-    const timer = setInterval(() => {
-      step++;
-      setCount(Math.round(easeOutCubic(step / steps) * value));
-      if (step >= steps) clearInterval(timer);
-    }, stepMs);
-    return () => clearInterval(timer);
-  }, [isInView, value, duration]);
-
+  const [ref, count] = useCounter<HTMLSpanElement>(value, decimals, duration);
+  const displayed = decimals > 0 ? count.toFixed(decimals) : Math.round(count);
   return (
-    <span ref={ref}>
-      {count}
+    <span ref={ref} className={className} style={style}>
+      {displayed}
       {suffix}
     </span>
   );

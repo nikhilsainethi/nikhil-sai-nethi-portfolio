@@ -1,62 +1,50 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { useRef } from "react";
 import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type TiltCardProps = {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 };
 
-export function TiltCard({ children, className }: TiltCardProps) {
-  const shouldSimplifyMotion = useShouldSimplifyMotion();
+export function TiltCard({ children, className, style }: TiltCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const shouldSimplify = useShouldSimplifyMotion();
 
-  if (shouldSimplifyMotion) {
-    return <div className={className}>{children}</div>;
-  }
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldSimplify) return;
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 8;
+    el.style.transform = `perspective(700px) rotateY(${x}deg) rotateX(${-y}deg) translateY(-4px)`;
+    el.style.boxShadow = `${-x * 2}px ${y * 2}px 50px rgba(0,0,0,.4), 0 0 40px rgba(0,229,199,.07)`;
+  };
 
-  return <AnimatedTiltCard className={className}>{children}</AnimatedTiltCard>;
-}
-
-function AnimatedTiltCard({ children, className }: TiltCardProps) {
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-
-  const x = useSpring(rawX, { stiffness: 120, damping: 18 });
-  const y = useSpring(rawY, { stiffness: 120, damping: 18 });
-
-  const rotateX = useTransform(y, [-0.5, 0.5], ["7deg", "-7deg"]);
-  const rotateY = useTransform(x, [-0.5, 0.5], ["-7deg", "7deg"]);
-  const glowX = useTransform(x, [-0.5, 0.5], ["20%", "80%"]);
-  const glowY = useTransform(y, [-0.5, 0.5], ["20%", "80%"]);
-
-  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    rawX.set((e.clientX - rect.left) / rect.width - 0.5);
-    rawY.set((e.clientY - rect.top) / rect.height - 0.5);
-  }
-
-  function onMouseLeave() {
-    rawX.set(0);
-    rawY.set(0);
-  }
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.transform = "";
+    el.style.boxShadow = "";
+  };
 
   return (
-    <motion.div
+    <div
+      ref={ref}
       className={className}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
+      style={{
+        transition: "transform .35s ease, box-shadow .35s ease",
+        willChange: "transform",
+        ...style,
+      }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
     >
-      {/* Dynamic highlight shimmer that follows cursor */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 rounded-[2.2rem] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(280px circle at ${glowX} ${glowY}, rgba(255,255,255,0.18), transparent 70%)`,
-        }}
-      />
-      <div style={{ transform: "translateZ(20px)" }}>{children}</div>
-    </motion.div>
+      {children}
+    </div>
   );
 }

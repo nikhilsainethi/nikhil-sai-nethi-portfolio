@@ -1,32 +1,34 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
-import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
+import type { CSSProperties, ReactNode } from "react";
+import { useReveal } from "./useReveal";
 
 type RevealProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
+  direction?: "up" | "left";
+  style?: CSSProperties;
 };
 
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
-  const reduceMotion = useReducedMotion();
-  const shouldSimplifyMotion = useShouldSimplifyMotion();
-
-  if (reduceMotion || shouldSimplifyMotion) {
-    return <div className={className}>{children}</div>;
-  }
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  direction = "up",
+  style,
+}: RevealProps) {
+  const [ref, visible] = useReveal<HTMLDivElement>();
+  const base = direction === "left" ? "reveal-left" : "reveal";
+  const composed = `${base}${visible ? " is-visible" : ""}${className ? ` ${className}` : ""}`;
 
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={ref}
+      className={composed}
+      style={{ transitionDelay: `${delay}s`, ...style }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

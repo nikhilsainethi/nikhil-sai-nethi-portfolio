@@ -17,12 +17,18 @@ export function withBasePath(path: `/${string}`) {
 export const resumePath = withBasePath("/nikhil-sai-nethi-resume.pdf");
 export const heroPortraitPath = withBasePath("/images/nikhil-hero.jpg");
 
-export const primaryNavItems = [
-  { href: "/" as const, label: "Home" },
-  { href: "/projects" as const, label: "Projects" },
-  { href: "/experience" as const, label: "Experience" },
-  { href: "/tech-stack" as const, label: "Tech Stack" },
-  { href: "/contact" as const, label: "Contact" },
+export type NavItem = {
+  id: string;
+  label: string;
+  route: `/${string}`;
+};
+
+export const primaryNavItems: NavItem[] = [
+  { id: "about", label: "About", route: "/#about" },
+  { id: "experience", label: "Exp.", route: "/#experience" },
+  { id: "projects", label: "Projects", route: "/#projects" },
+  { id: "skills", label: "Skills", route: "/#skills" },
+  { id: "contact", label: "Contact", route: "/#contact" },
 ];
 
 export function createPageMetadata({

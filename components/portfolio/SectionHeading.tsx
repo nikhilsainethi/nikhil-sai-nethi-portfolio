@@ -1,34 +1,74 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { ScrambleHeading } from "./ScrambleHeading";
+import { Reveal } from "./Reveal";
+
 type SectionHeadingProps = {
+  index: string;
   eyebrow: string;
-  title: string;
-  description: string;
-  index?: string; // e.g. "01", "02"
+  title: ReactNode;
+  sub?: ReactNode;
+  scramble?: boolean;
 };
 
 export function SectionHeading({
+  index,
   eyebrow,
   title,
-  description,
-  index,
+  sub,
+  scramble = false,
 }: SectionHeadingProps) {
   return (
-    <div className="mb-8 grid gap-4 border-b border-border/75 pb-6 sm:mb-10 sm:gap-5 sm:pb-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(18rem,1.05fr)] lg:items-end">
-      <div className="space-y-2.5 sm:space-y-3">
-        <div className="flex items-center gap-4">
-          {index && (
-            <span className="font-mono text-[11px] tracking-[0.22em] text-foreground/28 select-none">
-              {index}
-            </span>
-          )}
-          <p className="mono-label text-xs text-[var(--warm-accent)]">{eyebrow}</p>
+    <Reveal>
+      <div style={{ marginBottom: 56 }}>
+        <div className="flex items-center" style={{ gap: 12, marginBottom: 14 }}>
+          <span
+            style={{
+              fontFamily:
+                "var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace",
+              fontSize: 11,
+              color: "var(--amber)",
+              letterSpacing: ".2em",
+            }}
+          >
+            {index}
+          </span>
+          <span
+            aria-hidden="true"
+            style={{ width: 28, height: 1, background: "var(--border2)" }}
+          />
+          <span className="mono-label">{eyebrow}</span>
         </div>
-        <h2 className="text-3xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl">
-          {title}
+        <h2
+          style={{
+            fontSize: "clamp(2.2rem, 4vw, 3.8rem)",
+            fontWeight: 700,
+            letterSpacing: "-.04em",
+            lineHeight: 1.05,
+            color: "var(--fg)",
+            marginBottom: sub ? 14 : 0,
+          }}
+        >
+          {scramble && typeof title === "string" ? (
+            <ScrambleHeading text={title} />
+          ) : (
+            title
+          )}
         </h2>
+        {sub && (
+          <p
+            style={{
+              color: "var(--muted2)",
+              fontSize: 16,
+              lineHeight: 1.75,
+              maxWidth: 580,
+            }}
+          >
+            {sub}
+          </p>
+        )}
       </div>
-      <p className="max-w-2xl text-sm leading-7 text-muted sm:text-lg">
-        {description}
-      </p>
-    </div>
+    </Reveal>
   );
 }

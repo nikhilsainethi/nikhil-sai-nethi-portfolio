@@ -2,10 +2,10 @@ export const themeStorageKey = "nsn-portfolio-theme";
 
 export type ThemeMode = "light" | "dark";
 
-export const defaultThemeMode: ThemeMode = "light";
+export const defaultThemeMode: ThemeMode = "dark";
 
 export function parseThemeMode(value: string | null | undefined): ThemeMode {
-  return value === "dark" ? "dark" : defaultThemeMode;
+  return value === "light" ? "light" : "dark";
 }
 
 export function resolveThemeMode({
@@ -27,7 +27,7 @@ export function resolveThemeMode({
 }
 
 export function getNextThemeMode(currentTheme: ThemeMode): ThemeMode {
-  return currentTheme === "light" ? "dark" : "light";
+  return currentTheme === "dark" ? "light" : "dark";
 }
 
 export function applyThemeMode({
@@ -39,7 +39,7 @@ export function applyThemeMode({
   storage?: Pick<Storage, "setItem"> | null;
   theme: ThemeMode;
 }) {
-  root.dataset.theme = theme;
+  root.dataset.mode = theme;
   storage?.setItem(themeStorageKey, theme);
 }
 
@@ -49,10 +49,10 @@ export function getThemeInitializationScript() {
   const storageKey = "${themeStorageKey}";
   try {
     const storedTheme = window.localStorage.getItem(storageKey);
-    document.documentElement.dataset.theme =
+    document.documentElement.dataset.mode =
       storedTheme === "dark" || storedTheme === "light" ? storedTheme : defaultTheme;
   } catch (error) {
-    document.documentElement.dataset.theme = defaultTheme;
+    document.documentElement.dataset.mode = defaultTheme;
   }
 })();`;
 }

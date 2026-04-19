@@ -1,28 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { siteDescription, siteTitle, siteUrl } from "@/lib/site";
-import { ThemeToggle } from "@/components/portfolio/ThemeToggle";
-import { CursorSpotlight } from "@/components/portfolio/CursorSpotlight";
-import { CustomCursor } from "@/components/portfolio/CustomCursor";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { AnimatedBackground } from "@/components/portfolio/AnimatedBackground";
+import { CursorGlow } from "@/components/portfolio/CursorGlow";
 import { Header } from "@/components/portfolio/Header";
-import { HeroAnimation } from "@/components/portfolio/HeroAnimation";
-import { PageIntro } from "@/components/portfolio/PageIntro";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
+import { ThemeToggle } from "@/components/portfolio/ThemeToggle";
+import { siteDescription, siteTitle, siteUrl } from "@/lib/site";
 import { defaultThemeMode, getThemeInitializationScript } from "@/lib/theme";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
+  variable: "--font-space-grotesk",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
   fallback: ["system-ui", "sans-serif"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
+  weight: ["400", "500", "600"],
   fallback: ["ui-monospace", "SFMono-Regular", "monospace"],
 });
 
@@ -30,9 +30,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: siteTitle,
   description: siteDescription,
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     title: siteTitle,
     description: siteDescription,
@@ -52,37 +50,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      data-theme={defaultThemeMode}
+      data-mode={defaultThemeMode}
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-full">
         <script
           dangerouslySetInnerHTML={{ __html: getThemeInitializationScript() }}
         />
-        <PageIntro />
         <ScrollProgress />
-        <CustomCursor />
-        <CursorSpotlight />
-        <div className="grain-overlay relative min-h-screen [overflow:clip]">
-          <HeroAnimation />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[90rem] flex-col">
-            <div className="px-4 sm:px-6 lg:px-8">
-              <Header />
-            </div>
-            <div className="flex-1">{children}</div>
-            <div className="px-4 sm:px-6 lg:px-8">
-              <SiteFooter />
-            </div>
-          </div>
-        </div>
+        <CursorGlow />
+        <AnimatedBackground />
+        <Header />
         <ThemeToggle />
+        <div className="flex min-h-screen flex-col">
+          <div className="flex-1">{children}</div>
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

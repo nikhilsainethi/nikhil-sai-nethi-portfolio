@@ -1,47 +1,51 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
 import type { ReactNode } from "react";
+import { useRef } from "react";
 import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type MagneticButtonProps = {
   children: ReactNode;
+  className?: string;
+  strength?: number;
 };
 
-export function MagneticButton({ children }: MagneticButtonProps) {
-  const shouldSimplifyMotion = useShouldSimplifyMotion();
+export function MagneticButton({
+  children,
+  className,
+  strength = 0.2,
+}: MagneticButtonProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const shouldSimplify = useShouldSimplifyMotion();
 
-  if (shouldSimplifyMotion) {
-    return <div className="inline-flex">{children}</div>;
-  }
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldSimplify) return;
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const dx = (e.clientX - rect.left - rect.width / 2) * strength;
+    const dy = (e.clientY - rect.top - rect.height / 2) * strength;
+    el.style.transform = `translate(${dx}px, ${dy}px)`;
+  };
 
-  return <AnimatedMagneticButton>{children}</AnimatedMagneticButton>;
-}
-
-function AnimatedMagneticButton({ children }: MagneticButtonProps) {
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const x = useSpring(rawX, { stiffness: 280, damping: 18 });
-  const y = useSpring(rawY, { stiffness: 280, damping: 18 });
-
-  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    rawX.set((e.clientX - rect.left - rect.width / 2) * 0.38);
-    rawY.set((e.clientY - rect.top - rect.height / 2) * 0.38);
-  }
-
-  function onMouseLeave() {
-    rawX.set(0);
-    rawY.set(0);
-  }
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.transform = "";
+  };
 
   return (
-    <motion.div
-      style={{ x, y, display: "inline-flex" }}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        display: "inline-block",
+        transition: "transform .4s cubic-bezier(.16,1,.3,1)",
+      }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

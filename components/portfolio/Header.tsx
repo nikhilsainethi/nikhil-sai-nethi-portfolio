@@ -2,100 +2,92 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { FaBarsStaggered, FaXmark } from "react-icons/fa6";
+import { useCallback, useEffect, useState } from "react";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { basePath, primaryNavItems, resumePath } from "@/lib/site";
 
-function normalizePathname(pathname: string | null) {
-  if (!pathname) {
-    return "/";
-  }
+const SECTION_IDS = ["hero", ...primaryNavItems.map((item) => item.id)];
 
+function normalizePathname(pathname: string | null) {
+  if (!pathname) return "/";
   const normalized =
     pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
-
   if (normalized.startsWith(basePath)) {
     const stripped = normalized.slice(basePath.length);
     return stripped.length > 0 ? stripped : "/";
   }
-
   return normalized;
 }
 
 export function Header() {
   const pathname = normalizePathname(usePathname());
-  const [menuOpen, setMenuOpen] = useState(false);
+  const isHome = pathname === "/";
+  const [active, setActive] = useState<string>("hero");
+
+  useEffect(() => {
+    if (!isHome) return;
+    const update = () => {
+      for (let i = SECTION_IDS.length - 1; i >= 0; i--) {
+        const el = document.getElementById(SECTION_IDS[i]);
+        if (el && el.getBoundingClientRect().top <= 120) {
+          setActive(SECTION_IDS[i]);
+          return;
+        }
+      }
+      setActive("hero");
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [isHome]);
+
+  const onNavClick = useCallback(
+    (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (!isHome) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top, behavior: "smooth" });
+      history.replaceState(null, "", `#${id}`);
+    },
+    [isHome],
+  );
 
   return (
-    <header className="sticky top-0 z-50 pt-4 sm:pt-6">
-      <div className="mx-auto w-full max-w-6xl rounded-[2rem] border border-border/80 bg-surface-strong/80 px-4 py-3 shadow-[var(--shadow-card)] backdrop-blur-xl sm:px-6 lg:rounded-full">
-        <div className="grid gap-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-5">
-          <div className="flex items-center justify-between gap-4 lg:justify-start">
+    <nav
+      aria-label="Primary"
+      className="fixed left-0 right-0 top-0 flex items-center justify-center px-6 py-3.5"
+      style={{ zIndex: 200 }}
+    >
+      <div className="nav-pill flex-wrap">
+        {primaryNavItems.map((item) => {
+          const isActive = isHome && active === item.id;
+          return (
             <Link
-              className="mono-label text-sm text-foreground transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              href="/"
-              onClick={() => setMenuOpen(false)}
+              key={item.id}
+              href={item.route}
+              onClick={onNavClick(item.id)}
+              className={`nav-link${isActive ? " is-active" : ""}`}
+              aria-current={isActive ? "location" : undefined}
             >
-              Nikhil Sai Nethi
+              {item.label}
             </Link>
-
-            <button
-              aria-controls="site-nav-panel"
-              aria-expanded={menuOpen}
-              aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border/80 bg-surface text-foreground shadow-[0_12px_28px_color-mix(in_srgb,var(--foreground)_10%,transparent)] transition-all hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:hidden"
-              onClick={() => setMenuOpen((value) => !value)}
-              type="button"
-            >
-              {menuOpen ? <FaXmark size={18} /> : <FaBarsStaggered size={16} />}
-            </button>
-          </div>
-
-          <div
-            className={`${menuOpen ? "block" : "hidden"} lg:contents`}
-            data-open={menuOpen ? "true" : "false"}
-            data-testid="mobile-nav-panel"
-            id="site-nav-panel"
-          >
-            <div className="min-h-0 overflow-hidden lg:contents">
-              <nav aria-label="Primary" className="overflow-hidden pt-1 lg:min-w-0 lg:pt-0">
-                <ul className="flex flex-col gap-2 rounded-[1.6rem] bg-surface p-2 text-sm text-muted shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--border)_96%,transparent)] sm:flex-row sm:flex-wrap sm:justify-center lg:justify-center lg:rounded-full lg:bg-surface lg:px-2 lg:py-1">
-                  {primaryNavItems.map((item) => {
-                    const isActive = pathname === item.href;
-
-                    return (
-                      <li key={item.href}>
-                        <Link
-                          aria-current={isActive ? "page" : undefined}
-                          className={`inline-flex w-full justify-center rounded-full px-4 py-2 font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto ${
-                            isActive
-                              ? "bg-accent-soft text-accent shadow-[0_10px_20px_rgba(108,99,255,0.14)]"
-                              : "text-muted hover:text-foreground"
-                          }`}
-                          href={item.href}
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
-
-              <div className="pt-2 lg:flex lg:justify-end lg:pt-0">
-                <a
-                  className="inline-flex w-full items-center justify-center rounded-full bg-[var(--warm-accent)] px-4 py-2 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(255,138,61,0.26)] transition-all hover:bg-[var(--warm-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--warm-accent)] sm:px-5 lg:w-auto"
-                  href={resumePath}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Download Resume
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+          );
+        })}
+        <a
+          className="nav-cta"
+          href={resumePath}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Resume <FaArrowUpRightFromSquare size={10} aria-hidden="true" />
+        </a>
       </div>
-    </header>
+    </nav>
   );
 }
