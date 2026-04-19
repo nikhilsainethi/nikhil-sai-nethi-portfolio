@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const MOBILE_WIDTH_QUERY = "(max-width: 767px)";
+const MOBILE_WIDTH_QUERY = "(max-width: 900px)";
 const COARSE_POINTER_QUERY = "(pointer: coarse)";
 
 function getShouldSimplifyMotion() {

@@ -82,7 +82,7 @@ export function SkillsSection() {
       className="above"
       style={{ background: "var(--sec2)", backdropFilter: "blur(4px)" }}
     >
-      <div className="mx-auto" style={{ maxWidth: 1200, padding: "90px 32px" }}>
+      <div className="nsn-section">
         <SectionHeading
           index="05 ·"
           eyebrow="Tech Stack"
@@ -164,6 +164,7 @@ export function SkillsSection() {
                 </span>
               </div>
               <div
+                className="cert-grid"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(3, minmax(0, 1fr))",

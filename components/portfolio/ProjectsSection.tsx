@@ -75,7 +75,7 @@ export function ProjectsSection() {
       className="above"
       style={{ background: "var(--sec1)", backdropFilter: "blur(4px)" }}
     >
-      <div className="mx-auto" style={{ maxWidth: 1200, padding: "90px 32px" }}>
+      <div className="nsn-section">
         <SectionHeading
           index="04 ·"
           eyebrow="Projects"

@@ -32,10 +32,7 @@ export function AboutSection() {
       className="above"
       style={{ background: "var(--sec1)", backdropFilter: "blur(4px)" }}
     >
-      <div
-        className="mx-auto"
-        style={{ maxWidth: 1200, padding: "90px 32px" }}
-      >
+      <div className="nsn-section">
         <SectionHeading
           index="02 ·"
           eyebrow="Philosophy"
@@ -69,7 +66,7 @@ export function AboutSection() {
           }}
         >
           <Reveal direction="left">
-            <div style={{ position: "sticky", top: 100 }}>
+            <div className="about-sticky" style={{ position: "sticky", top: 100 }}>
               <p
                 style={{
                   color: "var(--muted2)",
@@ -106,6 +103,7 @@ export function AboutSection() {
                 }}
               >
                 <div
+                  className="about-counter-value"
                   style={{
                     fontSize: 52,
                     fontWeight: 700,

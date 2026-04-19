@@ -37,10 +37,7 @@ export function ContactSection() {
       className="above"
       style={{ background: "var(--sec1)", backdropFilter: "blur(4px)" }}
     >
-      <div
-        className="mx-auto text-center"
-        style={{ maxWidth: 1200, padding: "90px 32px" }}
-      >
+      <div className="nsn-section text-center">
         <Reveal>
           <p
             className="mono-label"
@@ -49,6 +46,7 @@ export function ContactSection() {
             06 · Next Steps
           </p>
           <h2
+            className="ready-to-scale"
             style={{
               fontSize: "clamp(3.5rem, 9vw, 9rem)",
               fontWeight: 800,

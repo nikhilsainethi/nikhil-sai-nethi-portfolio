@@ -41,6 +41,7 @@ export function SectionHeading({
           <span className="mono-label">{eyebrow}</span>
         </div>
         <h2
+          className="section-heading-title"
           style={{
             fontSize: "clamp(2.2rem, 4vw, 3.8rem)",
             fontWeight: 700,
@@ -58,6 +59,7 @@ export function SectionHeading({
         </h2>
         {sub && (
           <p
+            className="section-heading-sub"
             style={{
               color: "var(--muted2)",
               fontSize: 16,

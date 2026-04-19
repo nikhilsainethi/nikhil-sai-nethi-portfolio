@@ -118,6 +118,15 @@ button {
 
 /* ─── utility classes referenced from components ─────────────── */
 
+.nsn-section {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding: 90px 32px;
+}
+
+
 .dot-grid {
   background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
   background-size: 28px 28px;
@@ -349,6 +358,167 @@ html[data-mode="light"] .nav-pill {
 .nav-cta:hover {
   background: color-mix(in srgb, var(--amber) 85%, white);
   transform: scale(1.04);
+}
+
+/* ─── responsive breakpoints ────────────────────────────────── */
+
+/* Tablet: ease section padding */
+@media (max-width: 1024px) {
+  .nsn-section {
+    padding: 72px 24px !important;
+  }
+}
+
+/* Mobile: collapse multi-column grids */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  .nsn-section {
+    padding: 56px 18px !important;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+  }
+
+  .hero-card {
+    height: auto !important;
+  }
+
+  .hero-wrapper {
+    min-height: 0 !important;
+    flex: none !important;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .about-sticky {
+    position: static !important;
+    top: auto !important;
+  }
+
+  .proj-main {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .proj-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .skills-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .cred-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .cred-grid .cert-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .exp-ul {
+    grid-template-columns: 1fr !important;
+  }
+
+  .nav-pill {
+    padding: 6px 6px 6px 12px !important;
+    gap: 2px !important;
+  }
+
+  .nav-link {
+    padding: 6px 10px !important;
+    font-size: 10px !important;
+  }
+
+  .nav-cta {
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+  }
+
+  .hero-stat-chips {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .hero-stat-chips > div {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    background: rgba(17, 26, 47, 0.94) !important;
+  }
+
+  .hero-photo-panel {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 4 / 3;
+    min-height: 280px;
+    max-height: 60vh;
+  }
+
+  .hero-photo-gradient {
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(6, 8, 14, 0.45) 75%,
+      rgba(6, 8, 14, 0.88) 100%
+    ) !important;
+  }
+
+  .hero-stat-chips > div {
+    border-color: rgba(0, 229, 199, 0.32) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-watermark {
+    font-size: 32vw !important;
+    right: 12px !important;
+    bottom: -20px !important;
+    opacity: 0.8;
+  }
+
+  .section-watermark-mark {
+    font-size: clamp(72px, 22vw, 140px) !important;
+    right: 12px !important;
+  }
+
+  .section-heading-title {
+    font-size: clamp(1.9rem, 8vw, 2.6rem) !important;
+  }
+
+  .section-heading-sub {
+    font-size: 14px !important;
+  }
+
+  .ready-to-scale {
+    font-size: clamp(3rem, 16vw, 4.5rem) !important;
+  }
+
+  .about-counter-value {
+    font-size: 40px !important;
+  }
+}
+
+/* Very narrow phones: single-column skills */
+@media (max-width: 480px) {
+  .skills-5 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .nsn-section {
+    padding: 48px 14px !important;
+  }
 }
 
 /* ─── reduced motion ────────────────────────────────────────── */

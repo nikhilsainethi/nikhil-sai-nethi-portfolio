@@ -135,7 +135,7 @@ export function HeroSection() {
 
   const heroCard = (
     <TiltCard
-      className="dot-grid hero-grid relative overflow-hidden"
+      className="dot-grid hero-grid hero-card relative overflow-hidden"
       style={{
         width: "100%",
         height: "100%",
@@ -148,7 +148,7 @@ export function HeroSection() {
       }}
     >
       {/* Photo panel */}
-      <div className="relative overflow-hidden" style={{ height: "100%" }}>
+      <div className="hero-photo-panel relative overflow-hidden" style={{ height: "100%" }}>
         <div
           ref={photoRef}
           style={{
@@ -175,14 +175,14 @@ export function HeroSection() {
         </div>
         <div
           aria-hidden="true"
-          className="absolute inset-0"
+          className="hero-photo-gradient absolute inset-0"
           style={{
             background:
               "linear-gradient(to right, transparent 30%, rgba(11,17,32,.85) 100%), linear-gradient(to bottom, transparent 60%, rgba(11,17,32,.95) 100%)",
           }}
         />
         <div
-          className="absolute bottom-7 left-5 flex flex-col gap-2"
+          className="hero-stat-chips absolute bottom-7 left-5 flex flex-col gap-2"
           style={fade(1.0)}
         >
           {STAT_CHIPS.map((chip) => (
@@ -449,7 +449,7 @@ export function HeroSection() {
       {/* Watermark 01 inside card */}
       <div
         aria-hidden="true"
-        className="absolute right-5 select-none pointer-events-none"
+        className="hero-watermark absolute right-5 select-none pointer-events-none"
         style={{
           bottom: -10,
           fontSize: "18vw",
@@ -488,7 +488,7 @@ export function HeroSection() {
         style={{ minHeight: "100vh", paddingTop: 80 }}
       >
         <div
-          className="relative mx-3 mt-3"
+          className="hero-wrapper relative mx-3 mt-3"
           style={{
             flex: 1,
             borderRadius: "2rem",

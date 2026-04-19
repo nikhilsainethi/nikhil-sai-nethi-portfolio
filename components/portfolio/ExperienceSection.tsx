@@ -176,7 +176,7 @@ function HorizontalCard({ exp, index }: { exp: ExperienceEntry; index: number })
     >
       <div
         aria-hidden="true"
-        className="absolute pointer-events-none select-none"
+        className="section-watermark-mark absolute pointer-events-none select-none"
         style={{
           right: 24,
           top: "50%",
@@ -475,7 +475,7 @@ function VerticalExperience() {
       className="above"
       style={{ background: "var(--sec2)", backdropFilter: "blur(4px)" }}
     >
-      <div className="mx-auto" style={{ maxWidth: 1200, padding: "90px 32px" }}>
+      <div className="nsn-section">
         <SectionHeading
           index="03 ·"
           eyebrow="Experience"
@@ -526,6 +526,46 @@ function VerticalExperience() {
                       />
                     </div>
                     <div>
+                      {exp.current && (
+                        <div
+                          className="flex items-center"
+                          style={{ gap: 6, marginBottom: 6 }}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="relative inline-flex items-center justify-center"
+                            style={{ width: 7, height: 7 }}
+                          >
+                            <span
+                              className="absolute"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                borderRadius: "50%",
+                                background: "#22c55e",
+                                animation:
+                                  "ping-slow 1.4s cubic-bezier(0,0,.2,1) infinite",
+                              }}
+                            />
+                            <span
+                              style={{
+                                width: 7,
+                                height: 7,
+                                borderRadius: "50%",
+                                background: "#22c55e",
+                                display: "block",
+                                boxShadow: "0 0 8px #22c55e",
+                              }}
+                            />
+                          </span>
+                          <span
+                            className="mono-label"
+                            style={{ color: "#22c55e", fontSize: 9 }}
+                          >
+                            Current
+                          </span>
+                        </div>
+                      )}
                       <h3
                         style={{
                           fontSize: 18,
