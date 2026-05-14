@@ -2,8 +2,19 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import type { MotionValue } from "framer-motion";
 import { withBasePath } from "@/lib/site";
+import {
+  ExperienceTimeline,
+  type TimelineRole,
+} from "./ExperienceTimeline";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 import { TiltCard } from "./TiltCard";
@@ -89,6 +100,15 @@ function PinnedExperience() {
   const xRaw = useTransform(scrollYProgress, [0.05, 0.95], ["0vw", "-132vw"]);
   const x = useSpring(xRaw, { stiffness: 140, damping: 28, mass: 0.4 });
 
+  // Watermark parallax: positive counter-translate so watermarks lag the cards.
+  const watermarkX = useTransform(scrollYProgress, [0.05, 0.95], ["0vw", "44vw"]);
+
+  const timelineRoles: TimelineRole[] = [
+    { mark: "MO", label: "MOODY'S", startYear: 2024 + 7 / 12, endYear: null, current: true },
+    { mark: "VE", label: "VERISK", startYear: 2023 + 8 / 12, endYear: 2023 + 11 / 12 },
+    { mark: "NK", label: "NOKIA", startYear: 2020 + 8 / 12, endYear: 2021 + 11 / 12 },
+  ];
+
   return (
     <section
       ref={sectionRef}
@@ -115,13 +135,26 @@ function PinnedExperience() {
           className="mx-auto w-full"
           style={{ maxWidth: 1400, padding: "90px 32px 28px" }}
         >
-          <SectionHeading
-            index="03 ·"
-            eyebrow="Experience · Horizontal scroll"
-            title="Work History"
-            scramble
-            sub="Scroll to pan across roles. Infrastructure, observability, and platform work spanning production reliability, cloud migration, and AI-enabled engineering."
-          />
+          <div className="exp-heading-row">
+            <SectionHeading
+              index="03 ·"
+              eyebrow="Experience · Horizontal scroll"
+              title="Work History"
+              scramble
+              sub="Scroll to pan across roles. Infrastructure, observability, and platform work spanning production reliability, cloud migration, and AI-enabled engineering."
+            />
+            <div className="exp-console-chip" aria-hidden="true">
+              <span className="exp-console-chip__bracket">[</span>
+              <span className="exp-console-chip__dot" />
+              <span className="exp-console-chip__label">TIMELINE</span>
+              <span className="exp-console-chip__divider" />
+              <span className="exp-console-chip__range">
+                {Math.floor(timelineRoles[timelineRoles.length - 1].startYear)} →{" "}
+                {new Date().getFullYear()}
+              </span>
+              <span className="exp-console-chip__bracket">]</span>
+            </div>
+          </div>
         </div>
 
         <div
@@ -144,54 +177,83 @@ function PinnedExperience() {
             }}
           >
             {EXPERIENCES.map((exp, i) => (
-              <HorizontalCard key={exp.company} exp={exp} index={i} />
+              <HorizontalCard
+                key={exp.company}
+                exp={exp}
+                index={i}
+                watermarkX={watermarkX}
+              />
             ))}
           </motion.div>
         </div>
 
-        <ScrollCue
-          scrollYProgress={scrollYProgress}
-          total={EXPERIENCES.length}
-        />
+        <div className="mx-auto w-full" style={{ maxWidth: 1400, padding: "0 32px 28px" }}>
+          <ExperienceTimeline
+            scrollYProgress={scrollYProgress}
+            roles={timelineRoles}
+            startYear={2020}
+            endYear={new Date().getFullYear() + 0.6}
+          />
+        </div>
       </div>
     </section>
   );
 }
 
-function HorizontalCard({ exp, index }: { exp: ExperienceEntry; index: number }) {
+function HorizontalCard({
+  exp,
+  index,
+  watermarkX,
+}: {
+  exp: ExperienceEntry;
+  index: number;
+  watermarkX: MotionValue<string>;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(cardRef, {
+    margin: "0px -38% 0px -38%",
+    once: false,
+  });
+
   return (
-    <TiltCard
-      className="card"
-      style={{
-        width: "72vw",
-        maxWidth: 1080,
-        minWidth: 560,
-        padding: "28px 32px",
-        position: "relative",
-        overflow: "hidden",
-        flexShrink: 0,
-        borderColor: exp.current ? "rgba(0,229,199,.22)" : undefined,
-        boxShadow: exp.current ? "0 0 60px rgba(0,229,199,.06)" : undefined,
-      }}
+    <div
+      ref={cardRef}
+      className={`exp-card-shell${inView ? " is-centered" : ""}`}
+      style={{ flexShrink: 0 }}
     >
-      <div
-        aria-hidden="true"
-        className="section-watermark-mark absolute pointer-events-none select-none"
+      <TiltCard
+        className="card exp-card"
         style={{
-          right: 24,
-          top: "50%",
-          transform: "translateY(-50%)",
-          fontFamily:
-            "var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace",
-          fontSize: "clamp(96px, 14vw, 220px)",
-          fontWeight: 800,
-          color: "var(--watermark)",
-          letterSpacing: "-.1em",
-          lineHeight: 1,
+          width: "72vw",
+          maxWidth: 1080,
+          minWidth: 560,
+          padding: "28px 32px",
+          position: "relative",
+          overflow: "hidden",
+          borderColor: exp.current ? "rgba(0,229,199,.22)" : undefined,
+          boxShadow: exp.current ? "0 0 60px rgba(0,229,199,.06)" : undefined,
         }}
       >
-        {exp.mark}
-      </div>
+        <span className="exp-card__edge" aria-hidden="true" />
+        <motion.div
+          aria-hidden="true"
+          className="section-watermark-mark absolute pointer-events-none select-none"
+          style={{
+            x: watermarkX,
+            right: 24,
+            top: "50%",
+            y: "-50%",
+            fontFamily:
+              "var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace",
+            fontSize: "clamp(96px, 14vw, 220px)",
+            fontWeight: 800,
+            color: "var(--watermark)",
+            letterSpacing: "-.1em",
+            lineHeight: 1,
+          }}
+        >
+          {exp.mark}
+        </motion.div>
 
       <div
         aria-hidden="true"
@@ -319,17 +381,22 @@ function HorizontalCard({ exp, index }: { exp: ExperienceEntry; index: number })
       </div>
 
       <div
-        className="flex flex-wrap"
+        className="exp-card__tags flex flex-wrap"
         style={{ gap: 6, marginBottom: 18, position: "relative", zIndex: 1 }}
       >
-        {exp.tags.map((tag) => (
-          <span key={tag} className="tag">
+        {exp.tags.map((tag, ti) => (
+          <span
+            key={tag}
+            className="exp-card__tag tag"
+            style={{ ["--ti" as string]: ti }}
+          >
             {tag}
           </span>
         ))}
       </div>
 
       <ul
+        className="exp-card__bullets"
         style={{
           display: "grid",
           gridTemplateColumns:
@@ -344,125 +411,21 @@ function HorizontalCard({ exp, index }: { exp: ExperienceEntry; index: number })
         {exp.bullets.map((bullet, j) => (
           <li
             key={j}
-            className="flex"
+            className="exp-card__bullet"
             style={{
-              gap: 10,
+              ["--bi" as string]: j,
               fontSize: 13,
               lineHeight: 1.75,
               color: "var(--muted2)",
             }}
           >
-            <span
-              aria-hidden="true"
-              style={{
-                color: "var(--amber)",
-                marginTop: 7,
-                flexShrink: 0,
-                fontSize: 5,
-              }}
-            >
-              ◆
-            </span>
-            {bullet}
+            <span className="exp-card__bullet-dash" aria-hidden="true" />
+            <span className="exp-card__bullet-text">{bullet}</span>
           </li>
         ))}
       </ul>
-    </TiltCard>
-  );
-}
-
-function ScrollCue({
-  scrollYProgress,
-  total,
-}: {
-  scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
-  total: number;
-}) {
-  const width = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-  const dotIndex = useTransform(scrollYProgress, (p) =>
-    Math.min(total - 1, Math.floor(p * total)),
-  );
-  return (
-    <div
-      className="mx-auto w-full"
-      style={{
-        maxWidth: 1400,
-        padding: "0 32px 32px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 24,
-      }}
-    >
-      <div
-        className="flex items-center"
-        style={{ gap: 12, flex: 1, minWidth: 0 }}
-      >
-        <span
-          className="mono-label"
-          style={{ color: "var(--muted2)", whiteSpace: "nowrap" }}
-        >
-          Scroll ↓ to pan
-        </span>
-        <div
-          style={{
-            flex: 1,
-            height: 2,
-            background: "var(--border)",
-            borderRadius: 999,
-            overflow: "hidden",
-            maxWidth: 300,
-          }}
-        >
-          <motion.div
-            style={{
-              width,
-              height: "100%",
-              background: "linear-gradient(90deg, var(--cyan), var(--amber))",
-              borderRadius: 999,
-            }}
-          />
-        </div>
-      </div>
-      <div className="flex items-center" style={{ gap: 8 }}>
-        {EXPERIENCES.map((exp, i) => (
-          <CueDot key={exp.mark} index={i} active={dotIndex} mark={exp.mark} />
-        ))}
-      </div>
+      </TiltCard>
     </div>
-  );
-}
-
-function CueDot({
-  index,
-  active,
-  mark,
-}: {
-  index: number;
-  active: ReturnType<typeof useTransform<number, number>>;
-  mark: string;
-}) {
-  const opacity = useTransform(active, (a) => (a === index ? 1 : 0.35));
-  const scale = useTransform(active, (a) => (a === index ? 1.08 : 0.9));
-  return (
-    <motion.span
-      aria-hidden="true"
-      style={{
-        opacity,
-        scale,
-        fontFamily:
-          "var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace",
-        fontSize: 10,
-        letterSpacing: ".14em",
-        color: "var(--cyan)",
-        padding: "4px 10px",
-        border: "1px solid var(--border2)",
-        borderRadius: 999,
-        transition: "color .2s",
-      }}
-    >
-      {mark}
-    </motion.span>
   );
 }
 

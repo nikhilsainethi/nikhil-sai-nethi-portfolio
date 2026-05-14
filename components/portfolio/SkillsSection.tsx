@@ -5,6 +5,11 @@ import { withBasePath } from "@/lib/site";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 import { TiltCard } from "./TiltCard";
+import {
+  SkillsConstellation,
+  type SkillNodeData,
+} from "./SkillsConstellation";
+import { useShouldSimplifyMotion } from "./useShouldSimplifyMotion";
 
 type SkillGroup = { label: string; items: string[] };
 
@@ -26,6 +31,74 @@ const GROUPS: SkillGroup[] = [
     label: "Data / Messaging",
     items: ["PostgreSQL", "Kafka", "Redis", "RabbitMQ", "MySQL"],
   },
+];
+
+const CONSTELLATION_NODES: SkillNodeData[] = [
+  // Languages
+  { id: "python", label: "Python", category: "languages", depth: 5 },
+  { id: "typescript", label: "TypeScript", category: "languages", depth: 4 },
+  { id: "java", label: "Java", category: "languages", depth: 3 },
+  { id: "bash", label: "Bash", category: "languages", depth: 3 },
+  { id: "sql", label: "SQL", category: "languages", depth: 4 },
+  // Cloud / Platform
+  { id: "aws", label: "AWS", category: "cloud", depth: 5 },
+  { id: "eks", label: "EKS", category: "cloud", depth: 5 },
+  { id: "k8s", label: "Kubernetes", category: "cloud", depth: 5 },
+  { id: "terraform", label: "Terraform", category: "cloud", depth: 4 },
+  { id: "docker", label: "Docker", category: "cloud", depth: 4 },
+  // Observability
+  { id: "prometheus", label: "Prometheus", category: "observability", depth: 5 },
+  { id: "grafana", label: "Grafana", category: "observability", depth: 4 },
+  { id: "otel", label: "OpenTelemetry", category: "observability", depth: 5 },
+  { id: "datadog", label: "Datadog", category: "observability", depth: 4 },
+  { id: "elk", label: "ELK", category: "observability", depth: 3 },
+  // AI / LLM
+  { id: "rag", label: "RAG", category: "ai", depth: 5 },
+  { id: "langchain", label: "LangChain", category: "ai", depth: 4 },
+  { id: "pgvector", label: "pgvector", category: "ai", depth: 4 },
+  { id: "hyde", label: "HyDE", category: "ai", depth: 3 },
+  { id: "langsmith", label: "LangSmith", category: "ai", depth: 4 },
+  // Data / Messaging
+  { id: "postgres", label: "PostgreSQL", category: "data", depth: 5 },
+  { id: "kafka", label: "Kafka", category: "data", depth: 4 },
+  { id: "redis", label: "Redis", category: "data", depth: 4 },
+  { id: "rabbit", label: "RabbitMQ", category: "data", depth: 3 },
+  { id: "mysql", label: "MySQL", category: "data", depth: 3 },
+];
+
+// Cross-category relationships — the lines that tell a real story.
+const CONSTELLATION_EDGES: Array<[string, string]> = [
+  // Cloud cluster ties
+  ["aws", "eks"],
+  ["eks", "k8s"],
+  ["k8s", "docker"],
+  ["aws", "terraform"],
+  ["terraform", "k8s"],
+  // Observability tied to platform
+  ["k8s", "prometheus"],
+  ["prometheus", "grafana"],
+  ["otel", "grafana"],
+  ["otel", "datadog"],
+  ["elk", "datadog"],
+  // AI tied to data and languages
+  ["rag", "pgvector"],
+  ["rag", "langchain"],
+  ["langchain", "langsmith"],
+  ["rag", "hyde"],
+  ["pgvector", "postgres"],
+  ["python", "langchain"],
+  ["python", "rag"],
+  // Observability tied to AI (LLM observability)
+  ["langsmith", "otel"],
+  // Data ties
+  ["postgres", "sql"],
+  ["mysql", "sql"],
+  ["kafka", "rabbit"],
+  ["redis", "k8s"],
+  // Languages ties
+  ["python", "bash"],
+  ["typescript", "aws"],
+  ["java", "kafka"],
 ];
 
 const CERTS = [
@@ -76,6 +149,7 @@ const EDUCATION: Array<{
 ];
 
 export function SkillsSection() {
+  const simplifyMotion = useShouldSimplifyMotion();
   return (
     <section
       id="skills"
@@ -90,36 +164,47 @@ export function SkillsSection() {
           scramble
         />
 
-        <div
-          className="skills-5"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
-            gap: 10,
-            marginBottom: 56,
-          }}
-        >
-          {GROUPS.map((group, i) => (
-            <Reveal key={group.label} delay={i * 0.06}>
-              <TiltCard
-                className="card card-hover-glow h-full"
-                style={{ padding: 20 }}
-              >
-                <p
-                  className="mono-label"
-                  style={{ color: "var(--amber)", marginBottom: 14 }}
+        {simplifyMotion ? (
+          <div
+            className="skills-5"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+              gap: 10,
+              marginBottom: 56,
+            }}
+          >
+            {GROUPS.map((group, i) => (
+              <Reveal key={group.label} delay={i * 0.06}>
+                <TiltCard
+                  className="card card-hover-glow h-full"
+                  style={{ padding: 20 }}
                 >
-                  {group.label}
-                </p>
-                <div className="flex flex-col" style={{ gap: 7 }}>
-                  {group.items.map((item) => (
-                    <SkillPill key={item} label={item} />
-                  ))}
-                </div>
-              </TiltCard>
-            </Reveal>
-          ))}
-        </div>
+                  <p
+                    className="mono-label"
+                    style={{ color: "var(--amber)", marginBottom: 14 }}
+                  >
+                    {group.label}
+                  </p>
+                  <div className="flex flex-col" style={{ gap: 7 }}>
+                    {group.items.map((item) => (
+                      <SkillPill key={item} label={item} />
+                    ))}
+                  </div>
+                </TiltCard>
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          <Reveal>
+            <div style={{ marginBottom: 56 }}>
+              <SkillsConstellation
+                nodes={CONSTELLATION_NODES}
+                edges={CONSTELLATION_EDGES}
+              />
+            </div>
+          </Reveal>
+        )}
 
         <div
           className="cred-grid"

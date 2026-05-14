@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AnimatedBackground } from "@/components/portfolio/AnimatedBackground";
-import { CursorGlow } from "@/components/portfolio/CursorGlow";
 import { Header } from "@/components/portfolio/Header";
-import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
+import { HeroBoot } from "@/components/portfolio/HeroBoot";
+import { LenisProvider } from "@/components/portfolio/LenisProvider";
+import { OperatorBadge } from "@/components/portfolio/OperatorBadge";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
 import { ThemeToggle } from "@/components/portfolio/ThemeToggle";
 import { siteDescription, siteTitle, siteUrl } from "@/lib/site";
@@ -62,10 +63,11 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{ __html: getThemeInitializationScript() }}
         />
-        <ScrollProgress />
-        <CursorGlow />
+        <LenisProvider />
+        <HeroBoot />
         <AnimatedBackground />
         <Header />
+        <OperatorBadge />
         <ThemeToggle />
         <div className="flex min-h-screen flex-col">
           <div className="flex-1">{children}</div>

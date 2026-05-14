@@ -10,6 +10,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { heroPortraitPath, resumePath } from "@/lib/site";
+import { HeroWireframe } from "./HeroWireframe";
 import { MagneticButton } from "./MagneticButton";
 import { Marquee } from "./Marquee";
 import { TiltCard } from "./TiltCard";
@@ -69,35 +70,42 @@ export function HeroSection() {
     offset: ["start start", "end end"],
   });
 
-  // Progress 0 → 0.38 : hero idle at full size.
-  // Progress 0.38 → 0.95 : shrink + drift to top-right, rotate slightly.
-  // Progress 0.95 → 1 : fade out; About rises underneath.
-  const scale = useTransform(scrollYProgress, [0, 0.38, 0.92], [1, 1, 0.18]);
-  const x = useTransform(scrollYProgress, [0, 0.38, 0.92], ["0%", "0%", "36%"]);
+  // Hero exit choreography:
+  // 0     → 0.32 : idle at full size
+  // 0.32  → 0.62 : scan line drives wireframe over the rendered content
+  // 0.62  → 0.92 : the now-wireframed card collapses toward the badge corner
+  // 0.88  → 0.98 : card fades out; OperatorBadge fades in to dock
+  const scale = useTransform(scrollYProgress, [0, 0.32, 0.62, 0.92], [1, 1, 0.92, 0.04]);
+  const x = useTransform(scrollYProgress, [0, 0.32, 0.62, 0.92], ["0%", "0%", "2%", "48%"]);
   const y = useTransform(
     scrollYProgress,
-    [0, 0.38, 0.92],
-    ["0%", "0%", "-36%"],
-  );
-  const rotate = useTransform(
-    scrollYProgress,
-    [0, 0.38, 0.92],
-    [0, 0, -4],
+    [0, 0.32, 0.62, 0.92],
+    ["0%", "0%", "-2%", "-48%"],
   );
   const borderRadiusNum = useTransform(
     scrollYProgress,
-    [0, 0.38, 0.92],
-    [32, 32, 18],
+    [0, 0.32, 0.62, 0.92],
+    [32, 32, 24, 4],
   );
   const borderRadius = useMotionTemplate`${borderRadiusNum}px`;
-  const cardOpacity = useTransform(scrollYProgress, [0.92, 1], [1, 0]);
+  const cardOpacity = useTransform(scrollYProgress, [0.88, 0.96], [1, 0]);
   const overlayOpacity = useTransform(
     scrollYProgress,
-    [0.38, 0.92],
+    [0.62, 0.92],
     [0, 0.55],
   );
-  const nextOpacity = useTransform(scrollYProgress, [0.6, 0.98], [0, 1]);
-  const nextY = useTransform(scrollYProgress, [0.6, 0.98], ["22%", "0%"]);
+
+  // Wireframe progress: 0 → 1 across the scan phase.
+  const scanProgress = useTransform(scrollYProgress, [0.32, 0.62], [0, 1]);
+  const scanPct = useTransform(scanProgress, (v) => v * 100);
+  const scanComplementPct = useTransform(scanProgress, (v) => (1 - v) * 100);
+  const originalClip = useMotionTemplate`inset(${scanPct}% 0 0 0)`;
+  const wireframeClip = useMotionTemplate`inset(0 0 ${scanComplementPct}% 0)`;
+  const scanLineTop = useMotionTemplate`${scanPct}%`;
+  const scanLineOpacity = useTransform(scrollYProgress, [0.3, 0.34, 0.6, 0.64], [0, 1, 1, 0]);
+
+  const nextOpacity = useTransform(scrollYProgress, [0.7, 0.98], [0, 1]);
+  const nextY = useTransform(scrollYProgress, [0.7, 0.98], ["22%", "0%"]);
   const cueOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
 
   useEffect(() => {
@@ -306,6 +314,7 @@ export function HeroSection() {
         </div>
 
         <h1
+          className="hero-name-caret"
           style={{
             fontWeight: 700,
             lineHeight: 0.92,
@@ -528,18 +537,46 @@ export function HeroSection() {
               scale,
               x,
               y,
-              rotate,
               opacity: cardOpacity,
               borderRadius,
-              transformOrigin: "70% 30%",
+              transformOrigin: "92% 8%",
               width: "calc(100% - 24px)",
               height: "calc(100vh - 112px)",
               margin: "12px 12px 0",
               willChange: "transform, opacity",
               position: "relative",
+              overflow: "hidden",
             }}
           >
-            {heroCard}
+            <motion.div
+              style={{
+                position: "absolute",
+                inset: 0,
+                clipPath: originalClip,
+                WebkitClipPath: originalClip,
+              }}
+            >
+              {heroCard}
+            </motion.div>
+            <motion.div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: 0,
+                clipPath: wireframeClip,
+                WebkitClipPath: wireframeClip,
+              }}
+            >
+              <HeroWireframe />
+            </motion.div>
+            <motion.div
+              aria-hidden="true"
+              className="hero-scanline"
+              style={{
+                top: scanLineTop,
+                opacity: scanLineOpacity,
+              }}
+            />
             <motion.div
               aria-hidden="true"
               style={{
