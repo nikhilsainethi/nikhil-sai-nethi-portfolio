@@ -5,6 +5,7 @@ import { hydrateRoot } from "react-dom/client";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import ModelLab from "./ModelLab";
+import { createMachineModel, injectModelFault } from "@/lib/machine-model";
 
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -129,8 +130,22 @@ describe("interactive model lab", () => {
     });
     expect(JSON.parse(serialized)).toMatchObject({ platform: "arm", revision: "1.1", synthetic: true });
     expect(anchorClick).toHaveBeenCalledOnce();
-    await user.click(screen.getByRole("button", { name: "Export again" }));
+    await user.click(screen.getByRole("button", { name: "Export JSON" }));
     expect(createObjectURL).toHaveBeenCalledTimes(2);
     expect(anchorClick).toHaveBeenCalledTimes(2);
+  });
+
+  it("provides selectable JSON for the exact current model, including faults and fixture changes", async () => {
+    const user = userEvent.setup();
+    render(<ModelLab motionEnabled={false} />);
+    await user.click(screen.getByRole("button", { name: "Inject fault" }));
+    await user.click(screen.getByText("View JSON"));
+    const source = screen.getByRole("textbox", { name: "Current model JSON" });
+    expect(source).toHaveAttribute("readonly");
+    expect(source).toHaveValue(JSON.stringify(injectModelFault(createMachineModel("accelerator", "1.0"), "missing-reference"), null, 2));
+    await user.click(screen.getByRole("button", { name: "Revision 1.1" }));
+    expect(source).toHaveValue(JSON.stringify(createMachineModel("accelerator", "1.1"), null, 2));
+    await user.click(screen.getByRole("button", { name: "ARM Compute" }));
+    expect(source).toHaveValue(JSON.stringify(createMachineModel("arm", "1.1"), null, 2));
   });
 });

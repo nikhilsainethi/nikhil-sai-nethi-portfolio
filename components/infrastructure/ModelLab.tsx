@@ -41,7 +41,6 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
   const [injectedFault, setInjectedFault] = useState<Fault | null>(null);
   const [issues, setIssues] = useState<ValidationIssue[] | null>(null);
   const [comparisonOpen, setComparisonOpen] = useState(false);
-  const [exported, setExported] = useState(false);
   const validateButton = useRef<HTMLButtonElement>(null);
   const selected = model.entities.find((entity) => entity.id === selectedId) ?? model.entities[0];
   const difference = useMemo(() => diffMachineModels(
@@ -55,14 +54,12 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
     if (!next.entities.some((entity) => entity.id === selectedId)) setSelectedId("cpu-0");
     setIssues(null);
     setInjectedFault(null);
-    setExported(false);
   }
 
   function injectFault() {
     setModel(injectModelFault(createMachineModel(model.platform, model.revision), fault));
     setInjectedFault(fault);
     setIssues(null);
-    setExported(false);
   }
 
   function repairModel() {
@@ -81,7 +78,6 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
     anchor.remove();
     // Let the browser begin the download before releasing the object URL.
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setExported(true);
   }
 
   function node(entity: ModelEntity, index: number, wide = false) {
@@ -166,8 +162,16 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
 
         <div className={styles.bottomToolbar}>
           <button type="button" className={styles.textButton} aria-expanded={comparisonOpen} aria-controls="model-revision-comparison" aria-label="Compare revisions" onClick={() => setComparisonOpen(!comparisonOpen)}><span aria-hidden="true">⌥</span>Compare revisions <span className={styles.compareLabel}>1.0 → 1.1</span><span aria-hidden="true">{comparisonOpen ? "−" : "+"}</span></button>
-          <button type="button" className={styles.textButton} onClick={exportModel}>{exported ? "Export again" : "Export JSON"}<span aria-hidden="true">↓</span></button>
+          <button type="button" className={styles.textButton} onClick={exportModel}>Export JSON<span aria-hidden="true">↓</span></button>
         </div>
+        <details className={styles.jsonDisclosure}>
+          <summary>View JSON</summary>
+          <div className={styles.jsonSource}>
+            <label htmlFor="current-model-json">Current model JSON</label>
+            <p id="model-json-help">Inspect or select and copy the current model, including any injected fault.</p>
+            <textarea id="current-model-json" aria-describedby="model-json-help" readOnly spellCheck={false} wrap="off" value={JSON.stringify(model, null, 2)} />
+          </div>
+        </details>
         {comparisonOpen && <motion.section id="model-revision-comparison" aria-label="Revision comparison" className={styles.comparison} initial={animate ? { opacity: 0, y: -8 } : false} animate={{ opacity: 1, y: 0 }} transition={{ duration: animate ? 0.25 : 0 }}>
           <div className={styles.diffHeader}><h3>What changed in 1.1</h3><p>Compares the original {platforms.find((item) => item.id === model.platform)?.title} fixtures; injected faults are excluded.</p></div>
           <div className={styles.diffGrid}>
