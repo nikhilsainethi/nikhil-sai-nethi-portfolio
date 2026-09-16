@@ -1,7 +1,8 @@
 "use client";
 
 import { useId, type KeyboardEvent } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useSystemReducedMotion } from "./InfrastructureShell";
 import styles from "./RackScene.module.css";
 
 type RackId = "accelerator" | "arm" | "x86";
@@ -28,7 +29,7 @@ const racks: Array<{
 
 /** An original architectural illustration. The racks are synthetic, selectable models. */
 export function RackScene({ selected, onSelect, motionEnabled }: RackSceneProps) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useSystemReducedMotion();
   const animated = motionEnabled && !reducedMotion;
   const uniqueId = useId().replace(/:/g, "");
   const id = (name: string) => `${uniqueId}-${name}`;
