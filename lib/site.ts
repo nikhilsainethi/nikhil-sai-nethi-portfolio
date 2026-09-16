@@ -4,9 +4,9 @@ export const repoName = "nikhil-sai-nethi-portfolio";
 export const basePath = `/${repoName}`;
 export const siteUrl = `https://nikhilsainethi.github.io/${repoName}/`;
 export const siteName = "Nikhil Sai Nethi";
-export const siteTitle = `${siteName} | Software Engineer`;
+export const siteTitle = `${siteName} | Platform Infrastructure Engineer`;
 export const siteDescription =
-  "Portfolio for Nikhil Sai Nethi, a software engineer focused on cloud infrastructure, observability, and AI/LLM applications.";
+  "Nikhil Sai Nethi — incoming Platform Infrastructure Engineer at Google. Explore hardware models, reliable platforms, networking, and the engineering behind complex systems.";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -47,15 +47,15 @@ export function createPageMetadata({
       canonical: path,
     },
     openGraph: {
-      title: `${title} | ${siteName}`,
+      title: title.includes(siteName) ? title : `${title} | ${siteName}`,
       description,
       url: path,
-      images: ["/opengraph-image"],
+      images: [`${siteUrl}social-preview.png`],
     },
     twitter: {
-      title: `${title} | ${siteName}`,
+      title: title.includes(siteName) ? title : `${title} | ${siteName}`,
       description,
-      images: ["/twitter-image"],
+      images: [`${siteUrl}social-preview.png`],
     },
   };
 }

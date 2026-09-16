@@ -1,17 +1,10 @@
-import { SkillsSection } from "@/components/portfolio/SkillsSection";
+import { StandaloneSection } from "@/components/infrastructure/InfrastructurePortfolio";
 import { createPageMetadata } from "@/lib/site";
-
 export const metadata = createPageMetadata({
-  title: "Tech Stack",
-  description:
-    "Technical strengths across cloud platforms, observability, AI application layers, and programming languages.",
-  path: "/tech-stack",
+  title: "Platform capabilities",
+  description: "Capabilities in platforms, observability, software and data.",
+  path: "/tech-stack/",
 });
-
-export default function TechStackPage() {
-  return (
-    <main style={{ paddingTop: 96 }}>
-      <SkillsSection />
-    </main>
-  );
+export default function Page() {
+  return <StandaloneSection section="skills" />;
 }

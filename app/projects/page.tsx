@@ -1,17 +1,10 @@
-import { ProjectsSection } from "@/components/portfolio/ProjectsSection";
+import { StandaloneSection } from "@/components/infrastructure/InfrastructurePortfolio";
 import { createPageMetadata } from "@/lib/site";
-
 export const metadata = createPageMetadata({
-  title: "Projects",
-  description:
-    "Flagship RAG case study and supporting engineering work spanning observability, resilience, and release automation.",
-  path: "/projects",
+  title: "Engineering work",
+  description: "Selected systems, reliability, and developer experience work.",
+  path: "/projects/",
 });
-
-export default function ProjectsPage() {
-  return (
-    <main style={{ paddingTop: 96 }}>
-      <ProjectsSection />
-    </main>
-  );
+export default function Page() {
+  return <StandaloneSection section="work" />;
 }

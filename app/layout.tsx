@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
-import { AnimatedBackground } from "@/components/portfolio/AnimatedBackground";
-import { Header } from "@/components/portfolio/Header";
-import { HeroBoot } from "@/components/portfolio/HeroBoot";
-import { LenisProvider } from "@/components/portfolio/LenisProvider";
-import { OperatorBadge } from "@/components/portfolio/OperatorBadge";
-import { SiteFooter } from "@/components/portfolio/SiteFooter";
-import { ThemeToggle } from "@/components/portfolio/ThemeToggle";
+import { InfrastructureShell } from "@/components/infrastructure/InfrastructureShell";
 import { siteDescription, siteTitle, siteUrl } from "@/lib/site";
 import { defaultThemeMode, getThemeInitializationScript } from "@/lib/theme";
 import "./globals.css";
@@ -39,13 +33,13 @@ export const metadata: Metadata = {
     siteName: siteTitle,
     locale: "en_US",
     type: "website",
-    images: ["/opengraph-image"],
+    images: [`${siteUrl}social-preview.png`],
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/twitter-image"],
+    images: [`${siteUrl}social-preview.png`],
   },
 };
 
@@ -63,16 +57,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{ __html: getThemeInitializationScript() }}
         />
-        <LenisProvider />
-        <HeroBoot />
-        <AnimatedBackground />
-        <Header />
-        <OperatorBadge />
-        <ThemeToggle />
-        <div className="flex min-h-screen flex-col">
-          <div className="flex-1">{children}</div>
-          <SiteFooter />
-        </div>
+        <InfrastructureShell>{children}</InfrastructureShell>
       </body>
     </html>
   );

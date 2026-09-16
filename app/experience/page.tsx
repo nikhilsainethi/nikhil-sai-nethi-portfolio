@@ -1,17 +1,11 @@
-import { ExperienceSection } from "@/components/portfolio/ExperienceSection";
+import { StandaloneSection } from "@/components/infrastructure/InfrastructurePortfolio";
 import { createPageMetadata } from "@/lib/site";
-
 export const metadata = createPageMetadata({
   title: "Experience",
   description:
-    "Work history spanning cloud infrastructure, observability, and software engineering roles at Moody's, Verisk, and Nokia.",
-  path: "/experience",
+    "Engineering experience at Moody’s, Verisk, and Nokia, and an incoming platform infrastructure role at Google.",
+  path: "/experience/",
 });
-
-export default function ExperiencePage() {
-  return (
-    <main style={{ paddingTop: 96 }}>
-      <ExperienceSection />
-    </main>
-  );
+export default function Page() {
+  return <StandaloneSection section="about" />;
 }

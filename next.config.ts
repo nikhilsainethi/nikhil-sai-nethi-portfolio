@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   basePath: isProduction ? basePath : undefined,
   turbopack: {
-    root: path.resolve(__dirname, "../../.."),
+    root: path.resolve(__dirname),
   },
 };
 
