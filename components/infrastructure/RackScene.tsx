@@ -145,7 +145,7 @@ export function RackScene({ selected, onSelect, motionEnabled }: RackSceneProps)
                 whileHover={animated ? { y: isSelected ? -16 : -5 } : undefined}
                 transition={animated ? { type: "spring", stiffness: 135, damping: 22, delay: index * 0.07 } : { duration: 0 }}
               >
-                <title>{rack.label.toLowerCase()} — select to inspect the synthetic model</title>
+                <title>{`${rack.label.toLowerCase()} — select to inspect the synthetic model`}</title>
                 <path
                   className={styles.focusOutline}
                   d={`M-7 -4 65 -46 174 6 174 ${rack.height + 15} 102 ${rack.height + 57} -7 ${rack.height + 6}Z`}
