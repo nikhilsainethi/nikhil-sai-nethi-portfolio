@@ -1,0 +1,184 @@
+.scene {
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+  color: var(--infra-text, #e9eee8);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.floorGrid {
+  stroke: var(--infra-cyan, #80ccd2);
+  stroke-width: 0.65;
+  opacity: 0.12;
+}
+
+.floorEdge {
+  stroke: var(--infra-cyan, #80ccd2);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 6;
+  opacity: 0.28;
+}
+
+.floorRail {
+  stroke: var(--infra-cyan, #80ccd2);
+  stroke-width: 1;
+  opacity: 0.12;
+}
+
+.connection {
+  stroke: var(--infra-accent, #d0f266);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.connectionSecondary {
+  stroke: var(--infra-cyan, #80ccd2);
+  stroke-width: 0.7;
+  opacity: 0.35;
+}
+
+.floorNode {
+  fill: var(--infra-panel, #172326);
+  stroke: var(--infra-cyan, #80ccd2);
+  stroke-width: 0.7;
+}
+
+.floorLabel,
+.annotation,
+.tagCode,
+.selectedText,
+.sideCode,
+.rackName,
+.rackSerial {
+  font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+  user-select: none;
+}
+
+.floorLabel {
+  font-size: 7px;
+  letter-spacing: 1.7px;
+  fill: var(--infra-muted, #98a7a6);
+  opacity: 0.7;
+}
+
+.dimensionLine {
+  stroke: var(--infra-muted, #98a7a6);
+  stroke-width: 0.75;
+  opacity: 0.3;
+}
+
+.annotation {
+  font-size: 7px;
+  letter-spacing: 1px;
+  fill: var(--infra-muted, #98a7a6);
+}
+
+.rack {
+  --rack-color: #88bdc2;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rack[data-selected="true"] {
+  --rack-color: #d0f266;
+}
+
+.focusOutline {
+  fill: transparent;
+  stroke: var(--infra-text, #e9eee8);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rack:focus-visible .focusOutline {
+  opacity: 1;
+}
+
+.rack:hover .tagCode {
+  fill: var(--infra-text, #e9eee8);
+}
+
+.cornerLight {
+  stroke: var(--rack-color);
+  stroke-width: 1.7;
+  opacity: 0.85;
+}
+
+.indicator {
+  fill: var(--rack-color);
+}
+
+.rackName {
+  font-size: 6.2px;
+  font-weight: 600;
+  letter-spacing: 0.25px;
+  fill: #e2eeeb;
+}
+
+.rackSerial {
+  font-size: 3.6px;
+  letter-spacing: 0.25px;
+  fill: #98adae;
+}
+
+.sideCode {
+  font-size: 5px;
+  letter-spacing: 1px;
+  fill: #728e93;
+}
+
+.tagLine {
+  stroke: var(--infra-muted, #98a7a6);
+  stroke-width: 0.7;
+  opacity: 0.6;
+}
+
+.tagDot {
+  fill: var(--rack-color);
+}
+
+.tagCode {
+  font-size: 8px;
+  letter-spacing: 1px;
+  fill: var(--infra-muted, #98a7a6);
+}
+
+.selectedCheck {
+  stroke: var(--infra-text, #e9eee8);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.selectedText {
+  font-size: 6px;
+  letter-spacing: 0.8px;
+  fill: var(--infra-text, #e9eee8);
+}
+
+@media (max-width: 560px) {
+  .annotation,
+  .dimensionLine,
+  .floorLabel {
+    display: none;
+  }
+
+  .tagCode {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .selectedText {
+    font-size: 7px;
+  }
+}
