@@ -1,221 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { heroPortraitPath, resumePath } from "@/lib/site";
 import { useInfrastructureMotion } from "./InfrastructureShell";
-import { RackScene } from "./RackScene";
+import { CinematicHero } from "./CinematicHero";
 import { ModelLab } from "./ModelLab";
 import ObservabilityStory from "./ObservabilityStory";
 import { ObservabilityLab } from "./ObservabilityLab";
 
-type Platform = "accelerator" | "arm" | "x86";
-const platforms: Record<
-  Platform,
-  { name: string; tag: string; description: string }
-> = {
-  accelerator: {
-    name: "Accelerator systems",
-    tag: "COMPUTE / ACCELERATOR",
-    description: "Compute, memory, and interconnects. One connected model.",
-  },
-  arm: {
-    name: "ARM platforms",
-    tag: "COMPUTE / ARM",
-    description: "A different architecture. The same dependable foundation.",
-  },
-  x86: {
-    name: "General-purpose compute",
-    tag: "COMPUTE / X86",
-    description: "Understand every component, from the chassis to the network.",
-  },
-};
-
-export function HeroSection() {
-  const [selected, setSelected] = useState<Platform>("accelerator");
-  const enabled = useInfrastructureMotion();
-  const hero = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: hero,
-    offset: ["start start", "end start"],
-  });
-  const rackY = useTransform(scrollYProgress, [0, 1], [0, 105]);
-  const rackRotate = useTransform(scrollYProgress, [0, 1], [0, -5]);
-  const rackScale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
-  const signalY = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  return (
-    <section ref={hero} className="infra-hero infra-wrap" id="overview">
-      <div className="infra-hero-topline">
-        <span>
-          <span className="infra-dot" /> INCOMING · GOOGLE
-        </span>
-        <span>OBSERVABILITY / MONITORING / INFRASTRUCTURE</span>
-      </div>
-      <div className="infra-hero-layout">
-        <div className="infra-hero-copy">
-          <p className="infra-eyebrow">
-            NIKHIL SAI NETHI / PLATFORM INFRASTRUCTURE ENGINEER
-          </p>
-          <h1 className="infra-hero-title">
-            <span>Make complex</span>
-            <span>systems</span>
-            <span>
-              <em>observable.</em>
-            </span>
-          </h1>
-          <p className="infra-hero-description">
-            I connect metrics, logs, and traces to the systems behind them.
-            <span className="infra-next-chapter">
-              Next: observability and monitoring for Google’s UHM-M team.
-            </span>
-          </p>
-          <div className="infra-hero-cta">
-            <a href="#work" className="infra-button infra-button-primary">
-              Explore my experience <span aria-hidden="true">↗</span>
-            </a>
-            <a href="#infrastructure-story" className="infra-text-link">
-              Follow the signals <span aria-hidden="true">↓</span>
-            </a>
-          </div>
-          <div className="infra-hero-person">
-            <Image src={heroPortraitPath} alt="" width={38} height={38} />
-            <span>
-              Production experience. A platform mindset.
-              <small>Incoming Platform Infrastructure Engineer at Google</small>
-            </span>
-          </div>
-        </div>
-        <div className="infra-hero-visual">
-          <div className="infra-scene-caption">
-            <span className="infra-mono">FIG. 01 / BENEATH THE SIGNALS</span>
-            <span className="infra-scene-mode">INTERACTIVE</span>
-          </div>
-          <div className="infra-hero-scene-stage">
-            <motion.div
-              className="infra-signal-halo"
-              aria-hidden="true"
-              style={enabled ? { y: signalY } : undefined}
-            >
-              <span>
-                <i />
-                metrics
-              </span>
-              <span>
-                <i />
-                logs
-              </span>
-              <span>
-                <i />
-                traces
-              </span>
-            </motion.div>
-            <motion.div
-              style={
-                enabled
-                  ? { y: rackY, rotate: rackRotate, scale: rackScale }
-                  : undefined
-              }
-            >
-              <RackScene
-                selected={selected}
-                onSelect={setSelected}
-                motionEnabled={enabled}
-              />
-            </motion.div>
-          </div>
-          <div className="infra-scene-inspector">
-            <span className="infra-inspector-cross" aria-hidden="true">
-              +
-            </span>
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={selected}
-                initial={enabled ? { opacity: 0, y: 8 } : false}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                transition={{ duration: enabled ? 0.18 : 0 }}
-              >
-                <span className="infra-mono">{platforms[selected].tag}</span>
-                <strong>{platforms[selected].name}</strong>
-                <p>{platforms[selected].description}</p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          <div
-            className="infra-scene-switch"
-            aria-label="Select hardware architecture"
-          >
-            {(Object.keys(platforms) as Platform[]).map((id, index) => (
-              <button
-                key={id}
-                aria-pressed={selected === id}
-                onClick={() => setSelected(id)}
-              >
-                {selected === id && (
-                  <motion.span
-                    layoutId="hardware-pill"
-                    className="infra-selected-pill"
-                  />
-                )}
-                <span>
-                  0{index + 1} /{" "}
-                  {id === "accelerator"
-                    ? "Accelerator"
-                    : id === "arm"
-                      ? "ARM"
-                      : "x86"}
-                </span>
-              </button>
-            ))}
-          </div>
-          <p className="infra-scene-footnote">
-            SELECT A RACK · SCROLL TO FOLLOW THE SIGNALS
-          </p>
-        </div>
-      </div>
-      <div className="infra-hero-bottom">
-        <span>BUILT ON EXPERIENCE AT</span>
-        <div className="infra-company-row">
-          <span>Moody’s</span>
-          <span>verisk</span>
-          <span>NOKIA</span>
-        </div>
-        <a href="#infrastructure-story">
-          FOLLOW THE SIGNALS <span aria-hidden="true">↓</span>
-        </a>
-      </div>
-      <div
-        className="infra-experience-preview"
-        aria-label="Experience highlights"
-      >
-        <a href="#work">
-          <span>MOODY’S / SOFTWARE ENGINEER</span>
-          <strong>Production observability</strong>
-          <p>SLI/SLO dashboards · tracing · on-call</p>
-          <b aria-hidden="true">↗</b>
-        </a>
-        <a href="#work">
-          <span>NOKIA / SOFTWARE ENGINEER</span>
-          <strong>Systems-level diagnosis</strong>
-          <p>Packet analysis · kernel logs · network APIs</p>
-          <b aria-hidden="true">↗</b>
-        </a>
-        <a href="#work">
-          <span>VERISK / DEVELOPMENT CO-OP</span>
-          <strong>Cloud platform workflows</strong>
-          <p>AWS migration · CloudWatch · integration tests</p>
-          <b aria-hidden="true">↗</b>
-        </a>
-      </div>
-    </section>
-  );
-}
+export { CinematicHero as HeroSection } from "./CinematicHero";
 
 const projects = [
   {
@@ -668,7 +463,7 @@ export function InfrastructurePortfolio() {
   const enabled = useInfrastructureMotion();
   return (
     <main id="main">
-      <HeroSection />
+      <CinematicHero />
       <ObservabilityStory />
       <WorkSection />
       <ObservabilityLab />
