@@ -62,6 +62,18 @@ describe("interactive model lab", () => {
     expect(screen.queryByRole("button", { name: "Inspect Accelerator 01" })).not.toBeInTheDocument();
   });
 
+  it("moves focus to validation after a keyboard repair removes the repair button", async () => {
+    const user = userEvent.setup();
+    render(<ModelLab motionEnabled={false} />);
+    await user.click(screen.getByRole("button", { name: "Inject fault" }));
+    screen.getByRole("button", { name: "Repair model" }).focus();
+    await user.keyboard("{Enter}");
+    expect(screen.queryByRole("button", { name: "Repair model" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Validate model" })).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(screen.getByRole("status")).toHaveTextContent("All checks passed");
+  });
+
   it("validates a duplicate slot and resets it when changing revision", async () => {
     const user = userEvent.setup();
     render(<ModelLab motionEnabled={false} />);
@@ -117,5 +129,8 @@ describe("interactive model lab", () => {
     });
     expect(JSON.parse(serialized)).toMatchObject({ platform: "arm", revision: "1.1", synthetic: true });
     expect(anchorClick).toHaveBeenCalledOnce();
+    await user.click(screen.getByRole("button", { name: "Export again" }));
+    expect(createObjectURL).toHaveBeenCalledTimes(2);
+    expect(anchorClick).toHaveBeenCalledTimes(2);
   });
 });

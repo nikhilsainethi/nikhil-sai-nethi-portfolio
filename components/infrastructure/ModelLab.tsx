@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSystemReducedMotion } from "./InfrastructureShell";
 import {
@@ -42,6 +42,7 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
   const [issues, setIssues] = useState<ValidationIssue[] | null>(null);
   const [comparisonOpen, setComparisonOpen] = useState(false);
   const [exported, setExported] = useState(false);
+  const validateButton = useRef<HTMLButtonElement>(null);
   const selected = model.entities.find((entity) => entity.id === selectedId) ?? model.entities[0];
   const difference = useMemo(() => diffMachineModels(
     createMachineModel(model.platform, "1.0"), createMachineModel(model.platform, "1.1"),
@@ -62,6 +63,11 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
     setInjectedFault(fault);
     setIssues(null);
     setExported(false);
+  }
+
+  function repairModel() {
+    switchModel(model.platform, model.revision);
+    validateButton.current?.focus();
   }
 
   function exportModel() {
@@ -147,8 +153,8 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
           <div className={styles.validationControls}>
             <label className={styles.faultSelect}><span>Fault scenario</span><select value={fault} onChange={(event) => setFault(event.target.value as Fault)}><option value="missing-reference">Missing reference</option><option value="duplicate-slot">Duplicate slot</option></select></label>
             <button type="button" className={styles.secondaryButton} onClick={injectFault}>Inject fault <span aria-hidden="true">＋</span></button>
-            <button type="button" className={styles.primaryButton} onClick={() => setIssues(validateMachineModel(model))}>Validate model <span aria-hidden="true">↗</span></button>
-            {injectedFault && <button type="button" className={styles.repairButton} onClick={() => switchModel(model.platform, model.revision)}>Repair model <span aria-hidden="true">↺</span></button>}
+            <button ref={validateButton} type="button" className={styles.primaryButton} onClick={() => setIssues(validateMachineModel(model))}>Validate model <span aria-hidden="true">↗</span></button>
+            {injectedFault && <button type="button" className={styles.repairButton} onClick={repairModel}>Repair model <span aria-hidden="true">↺</span></button>}
           </div>
           <div role="status" aria-live="polite" aria-atomic="true" className={styles.validationResult} data-state={issues === null ? "idle" : issues.length ? "error" : "success"}>
             <span className={styles.statusIcon} aria-hidden="true">{issues === null ? "○" : issues.length ? "!" : "✓"}</span>
@@ -160,7 +166,7 @@ export function ModelLab({ motionEnabled = true }: { motionEnabled?: boolean }) 
 
         <div className={styles.bottomToolbar}>
           <button type="button" className={styles.textButton} aria-expanded={comparisonOpen} aria-controls="model-revision-comparison" aria-label="Compare revisions" onClick={() => setComparisonOpen(!comparisonOpen)}><span aria-hidden="true">⌥</span>Compare revisions <span className={styles.compareLabel}>1.0 → 1.1</span><span aria-hidden="true">{comparisonOpen ? "−" : "+"}</span></button>
-          <button type="button" className={styles.textButton} aria-label="Export JSON" onClick={exportModel}>{exported ? "Export again" : "Export JSON"}<span aria-hidden="true">↓</span></button>
+          <button type="button" className={styles.textButton} onClick={exportModel}>{exported ? "Export again" : "Export JSON"}<span aria-hidden="true">↓</span></button>
         </div>
         {comparisonOpen && <motion.section id="model-revision-comparison" aria-label="Revision comparison" className={styles.comparison} initial={animate ? { opacity: 0, y: -8 } : false} animate={{ opacity: 1, y: 0 }} transition={{ duration: animate ? 0.25 : 0 }}>
           <div className={styles.diffHeader}><h3>What changed in 1.1</h3><p>Compares the original {platforms.find((item) => item.id === model.platform)?.title} fixtures; injected faults are excluded.</p></div>
