@@ -17,6 +17,7 @@ let compactViewport = false;
 const defaultIntersectionObserver = globalThis.IntersectionObserver;
 
 beforeEach(() => {
+  window.history.replaceState({}, "", "/");
   motionPreference.enabled = true;
   reducedMotion = true;
   compactViewport = false;
@@ -40,6 +41,98 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
   globalThis.IntersectionObserver = defaultIntersectionObserver;
+  window.history.replaceState({}, "", "/");
+  document.documentElement.style.scrollPaddingTop = "";
+});
+
+describe("initial fragment navigation", () => {
+  function setupFrames() {
+    const callbacks = new Map<number, FrameRequestCallback>();
+    let frameId = 0;
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      callbacks.set(++frameId, callback);
+      return frameId;
+    });
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation((id) => { callbacks.delete(id); });
+    return async () => {
+      await act(async () => {
+        const queued = [...callbacks.values()];
+        callbacks.clear();
+        queued.forEach((callback) => callback(0));
+      });
+    };
+  }
+
+  it("restores an initial below-story fragment once after desktop pinning, respecting scroll padding", async () => {
+    reducedMotion = false;
+    window.history.replaceState({}, "", "/#work");
+    document.documentElement.style.scrollPaddingTop = "108px";
+    const flush = setupFrames();
+    const originalBounds = HTMLElement.prototype.getBoundingClientRect;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      if (this.id !== "work") return originalBounds.call(this);
+      return { x: 0, y: 1897, top: 1897, bottom: 2097, left: 0, right: 1200, width: 1200, height: 200, toJSON: () => ({}) };
+    });
+    const view = <><ObservabilityStory /><section id="work">My work</section></>;
+    const { rerender } = render(view);
+    await flush();
+
+    expect(window.scrollTo).toHaveBeenCalledExactlyOnceWith({ top: 1789, behavior: "instant" });
+    rerender(view);
+    window.dispatchEvent(new Event("resize"));
+    await flush();
+    expect(window.scrollTo).toHaveBeenCalledTimes(1);
+  });
+
+  it("waits for compact server markup to hydrate into desktop geometry before restoring the fragment", async () => {
+    reducedMotion = false;
+    window.history.replaceState({}, "", "/#work");
+    document.documentElement.style.scrollPaddingTop = "108px";
+    const flush = setupFrames();
+    const originalBounds = HTMLElement.prototype.getBoundingClientRect;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      if (this.id !== "work") return originalBounds.call(this);
+      const top = document.querySelector("#infrastructure-story")?.getAttribute("data-pinned") === "on" ? 1897 : 108;
+      return { x: 0, y: top, top, bottom: top + 200, left: 0, right: 1200, width: 1200, height: 200, toJSON: () => ({}) };
+    });
+    const view = <><ObservabilityStory /><section id="work">My work</section></>;
+    const container = document.createElement("div");
+    document.body.append(container);
+    container.innerHTML = renderToString(view);
+    expect(container.querySelector("#infrastructure-story")).toHaveAttribute("data-pinned", "off");
+    const recoverableErrors: unknown[] = [];
+    let root: Root | undefined;
+    try {
+      await act(async () => {
+        root = hydrateRoot(container, view, { onRecoverableError: (error) => { recoverableErrors.push(error); } });
+      });
+      await flush();
+      expect(recoverableErrors).toEqual([]);
+      expect(container.querySelector("#infrastructure-story")).toHaveAttribute("data-pinned", "on");
+      expect(window.scrollTo).toHaveBeenCalledExactlyOnceWith({ top: 1789, behavior: "instant" });
+    } finally {
+      await act(async () => { root?.unmount(); });
+      container.remove();
+    }
+  });
+
+  it.each(["no hash", "target before story", "user input", "late hash", "late desktop resize"] as const)("does not correct the fragment for %s", async (scenario) => {
+    reducedMotion = false;
+    compactViewport = scenario === "late desktop resize";
+    if (scenario !== "no hash" && scenario !== "late hash") window.history.replaceState({}, "", "/#work");
+    const flush = setupFrames();
+    const view = (renderCount: number) => <div data-render-count={renderCount}>{scenario === "target before story"
+      ? <><section id="work">My work</section><ObservabilityStory /></>
+      : <><ObservabilityStory /><section id="work">My work</section></>}</div>;
+    const { rerender } = render(view(0));
+    if (scenario === "user input") window.dispatchEvent(new Event("wheel"));
+    await flush();
+    if (scenario === "late hash") window.history.replaceState({}, "", "/#work");
+    if (scenario === "late desktop resize") compactViewport = false;
+    rerender(view(1));
+    await flush();
+    expect(window.scrollTo).not.toHaveBeenCalled();
+  });
 });
 
 describe("observability story access", () => {

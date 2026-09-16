@@ -120,14 +120,14 @@
   .stepCopy { min-height: 290px; }
   .controls button { gap: 9px; padding-inline: 12px; font-size: 11px; }
 }
-@media (max-width: 800px), (max-height: 760px) {
+@media (max-width: 700px), (max-height: 760px) {
   .story[data-pinned="on"] { height: auto; }
   .story[data-pinned="on"] .sticky { position: relative; top: 0; height: auto; }
   .sticky { padding-top: 32px; }
   .header { align-items: flex-start; }
   .scrollHint { display: none; }
 }
-@media (max-width: 800px) {
+@media (max-width: 700px) {
   .story { margin-top: 65px; }
   .sticky { width: 88%; }
   .header h2 { font-size: 30px; max-width: 350px; }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useInfrastructureMotion, useSystemReducedMotion } from "./InfrastructureShell";
 import styles from "./ObservabilityStory.module.css";
 
@@ -39,7 +39,7 @@ const stages = [
   },
 ] as const;
 
-const compactQuery = "(max-width: 800px), (max-height: 760px)";
+const compactQuery = "(max-width: 700px), (max-height: 760px)";
 const compactServerSnapshot = () => true;
 const compactSnapshot = () => window.matchMedia(compactQuery).matches;
 function subscribeCompact(callback: () => void) {
@@ -50,6 +50,14 @@ function subscribeCompact(callback: () => void) {
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 const stageProgress = [0.04, 0.36, 0.64, 0.96];
 const stickyInset = 86;
+
+type InitialAnchorRequest = {
+  hash: string;
+  target: HTMLElement;
+  cancelled: boolean;
+  handled: boolean;
+  detach: () => void;
+};
 
 /** Scrub a few composited layers; nothing runs continuously between scroll events. */
 function paintProgress(scene: HTMLDivElement | null, progress: number) {
@@ -176,7 +184,55 @@ export function ObservabilityStory() {
   const sectionRef = useRef<HTMLElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(stageProgress[0]);
+  const motionOnMount = useRef(enabled);
+  const initialAnchor = useRef<InitialAnchorRequest | null>(null);
   const stage = stages[active];
+
+  useLayoutEffect(() => {
+    // Native fragment navigation may resolve against the compact SSR layout.
+    // Only record the initial request, before desktop geometry expands; never
+    // reinterpret a later hash change, resize, or motion-setting change.
+    const section = sectionRef.current;
+    const hash = window.location.hash;
+    if (!section || !hash || !motionOnMount.current || window.matchMedia(compactQuery).matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let target: HTMLElement | null;
+    try { target = document.getElementById(decodeURIComponent(hash.slice(1))); }
+    catch { return; }
+    if (!target || section.contains(target) || !(section.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
+
+    const request: InitialAnchorRequest = { hash, target, cancelled: false, handled: false, detach: () => {} };
+    const cancel = () => { request.cancelled = true; };
+    const events = ["wheel", "touchstart", "pointerdown", "keydown", "hashchange", "popstate", "resize"] as const;
+    for (const event of events) window.addEventListener(event, cancel, { passive: true });
+    request.detach = () => {
+      for (const event of events) window.removeEventListener(event, cancel);
+    };
+    initialAnchor.current = request;
+    return () => {
+      request.cancelled = true;
+      request.detach();
+      initialAnchor.current = null;
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const request = initialAnchor.current;
+    if (!pinned || !request || request.handled) return;
+    const frame = window.requestAnimationFrame(() => {
+      request.handled = true;
+      request.detach();
+      if (request.cancelled || window.location.hash !== request.hash || !request.target.isConnected) return;
+      const padding = Number.parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      const margin = Number.parseFloat(window.getComputedStyle(request.target).scrollMarginTop) || 0;
+      const top = window.scrollY + request.target.getBoundingClientRect().top - padding - margin;
+      window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+    });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      request.handled = true;
+      request.detach();
+    };
+  }, [pinned]);
 
   useEffect(() => {
     if (!scrollEnabled) {
