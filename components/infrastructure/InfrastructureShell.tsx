@@ -8,7 +8,12 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  useScroll,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 import { resumePath, withBasePath } from "@/lib/site";
 import { themeStorageKey } from "@/lib/theme";
@@ -55,8 +60,9 @@ export function CubeMark({ className = "" }: { className?: string }) {
 }
 
 const links = [
-  { id: "model-lab", label: "Model lab" },
-  { id: "work", label: "Selected work" },
+  { id: "work", label: "Experience" },
+  { id: "infrastructure-story", label: "Infrastructure" },
+  { id: "observability-lab", label: "Signal lab" },
   { id: "about", label: "About" },
   { id: "contact", label: "Contact" },
 ];
@@ -73,6 +79,7 @@ export function InfrastructureShell({
   const motionEnabled = motionOn && !prefersReduced;
   const menuButton = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     document.documentElement.dataset.motion = motionEnabled ? "on" : "off";
@@ -128,6 +135,13 @@ export function InfrastructureShell({
           Skip to content
         </a>
         <header className="infra-header">
+          {motionEnabled && (
+            <motion.div
+              className="infra-scroll-meter"
+              style={{ scaleX: scrollYProgress }}
+              aria-hidden="true"
+            />
+          )}
           <a
             href={withBasePath("/")}
             className="infra-brand"
@@ -157,6 +171,27 @@ export function InfrastructureShell({
             ))}
           </nav>
           <div className="infra-header-actions">
+            <button
+              className="infra-icon-button infra-motion-header"
+              onClick={() => setMotionOn(!motionOn)}
+              disabled={prefersReduced}
+              aria-label={
+                prefersReduced
+                  ? "Reduced motion enabled by system"
+                  : motionEnabled
+                    ? "Pause animations"
+                    : "Enable animations"
+              }
+              title={
+                prefersReduced
+                  ? "Your device prefers reduced motion"
+                  : motionEnabled
+                    ? "Pause animations"
+                    : "Enable animations"
+              }
+            >
+              <span aria-hidden="true">{motionEnabled ? "Ⅱ" : "▷"}</span>
+            </button>
             <button
               className="infra-icon-button infra-theme"
               onClick={toggleTheme}
@@ -221,7 +256,7 @@ export function InfrastructureShell({
         </header>
         <noscript>
           <style>{`main [style*="opacity:0"], main [style*="opacity: 0"], main svg [opacity="0"] { opacity:1 !important; }
-          .infra-menu-toggle,.infra-theme,.infra-motion-toggle { display:none !important; }
+          .infra-menu-toggle,.infra-theme,.infra-motion-toggle,.infra-motion-header { display:none !important; }
           .infra-project-open { display:none; }`}</style>
           <nav
             className="infra-static-nav infra-wrap"
@@ -235,7 +270,7 @@ export function InfrastructureShell({
           </nav>
           <p className="infra-static-note infra-wrap">
             You’re viewing the static portfolio. Enable JavaScript to explore
-            the interactive hardware models.
+            the interactive infrastructure and monitoring demos.
           </p>
         </noscript>
         {children}

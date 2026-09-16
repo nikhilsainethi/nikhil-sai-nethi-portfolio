@@ -1,13 +1,14 @@
 # Nikhil Sai Nethi — Infrastructure Portfolio
 
-A data-centre-inspired redesign built around the physical systems, hardware models, and platform tooling behind reliable infrastructure. The Google role is presented as **incoming**; the interactive lab is an independent personal demonstration using synthetic hardware.
+A data-centre-inspired portfolio focused on **observability and monitoring**. Scroll through infrastructure becoming telemetry, explore production reliability experience, and investigate a synthetic incident. The Google UHM-M role is presented as **incoming**; the demos are independent personal illustrations.
 
 ## Explore
 
-- **Interactive rack scene:** original SVG cabinets for accelerator, ARM, and x86 systems; animated assembly, connection drawing, keyboard selection, and an architecture inspector.
-- **Machine-model lab:** inspect entities and relationships, switch platform/revision, introduce a missing reference or duplicate slot, validate, repair, compare revisions, and export or view the current JSON.
-- **Lifecycle explorer:** Design → Validate → Serve → Repair, with changing diagrams and explanations.
-- **Selected work:** four expandable case studies from Nokia, Moody’s, and Verisk, grounded in the original portfolio’s experience.
+- **Interactive rack scene:** original SVG cabinets, selectable architectures, signal labels, and scroll-driven camera movement.
+- **Follow the signals:** a bounded sticky desktop scene evolves from physical racks to telemetry, a slow dependency, and recovery. Stage buttons provide direct control; small screens and reduced motion use a compact layout.
+- **Signal Lab:** investigate a slow model lookup through calculated sample metrics, traces, and correlated logs, adjust the example alert threshold, and recover the synthetic service.
+- **Hardware-model foundation:** an optional disclosure retains entity inspection, validation, revision comparison, and JSON export.
+- **Experience first:** a primary experience CTA, three visible experience highlights, and a featured Moody’s observability case study that opens by default. Nokia diagnostics, developer tooling, and Verisk migration work remain available.
 - **Engineer profile:** career timeline, education, certifications, résumé, and contact links.
 - Responsive layouts, dark/light themes, native anchor navigation, system reduced-motion support, a manual motion toggle, and a readable no-JavaScript fallback.
 
@@ -38,7 +39,10 @@ The existing GitHub Actions workflow publishes `out/` when changes reach `main`.
 | Location | Responsibility |
 | --- | --- |
 | `components/infrastructure/InfrastructureShell.tsx` | Navigation, theme, motion preferences, static fallback, footer |
-| `components/infrastructure/InfrastructurePortfolio.tsx` | Hero, lifecycle, work, profile, contact, and legacy page wrappers |
+| `components/infrastructure/InfrastructurePortfolio.tsx` | Observability hero, featured experience, profile, optional model lab, and legacy pages |
+| `components/infrastructure/ObservabilityStory.tsx` | Scroll-driven infrastructure and telemetry narrative |
+| `components/infrastructure/ObservabilityLab.tsx` | Interactive synthetic monitoring and diagnosis UI |
+| `lib/observability.ts` | Deterministic request fixtures and calculated monitoring metrics |
 | `components/infrastructure/RackScene.tsx` | Original interactive isometric illustration |
 | `components/infrastructure/ModelLab.tsx` | Interactive model inspection and validation UI |
 | `lib/machine-model.ts` | Typed fixtures, deterministic validation, immutable fault injection, revision diffs |
@@ -51,7 +55,7 @@ The previous `components/portfolio/` files are retained as source history but ar
 
 ## Demo boundaries
 
-The lab runs entirely in the browser. Its entities, relationships, revisions, and error scenarios are synthetic. It does not connect to Google infrastructure, represent an internal UHM-M schema, operate a real fleet, or claim production-scale serving performance. The lifecycle is a conceptual explanation. Experience summaries preserve the original portfolio’s claims without adding invented achievements or metrics.
+Both labs run entirely in the browser. Requests, telemetry, models, and error scenarios are synthetic. The examples do not connect to Google infrastructure, represent an internal UHM-M architecture or telemetry stack, operate a real fleet, or report production performance. Monitoring thresholds are illustrative scenario settings, not claimed Google SLOs. Experience summaries preserve the original portfolio’s claims without inventing achievements.
 
 JSON export creates a standard browser download. Some embedded browsers cancel file downloads; **View JSON** provides a selectable copy of the same current model, including any injected fault.
 
@@ -61,8 +65,10 @@ JSON export creates a standard browser download. Some embedded browsers cancel f
 
 ## Verification
 
-Final checks: **25 tests passed**, ESLint passed, the static production build passed, and `npm audit` reported **0 vulnerabilities**. Production routes, résumé, portrait, and the PNG sharing image returned HTTP 200 at the repository base path.
+Final verification: **50 tests passed**, ESLint passed, the production static export built successfully, and `npm audit` reported **0 vulnerabilities**.
 
-Automated tests cover fixture integrity, missing references, duplicate IDs and slots, containment cycles, permitted connectivity cycles, immutable changes, real revision differences, inspection, repair focus, export contents, and React hydration with reduced motion.
+Automated tests cover monitoring calculations and invalid samples, incident diagnosis and recovery, trace/log correlation, story controls and reduced motion, initial deep links after hydration, fixture integrity, missing references, duplicate IDs and slots, containment cycles, permitted connectivity cycles, immutable changes, real revision differences, inspection, repair focus, export contents, and React hydration with reduced motion.
 
-Browser checks cover desktop, tablet, and narrow phone layouts; both themes; navigation and Escape focus; rack selection; fault → validation → repair; revision changes; case-study expansion; system reduced motion; no-JavaScript visibility; and production base-path assets. The synthetic model JSON is additionally available for inspection in the page.
+Browser checks cover native scroll progression, direct story-stage selection, synthetic incident investigation/recovery, desktop, tablet, and narrow phone layouts; both themes; navigation and Escape focus; rack selection; fault → validation → repair; revision changes; case-study expansion; system reduced motion; no-JavaScript visibility; and production base-path assets. The synthetic model JSON is additionally available for inspection in the page.
+
+The scroll story also works in the 736px-wide app preview. Pausing mid-story preserves its position; initial experience links land correctly after desktop hydration. The final production preview loaded without browser warnings or errors.

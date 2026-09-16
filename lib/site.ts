@@ -6,7 +6,7 @@ export const siteUrl = `https://nikhilsainethi.github.io/${repoName}/`;
 export const siteName = "Nikhil Sai Nethi";
 export const siteTitle = `${siteName} | Platform Infrastructure Engineer`;
 export const siteDescription =
-  "Nikhil Sai Nethi — incoming Platform Infrastructure Engineer at Google. Explore hardware models, reliable platforms, networking, and the engineering behind complex systems.";
+  "Nikhil Sai Nethi — incoming Platform Infrastructure Engineer at Google. Focused on observability and monitoring for UHM-M. Explore production reliability experience, interactive telemetry, and infrastructure.";
 
 const isProduction = process.env.NODE_ENV === "production";
 

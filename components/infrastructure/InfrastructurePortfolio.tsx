@@ -1,12 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { heroPortraitPath, resumePath } from "@/lib/site";
-import { CubeMark, useInfrastructureMotion } from "./InfrastructureShell";
+import { useInfrastructureMotion } from "./InfrastructureShell";
 import { RackScene } from "./RackScene";
 import { ModelLab } from "./ModelLab";
+import ObservabilityStory from "./ObservabilityStory";
+import { ObservabilityLab } from "./ObservabilityLab";
 
 type Platform = "accelerator" | "arm" | "x86";
 const platforms: Record<
@@ -33,13 +40,22 @@ const platforms: Record<
 export function HeroSection() {
   const [selected, setSelected] = useState<Platform>("accelerator");
   const enabled = useInfrastructureMotion();
+  const hero = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: hero,
+    offset: ["start start", "end start"],
+  });
+  const rackY = useTransform(scrollYProgress, [0, 1], [0, 105]);
+  const rackRotate = useTransform(scrollYProgress, [0, 1], [0, -5]);
+  const rackScale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
+  const signalY = useTransform(scrollYProgress, [0, 1], [0, -50]);
   return (
-    <section className="infra-hero infra-wrap" id="overview">
+    <section ref={hero} className="infra-hero infra-wrap" id="overview">
       <div className="infra-hero-topline">
         <span>
           <span className="infra-dot" /> INCOMING · GOOGLE
         </span>
-        <span>ENGINEERING THE FOUNDATION</span>
+        <span>OBSERVABILITY / MONITORING / INFRASTRUCTURE</span>
       </div>
       <div className="infra-hero-layout">
         <div className="infra-hero-copy">
@@ -47,43 +63,72 @@ export function HeroSection() {
             NIKHIL SAI NETHI / PLATFORM INFRASTRUCTURE ENGINEER
           </p>
           <h1 className="infra-hero-title">
-            <span>Behind every</span>
-            <span>great system</span>
+            <span>Make complex</span>
+            <span>systems</span>
             <span>
-              is a <em>foundation.</em>
+              <em>observable.</em>
             </span>
           </h1>
           <p className="infra-hero-description">
-            I build reliable platforms for complex systems.
-            <br className="desktop-only" /> My next chapter: infrastructure that
-            brings hardware models to life.
+            I connect metrics, logs, and traces to the systems behind them.
+            <span className="infra-next-chapter">
+              Next: observability and monitoring for Google’s UHM-M team.
+            </span>
           </p>
           <div className="infra-hero-cta">
-            <a href="#model-lab" className="infra-button infra-button-primary">
-              Explore the model lab <span aria-hidden="true">↗</span>
+            <a href="#work" className="infra-button infra-button-primary">
+              Explore my experience <span aria-hidden="true">↗</span>
             </a>
-            <a href="#work" className="infra-text-link">
-              Selected work <span aria-hidden="true">↓</span>
+            <a href="#infrastructure-story" className="infra-text-link">
+              Follow the signals <span aria-hidden="true">↓</span>
             </a>
           </div>
           <div className="infra-hero-person">
             <Image src={heroPortraitPath} alt="" width={38} height={38} />
             <span>
-              Software. Hardware. Everything between.
+              Production experience. A platform mindset.
               <small>Incoming Platform Infrastructure Engineer at Google</small>
             </span>
           </div>
         </div>
         <div className="infra-hero-visual">
           <div className="infra-scene-caption">
-            <span className="infra-mono">FIG. 01 / THE PHYSICAL LAYER</span>
+            <span className="infra-mono">FIG. 01 / BENEATH THE SIGNALS</span>
             <span className="infra-scene-mode">INTERACTIVE</span>
           </div>
-          <RackScene
-            selected={selected}
-            onSelect={setSelected}
-            motionEnabled={enabled}
-          />
+          <div className="infra-hero-scene-stage">
+            <motion.div
+              className="infra-signal-halo"
+              aria-hidden="true"
+              style={enabled ? { y: signalY } : undefined}
+            >
+              <span>
+                <i />
+                metrics
+              </span>
+              <span>
+                <i />
+                logs
+              </span>
+              <span>
+                <i />
+                traces
+              </span>
+            </motion.div>
+            <motion.div
+              style={
+                enabled
+                  ? { y: rackY, rotate: rackRotate, scale: rackScale }
+                  : undefined
+              }
+            >
+              <RackScene
+                selected={selected}
+                onSelect={setSelected}
+                motionEnabled={enabled}
+              />
+            </motion.div>
+          </div>
           <div className="infra-scene-inspector">
             <span className="infra-inspector-cross" aria-hidden="true">
               +
@@ -130,7 +175,7 @@ export function HeroSection() {
             ))}
           </div>
           <p className="infra-scene-footnote">
-            SYNTHETIC HARDWARE · SELECT A RACK TO EXPLORE
+            SELECT A RACK · SCROLL TO FOLLOW THE SIGNALS
           </p>
         </div>
       </div>
@@ -141,168 +186,32 @@ export function HeroSection() {
           <span>verisk</span>
           <span>NOKIA</span>
         </div>
-        <a href="#model-lab">
-          SCROLL TO THE SYSTEM <span aria-hidden="true">↓</span>
+        <a href="#infrastructure-story">
+          FOLLOW THE SIGNALS <span aria-hidden="true">↓</span>
         </a>
       </div>
-    </section>
-  );
-}
-
-const lifecycle = [
-  {
-    label: "Design",
-    title: "Make the machine understandable.",
-    body: "Describe components, containment, and connections in a shared model. Choose the fidelity that helps a consumer answer a real question.",
-    input: "Hardware definition",
-    output: "Component graph",
-    detail: "IDENTITY → RELATIONSHIPS",
-    nodes: ["Chassis", "Compute", "Network"],
-  },
-  {
-    label: "Validate",
-    title: "Find the mismatch before it travels.",
-    body: "Check references and structural constraints before a model is consumed. A useful failure points to the exact entity and explains what needs to change.",
-    input: "Candidate revision",
-    output: "Validation report",
-    detail: "CONSTRAINTS → CONFIDENCE",
-    nodes: ["References", "Containment", "Slot allocation"],
-  },
-  {
-    label: "Serve",
-    title: "Give every consumer a stable contract.",
-    body: "Version the model so tools can agree on a specific revision. Clear interfaces let independent consumers build on the same foundation.",
-    input: "Verified model",
-    output: "Versioned contract",
-    detail: "ONE MODEL → MANY CONSUMERS",
-    nodes: ["Design tools", "Deployment", "Diagnostics"],
-  },
-  {
-    label: "Repair",
-    title: "Connect intended state to the next action.",
-    body: "Use component identity and relationships to reason about a replacement. Preserve revision history so a change remains explainable.",
-    input: "Component change",
-    output: "Traceable revision",
-    detail: "CHANGE → VALIDATE → REUSE",
-    nodes: ["Identify", "Replace", "Revalidate"],
-  },
-];
-
-export function LifecycleSection() {
-  const [step, setStep] = useState(0);
-  const enabled = useInfrastructureMotion();
-  const item = lifecycle[step];
-  return (
-    <section
-      className="infra-lifecycle infra-section infra-wrap"
-      id="lifecycle"
-    >
-      <div className="infra-section-heading">
-        <div>
-          <p className="infra-eyebrow">02 / THE INFRASTRUCTURE LIFECYCLE</p>
-          <h2>
-            One model.
-            <br />
-            <span className="infra-muted">An entire lifecycle.</span>
-          </h2>
-        </div>
-        <p>
-          How a shared hardware model can connect the people and systems that
-          build, deploy, and maintain machines.
-        </p>
-      </div>
       <div
-        className="infra-lifecycle-tabs"
-        aria-label="Explore model lifecycle"
+        className="infra-experience-preview"
+        aria-label="Experience highlights"
       >
-        {lifecycle.map((s, i) => (
-          <button
-            key={s.label}
-            aria-pressed={step === i}
-            onClick={() => setStep(i)}
-          >
-            <span className="infra-step-number">0{i + 1}</span>
-            {s.label}
-            <span aria-hidden="true">{step === i ? "↙" : "↗"}</span>
-            {step === i && (
-              <motion.span
-                className="infra-step-indicator"
-                layoutId="lifecycle-step"
-              />
-            )}
-          </button>
-        ))}
-      </div>
-      <div className="infra-lifecycle-body">
-        <div className="infra-lifecycle-graphic">
-          <div className="infra-graphic-top">
-            <span className="infra-dot" />
-            {item.detail}
-          </div>
-          <div className="infra-model-flow">
-            <motion.div
-              className="infra-model-input"
-              key={`input-${step}`}
-              initial={enabled ? { x: -12, opacity: 0 } : false}
-              animate={{ x: 0, opacity: 1 }}
-            >
-              <span className="infra-mono">INPUT</span>
-              <strong>{item.input}</strong>
-            </motion.div>
-            <div className="infra-flow-connector" />
-            <div className="infra-model-cube">
-              <CubeMark />
-              <span>machine.model</span>
-            </div>
-            <div className="infra-flow-connector" />
-            <motion.div
-              key={`output-${step}`}
-              className="infra-model-output"
-              initial={enabled ? { x: 12, opacity: 0 } : false}
-              animate={{ x: 0, opacity: 1 }}
-            >
-              <span className="infra-mono">OUTPUT</span>
-              <strong>{item.output}</strong>
-            </motion.div>
-          </div>
-          <div className="infra-consumer-nodes">
-            {item.nodes.map((n, i) => (
-              <motion.span
-                key={n}
-                initial={enabled ? { y: 12, opacity: 0 } : false}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: enabled ? i * 0.06 : 0 }}
-              >
-                <span aria-hidden="true">◇</span>
-                {n}
-              </motion.span>
-            ))}
-          </div>
-          <span className="infra-graphic-note">
-            CONCEPTUAL WORKFLOW / SYNTHETIC EXAMPLE
-          </span>
-        </div>
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={step}
-            className="infra-lifecycle-description"
-            initial={enabled ? { y: 14, opacity: 0 } : false}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -8, opacity: 0 }}
-            transition={{ duration: enabled ? 0.2 : 0 }}
-          >
-            <span className="infra-large-number">0{step + 1}</span>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
-            <button
-              className="infra-text-link"
-              onClick={() => setStep((step + 1) % lifecycle.length)}
-            >
-              Next: {lifecycle[(step + 1) % lifecycle.length].label}{" "}
-              <span aria-hidden="true">→</span>
-            </button>
-          </motion.div>
-        </AnimatePresence>
+        <a href="#work">
+          <span>MOODY’S / SOFTWARE ENGINEER</span>
+          <strong>Production observability</strong>
+          <p>SLI/SLO dashboards · tracing · on-call</p>
+          <b aria-hidden="true">↗</b>
+        </a>
+        <a href="#work">
+          <span>NOKIA / SOFTWARE ENGINEER</span>
+          <strong>Systems-level diagnosis</strong>
+          <p>Packet analysis · kernel logs · network APIs</p>
+          <b aria-hidden="true">↗</b>
+        </a>
+        <a href="#work">
+          <span>VERISK / DEVELOPMENT CO-OP</span>
+          <strong>Cloud platform workflows</strong>
+          <p>AWS migration · CloudWatch · integration tests</p>
+          <b aria-hidden="true">↗</b>
+        </a>
       </div>
     </section>
   );
@@ -324,26 +233,30 @@ const projects = [
       "Built Python wrappers across hundreds of Broadcom C APIs and CPRI communication paths. Debugged Layer 2/3 issues with packet analysis, tcpdump, MTR, and kernel logs, and used Docker and Kubernetes for subsystem integration testing.",
     tradeoff:
       "Model only the detail a consumer needs; additional fidelity also adds maintenance and validation cost.",
-    lesson: "The connection to infrastructure modeling",
+    lesson: "From hardware symptoms to useful evidence",
     takeaway:
       "Component identity, interfaces, and relationships make a complex system easier to inspect. This experience is the hardware-facing foundation I bring to platform work.",
   },
   {
     id: "02",
-    category: "PLATFORMS & RELIABILITY",
+    category: "OBSERVABILITY & PRODUCTION RELIABILITY",
     company: "MOODY’S",
-    title: "Built to run. Ready to recover.",
+    title: "From signals to a response.",
     description:
-      "Production operations and observability for Linux services and Kubernetes platforms.",
-    tags: ["Amazon EKS", "OpenTelemetry", "Prometheus"],
-    diagram: ["Services", "Telemetry", "On-call workflows"],
+      "Built SLI/SLO dashboards, alert rules, structured logs, and distributed traces. Supported production on-call for Linux services and Amazon EKS.",
+    tags: ["OpenTelemetry", "Prometheus / Grafana", "Datadog", "Amazon EKS"],
+    diagram: [
+      "Instrument & observe",
+      "Diagnose & respond",
+      "Runbooks & learning",
+    ],
     challenge:
       "Keeping production services understandable requires signals that connect a symptom to the system behind it.",
     contribution:
       "Supported production on-call, incident response, root-cause analysis, runbooks, and blameless postmortems. Built SLI/SLO dashboards, alert rules, structured logs, and distributed traces with Prometheus, Grafana, Datadog, and OpenTelemetry.",
     tradeoff:
       "More telemetry is not always more clarity. Signals need a clear owner and an actionable path from detection to diagnosis.",
-    lesson: "The connection to reliable model services",
+    lesson: "What I bring to observability infrastructure",
     takeaway:
       "A service needs both a clear contract and a way to understand when that contract is not being met. Operational feedback belongs in the engineering loop.",
   },
@@ -351,9 +264,9 @@ const projects = [
     id: "03",
     category: "DEVELOPER EXPERIENCE",
     company: "MOODY’S",
-    title: "Make knowledge easier to find.",
+    title: "Make troubleshooting knowledge accessible.",
     description:
-      "An internal retrieval system that connects engineering questions to runbooks and documentation.",
+      "Internal retrieval and LLM observability workflows for grounded triage steps, incident summaries, and engineering documentation.",
     tags: ["pgvector", "Hybrid retrieval", "LangChain"],
     diagram: ["Engineering question", "Retrieve + rerank", "Grounded answer"],
     challenge:
@@ -426,80 +339,84 @@ function CaseStudyBody({ project: p }: { project: (typeof projects)[number] }) {
 }
 
 export function WorkSection() {
-  const [open, setOpen] = useState<string | null>(null);
+  const [open, setOpen] = useState<string | null>("02");
   const enabled = useInfrastructureMotion();
   return (
     <section className="infra-work infra-section infra-wrap" id="work">
       <div className="infra-section-heading">
         <div>
-          <p className="infra-eyebrow">03 / SELECTED ENGINEERING WORK</p>
+          <p className="infra-eyebrow">02 / SELECTED ENGINEERING EXPERIENCE</p>
           <h2>
-            Experience below
+            Built from experience.
             <br />
-            <span className="infra-muted">the surface.</span>
+            <span className="infra-muted">Applied to what’s next.</span>
           </h2>
         </div>
         <p>
-          From network interfaces to production platforms. The work that shapes
-          how I think about infrastructure.
+          Production observability at Moody’s. Hardware-facing diagnosis at
+          Nokia. Cloud workflows at Verisk. The foundation for my next chapter.
         </p>
       </div>
       <div className="infra-work-list">
-        {projects.map((p) => (
-          <motion.article
-            layout={enabled}
-            key={p.id}
-            className={`infra-project ${open === p.id ? "is-expanded" : ""}`}
-          >
-            <button
-              className="infra-project-trigger"
-              aria-expanded={open === p.id}
-              aria-controls={`case-${p.id}`}
-              onClick={() => setOpen(open === p.id ? null : p.id)}
+        {[projects[1], projects[0], projects[2], projects[3]].map(
+          (p, index) => (
+            <motion.article
+              layout={enabled}
+              key={p.id}
+              className={`infra-project ${open === p.id ? "is-expanded" : ""}`}
             >
-              <span className="infra-project-index">/{p.id}</span>
-              <div className="infra-project-summary">
-                <span className="infra-eyebrow">
-                  {p.category} <span>· {p.company}</span>
-                </span>
-                <h3>{p.title}</h3>
-                <p>{p.description}</p>
-                <div className="infra-tags">
-                  {p.tags.map((t) => (
-                    <span key={t}>{t}</span>
-                  ))}
+              <button
+                className="infra-project-trigger"
+                aria-expanded={open === p.id}
+                aria-controls={`case-${p.id}`}
+                onClick={() => setOpen(open === p.id ? null : p.id)}
+              >
+                <span className="infra-project-index">/0{index + 1}</span>
+                <div className="infra-project-summary">
+                  <span className="infra-eyebrow">
+                    {p.category} <span>· {p.company}</span>
+                  </span>
+                  <h3>{p.title}</h3>
+                  <p>{p.description}</p>
+                  <div className="infra-tags">
+                    {p.tags.map((t) => (
+                      <span key={t}>{t}</span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <span className="infra-project-open" aria-hidden="true">
-                {open === p.id ? "−" : "+"}
-              </span>
-              <span className="sr-only">
-                {open === p.id ? "Close" : "Read"} case study
-              </span>
-            </button>
-            <AnimatePresence initial={false}>
-              {open === p.id && (
-                <motion.div
-                  id={`case-${p.id}`}
-                  initial={{
-                    height: enabled ? 0 : "auto",
-                    opacity: enabled ? 0 : 1,
-                  }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="infra-case-content"
-                >
-                  <CaseStudyBody project={p} />
-                </motion.div>
+                <span className="infra-project-open" aria-hidden="true">
+                  {open === p.id ? "−" : "+"}
+                </span>
+                <span className="sr-only">
+                  {open === p.id ? "Close" : "Read"} case study
+                </span>
+              </button>
+              <AnimatePresence initial={false}>
+                {open === p.id && (
+                  <motion.div
+                    id={`case-${p.id}`}
+                    initial={{
+                      height: enabled ? 0 : "auto",
+                      opacity: enabled ? 0 : 1,
+                    }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="infra-case-content"
+                  >
+                    <CaseStudyBody project={p} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              {p.id !== "02" && (
+                <noscript>
+                  <div className="infra-case-content">
+                    <CaseStudyBody project={p} />
+                  </div>
+                </noscript>
               )}
-            </AnimatePresence>
-            <noscript>
-              <div className="infra-case-content">
-                <CaseStudyBody project={p} />
-              </div>
-            </noscript>
-          </motion.article>
-        ))}
+            </motion.article>
+          ),
+        )}
       </div>
     </section>
   );
@@ -511,7 +428,7 @@ const history = [
     role: "Incoming Platform Infrastructure Engineer",
     date: "NEXT CHAPTER",
     description:
-      "Moving into infrastructure for hardware modeling and the systems that create and consume models.",
+      "Joining the UHM-M team with a focus on observability and monitoring for hardware-modeling infrastructure.",
     incoming: true,
   },
   {
@@ -519,7 +436,7 @@ const history = [
     role: "Software Engineer",
     date: "AUG 2024 — PRESENT",
     description:
-      "Production reliability, Kubernetes, observability, and internal engineering tools.",
+      "SLI/SLO dashboards, distributed tracing, structured logs, alerting, and production incident response on Linux and Amazon EKS.",
   },
   {
     company: "Verisk Analytics",
@@ -542,12 +459,13 @@ const capabilities = [
     items: ["Linux", "Kubernetes", "AWS / EKS", "Docker", "Terraform"],
   },
   {
-    label: "Visibility & reliability",
+    label: "Observability & monitoring",
     items: [
       "OpenTelemetry",
       "Prometheus",
       "Grafana",
       "Datadog",
+      "SLI / SLO dashboards",
       "Incident response",
     ],
   },
@@ -595,8 +513,9 @@ export function AboutSection() {
             </div>
           </div>
           <p>
-            I like understanding what happens beneath an abstraction—and
-            building tools that make that complexity useful to someone else.
+            I like turning a confusing production symptom into something an
+            engineer can investigate. Good instrumentation, useful alerts, and
+            clear runbooks make complex systems easier to operate.
           </p>
           <a
             className="infra-text-link"
@@ -750,12 +669,26 @@ export function InfrastructurePortfolio() {
   return (
     <main id="main">
       <HeroSection />
-      <div className="infra-lab-wrap infra-wrap">
-        <ModelLab motionEnabled={enabled} />
-      </div>
-      <LifecycleSection />
+      <ObservabilityStory />
       <WorkSection />
+      <ObservabilityLab />
       <AboutSection />
+      <div className="infra-wrap infra-foundation-wrap">
+        <details className="infra-foundation">
+          <summary>
+            <span className="infra-eyebrow">UNDER THE HOOD</span>
+            <strong>Explore the hardware-model foundation</strong>
+            <span className="infra-muted">
+              A separate playground for entities, relationships, validation, and
+              revisions.
+            </span>
+            <b aria-hidden="true">＋</b>
+          </summary>
+          <div className="infra-foundation-content">
+            <ModelLab motionEnabled={enabled} />
+          </div>
+        </details>
+      </div>
       <ContactSection />
     </main>
   );

@@ -2,7 +2,8 @@ import { StandaloneSection } from "@/components/infrastructure/InfrastructurePor
 import { createPageMetadata } from "@/lib/site";
 export const metadata = createPageMetadata({
   title: "Engineering work",
-  description: "Selected systems, reliability, and developer experience work.",
+  description:
+    "Production observability, incident response, systems diagnosis, and platform work at Moody’s, Nokia, and Verisk.",
   path: "/projects/",
 });
 export default function Page() {
