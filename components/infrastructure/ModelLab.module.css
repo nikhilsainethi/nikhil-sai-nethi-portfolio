@@ -1,4 +1,4 @@
-.section { max-width: 1400px; margin: 0 auto; padding: 110px clamp(20px, 5vw, 76px); color: var(--infra-text, #f0f1eb); scroll-margin-top: 90px; }
+.section { max-width: 1400px; margin: 0 auto; padding: 0; color: var(--infra-text, #f0f1eb); scroll-margin-top: 0; }
 .section button, .section select { font: inherit; }
 .section button { cursor: pointer; }
 .section button:focus-visible, .section select:focus-visible, .section summary:focus-visible { outline: 2px solid var(--infra-accent, #d7ff79); outline-offset: 4px; }
@@ -54,7 +54,7 @@
 .nodeIcon svg { display: block; width: 100%; height: 100%; }
 .nodeText { min-width: 0; }
 .nodeKind { font-size: 8px; letter-spacing: .09em; text-transform: uppercase; color: var(--infra-muted, #8a9298); display: block; margin-bottom: 5px; }
-.nodeName { display: block; font-size: 11px; line-height: 1.4; font-weight: 500; }
+.nodeName { display: block; font-size: 12px; line-height: 1.4; font-weight: 500; }
 .nodeId { display: block; font-size: 9px; font-family: var(--font-mono, monospace); color: var(--infra-muted, #8a9298); margin-top: 7px; overflow-wrap: anywhere; }
 .nodeDot { position: absolute; width: 4px; height: 4px; right: 10px; top: 11px; border-radius: 50%; background: var(--infra-border, #2b3134); }
 .node[data-selected="true"] .nodeDot { background: var(--infra-accent, #d7ff79); }
@@ -91,8 +91,8 @@
 .faultSelect { display: flex; flex-direction: column; gap: 6px; margin-right: 3px; }
 .faultSelect > span { font-size: 9px; color: var(--infra-muted, #8a9298); }
 .faultSelect select { min-height: 39px; padding: 8px 30px 8px 12px; color: var(--infra-text, #f0f1eb); background: var(--infra-panel, #111618); border: 1px solid var(--infra-border, #2b3134); border-radius: 4px; font-size: 11px; max-width: 100%; }
-.primaryButton, .secondaryButton, .repairButton { display: inline-flex; align-items: center; justify-content: space-between; gap: 18px; border-radius: 4px; padding: 10px 13px; min-height: 39px; font-size: 11px !important; border: 1px solid var(--infra-border, #2b3134); transition: background .2s, border-color .2s; }
-.primaryButton { background: var(--infra-accent, #d7ff79); border-color: var(--infra-accent, #d7ff79); color: #151d0d; font-weight: 600 !important; }
+.primaryButton, .secondaryButton, .repairButton { display: inline-flex; align-items: center; justify-content: space-between; gap: 18px; border-radius: 4px; padding: 10px 13px; min-height: 39px; font-size: 12px !important; border: 1px solid var(--infra-border, #2b3134); transition: background .2s, border-color .2s; }
+.primaryButton { background: var(--infra-accent, #d7ff79); border-color: var(--infra-accent, #d7ff79); color: var(--infra-accent-ink, #151d0d); font-weight: 600 !important; }
 .primaryButton:hover { background: color-mix(in srgb, var(--infra-accent, #d7ff79) 85%, white); }
 .secondaryButton { color: var(--infra-text, #f0f1eb); background: transparent; }
 .secondaryButton:hover { border-color: var(--infra-muted, #8a9298); }
@@ -100,8 +100,8 @@
 .repairButton:hover { background: color-mix(in srgb, var(--infra-cyan, #93d9df) 5%, transparent); }
 .validationResult { display: flex; gap: 12px; align-items: start; border: 1px solid var(--infra-border, #2b3134); border-radius: 6px; background: color-mix(in srgb, var(--infra-bg, #0b1012) 35%, transparent); padding: 15px; margin-top: 20px; color: var(--infra-muted, #8a9298); }
 .statusIcon { display: grid; place-items: center; width: 17px; height: 17px; font-size: 12px; flex-shrink: 0; }
-.validationResult strong { font-weight: 500; font-size: 11px; color: var(--infra-text, #f0f1eb); }
-.validationResult p, .validationResult ul { margin: 5px 0 0; font-size: 10px; line-height: 1.8; }
+.validationResult strong { font-weight: 500; font-size: 12px; color: var(--infra-text, #f0f1eb); }
+.validationResult p, .validationResult ul { margin: 5px 0 0; font-size: 11px; line-height: 1.8; }
 .validationResult ul { padding-left: 15px; overflow-wrap: anywhere; }
 .validationResult[data-state="success"] { border-color: color-mix(in srgb, var(--infra-accent, #d7ff79) 25%, transparent); }
 .validationResult[data-state="success"] .statusIcon, .validationResult[data-state="success"] strong { color: var(--infra-accent, #d7ff79); }
@@ -135,7 +135,6 @@
 .sectionFootnote > p { max-width: 470px; text-align: right; margin: 0; font-size: 10px; line-height: 1.6; }
 .section[data-motion="false"] *, .section[data-motion="false"] *::before { transition: none !important; }
 @media (max-width: 1050px) {
-  .section { padding-left: 28px; padding-right: 28px; }
   .workspace { grid-template-columns: minmax(0, 1fr) 238px; }
   .platformButton { gap: 6px; padding: 10px; }
   .platformButton > span { font-size: 10px; }
@@ -145,7 +144,6 @@
   .wideNode .nodeId { margin-top: 5px; }
 }
 @media (max-width: 760px) {
-  .section { padding: 80px 20px; }
   .sectionHeading { gap: 30px; align-items: start; }
   .sectionHeading h2 { font-size: 48px; }
   .intro { max-width: 260px; padding-top: 31px; }
@@ -195,7 +193,7 @@
   .componentGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .componentGrid::before { left: 25%; right: 25%; }
   .node { padding: 12px; }
-  .nodeName { font-size: 11px; }
+  .nodeName { font-size: 12px; }
   .nodeId { font-size: 9px; }
   .wideNode { padding: 11px 13px; }
   .wideNode .nodeText { display: grid; column-gap: 8px; }
@@ -216,10 +214,10 @@
   .validationControls { gap: 9px; }
   .faultSelect { flex-basis: 100%; margin: 0; }
   .faultSelect select { width: 100%; }
-  .primaryButton, .secondaryButton { flex: 1; gap: 9px; font-size: 10px !important; padding: 10px; }
+  .primaryButton, .secondaryButton { flex: 1; gap: 9px; font-size: 12px !important; padding: 10px; }
   .repairButton { width: 100%; justify-content: center; }
   .validationResult { padding: 12px 10px; gap: 8px; }
-  .validationResult p, .validationResult ul { font-size: 10px; }
+  .validationResult p, .validationResult ul { font-size: 11px; }
   .bottomToolbar { padding: 17px 15px; gap: 12px; }
   .textButton { gap: 7px; font-size: 10px !important; }
   .compareLabel { display: none; }
