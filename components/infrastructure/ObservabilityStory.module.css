@@ -5,9 +5,9 @@
   border-bottom: 1px solid var(--infra-border);
   background: var(--infra-bg);
 }
-.story[data-scroll="on"] { height: 290vh; }
+.story[data-pinned="on"] { height: 290vh; }
 .sticky { width: min(1360px, 88%); margin: 0 auto; padding: 38px 0 24px; }
-.story[data-scroll="on"] .sticky {
+.story[data-pinned="on"] .sticky {
   position: sticky;
   top: 86px;
   height: calc(100svh - 86px);
@@ -108,8 +108,8 @@
 .controls button[aria-pressed="true"] .controlDot { border-color: var(--infra-accent); background: var(--infra-accent); }
 .disclaimer { margin: 13px 0 0; color: var(--infra-muted); font-size: 8px; line-height: 1.5; text-align: center; flex-shrink: 0; }
 .noScript { color: var(--infra-muted); font-size: 13px; line-height: 1.8; }
-.story[data-scroll="off"] .main { padding: 36px 0; }
-.story[data-scroll="off"] .scene { min-height: 390px; }
+.story[data-pinned="off"] .main { padding: 36px 0; }
+.story[data-pinned="off"] .scene { min-height: 390px; }
 .story[data-scroll="off"][data-motion="on"] .rackGroup,
 .story[data-scroll="off"][data-motion="on"] .signalCards,
 .story[data-scroll="off"][data-motion="on"] .tracePanel { transition: transform .4s, opacity .3s; }
@@ -121,8 +121,8 @@
   .controls button { gap: 9px; padding-inline: 12px; font-size: 11px; }
 }
 @media (max-width: 800px), (max-height: 760px) {
-  .story[data-scroll="on"] { height: auto; }
-  .story[data-scroll="on"] .sticky { position: relative; top: 0; height: auto; }
+  .story[data-pinned="on"] { height: auto; }
+  .story[data-pinned="on"] .sticky { position: relative; top: 0; height: auto; }
   .sticky { padding-top: 32px; }
   .header { align-items: flex-start; }
   .scrollHint { display: none; }
@@ -132,7 +132,7 @@
   .sticky { width: 88%; }
   .header h2 { font-size: 30px; max-width: 350px; }
   .main { display: flex; flex-direction: column; align-items: stretch; gap: 25px; padding-top: 26px; }
-  .story[data-scroll="off"] .main { padding: 26px 0; }
+  .story[data-pinned="off"] .main { padding: 26px 0; }
   .copy { max-width: none; }
   .stepIndex { margin-bottom: 12px; font-size: 9px; }
   .copy h3 { max-width: none; margin-bottom: 12px; font-size: 26px; }
@@ -141,7 +141,7 @@
   .evidence { margin-top: 16px; max-width: 580px; }
   .evidence p { font-size: 11px; }
   .workLink { margin-top: 15px; }
-  .scene, .story[data-scroll="off"] .scene { min-height: 0; padding-top: 22px; }
+  .scene, .story[data-pinned="off"] .scene { min-height: 0; padding-top: 22px; }
   .drawing { margin-top: 0; max-height: 450px; }
   .sceneTopline { font-size: 7px; }
   .sceneCaption { margin-top: 0; }
@@ -160,7 +160,5 @@
   .controls button { gap: 10px; font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .story[data-scroll="on"] { height: auto; }
-  .story[data-scroll="on"] .sticky { position: relative; top: 0; height: auto; }
   .story * { transition: none !important; animation: none !important; }
 }

@@ -6,11 +6,18 @@ import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ObservabilityStory from "./ObservabilityStory";
 
+const motionPreference = vi.hoisted(() => ({ enabled: true }));
+vi.mock("./InfrastructureShell", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./InfrastructureShell")>();
+  return { ...actual, useInfrastructureMotion: () => motionPreference.enabled };
+});
+
 let reducedMotion = true;
 let compactViewport = false;
 const defaultIntersectionObserver = globalThis.IntersectionObserver;
 
 beforeEach(() => {
+  motionPreference.enabled = true;
   reducedMotion = true;
   compactViewport = false;
   Object.defineProperty(window, "matchMedia", {
@@ -146,5 +153,56 @@ describe("observability story access", () => {
       await act(async () => { root?.unmount(); });
       container.remove();
     }
+  });
+
+  it.each(["manual", "system"] as const)("preserves the pinned layout and visible correlation stage when %s motion is paused mid-story", async (preference) => {
+    reducedMotion = false;
+    let storyTop = 86;
+    const storyHeight = 2320;
+    const frames = new Map<number, FrameRequestCallback>();
+    let frameId = 0;
+    const originalBounds = HTMLElement.prototype.getBoundingClientRect;
+    vi.spyOn(document, "hidden", "get").mockReturnValue(false);
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      if (this.id !== "infrastructure-story") return originalBounds.call(this);
+      return { x: 0, y: storyTop, top: storyTop, bottom: storyTop + storyHeight, left: 0, right: 1200, width: 1200, height: storyHeight, toJSON: () => ({}) };
+    });
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      frames.set(++frameId, callback);
+      return frameId;
+    });
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation((id) => { frames.delete(id); });
+    const flushFrames = async () => {
+      await act(async () => {
+        const callbacks = [...frames.values()];
+        frames.clear();
+        callbacks.forEach((callback) => callback(0));
+      });
+    };
+    const user = userEvent.setup();
+    const { container, rerender } = render(<ObservabilityStory />);
+    await flushFrames();
+    storyTop = 86 - 0.64 * (storyHeight - (window.innerHeight - 86));
+    window.dispatchEvent(new Event("scroll"));
+    await flushFrames();
+    const scene = container.querySelector<HTMLDivElement>("[data-stage]")!;
+    const frozenStyle = scene.getAttribute("style");
+    expect(screen.getByRole("heading", { name: "Find the slow dependency." })).toBeVisible();
+
+    if (preference === "manual") motionPreference.enabled = false;
+    else reducedMotion = true;
+    rerender(<ObservabilityStory />);
+
+    expect(container.querySelector("section")).toHaveAttribute("data-scroll", "off");
+    expect(container.querySelector("section")).toHaveAttribute("data-pinned", "on");
+    expect(screen.getByRole("heading", { name: "Find the slow dependency." })).toBeVisible();
+    expect(scene.getAttribute("style")).toBe(frozenStyle);
+    expect(window.scrollTo).not.toHaveBeenCalled();
+    window.dispatchEvent(new Event("scroll"));
+    expect(frames.size).toBe(0);
+
+    await user.click(screen.getByRole("button", { name: "04 Recovery" }));
+    expect(screen.getByRole("heading", { name: "Close the loop." })).toBeVisible();
+    expect(window.scrollTo).not.toHaveBeenCalled();
   });
 });

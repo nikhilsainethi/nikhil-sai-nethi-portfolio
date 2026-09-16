@@ -167,13 +167,20 @@ export function ObservabilityStory() {
   const reduced = useSystemReducedMotion();
   const compact = useSyncExternalStore(subscribeCompact, compactSnapshot, compactServerSnapshot);
   const scrollEnabled = enabled && !reduced && !compact;
+  const [hasPinned, setHasPinned] = useState(false);
+  // Preserve document geometry when motion is paused mid-story. A visitor who
+  // starts with reduced motion still gets the compact, directly selectable view.
+  if (scrollEnabled && !hasPinned) setHasPinned(true);
+  else if (compact && hasPinned) setHasPinned(false);
+  const pinned = hasPinned && !compact;
   const sectionRef = useRef<HTMLElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef(stageProgress[0]);
   const stage = stages[active];
 
   useEffect(() => {
     if (!scrollEnabled) {
-      paintProgress(sceneRef.current, stageProgress[active]);
+      paintProgress(sceneRef.current, progressRef.current);
       return;
     }
     const section = sectionRef.current;
@@ -187,6 +194,7 @@ export function ObservabilityStory() {
       const rect = section.getBoundingClientRect();
       const distance = Math.max(1, rect.height - (window.innerHeight - stickyInset));
       const progress = clamp((stickyInset - rect.top) / distance);
+      progressRef.current = progress;
       paintProgress(sceneRef.current, progress);
       setActive(Math.min(3, Math.floor(progress * 4)));
     };
@@ -215,7 +223,8 @@ export function ObservabilityStory() {
   function selectStage(index: number) {
     if (!scrollEnabled || !sectionRef.current) {
       setActive(index);
-      paintProgress(sceneRef.current, stageProgress[index]);
+      progressRef.current = stageProgress[index];
+      paintProgress(sceneRef.current, progressRef.current);
       return;
     }
     const rect = sectionRef.current.getBoundingClientRect();
@@ -227,7 +236,7 @@ export function ObservabilityStory() {
   }
 
   return (
-    <section id="infrastructure-story" className={styles.story} ref={sectionRef} data-scroll={scrollEnabled ? "on" : "off"} data-motion={enabled && !reduced ? "on" : "off"} aria-labelledby="observability-story-title">
+    <section id="infrastructure-story" className={styles.story} ref={sectionRef} data-pinned={pinned ? "on" : "off"} data-scroll={scrollEnabled ? "on" : "off"} data-motion={enabled && !reduced ? "on" : "off"} aria-labelledby="observability-story-title">
       <div className={styles.sticky}>
         <header className={styles.header}>
           <div>
