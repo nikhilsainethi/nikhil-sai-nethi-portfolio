@@ -20,6 +20,11 @@
 .environment {
   overflow: hidden;
 }
+/* Once the WebGL aisle has faded in, stop painting the SVG fallback beneath it. */
+.environment:has(canvas[data-state="ready"]) > :first-child {
+  visibility: hidden;
+  transition: visibility 0s 1.3s;
+}
 .shade {
   z-index: -1;
   background:
@@ -185,6 +190,14 @@
   letter-spacing: 0.08em;
   color: #9ab7b4;
   pointer-events: none;
+  /* Keeps the label readable over the brightly lit cabinets behind it. */
+  padding: 16px 18px;
+  margin: -16px -18px;
+  border: 1px solid #b1c7c41f;
+  border-radius: 6px;
+  background: #040c1099;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .annotation .stage {
   font-size: 12px;
@@ -506,6 +519,8 @@
     gap: 7px;
     width: auto;
     text-align: right;
+    margin: 0;
+    padding: 9px 12px;
   }
   .annotation > span:first-child,
   .annotation small,

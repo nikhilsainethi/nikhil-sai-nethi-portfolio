@@ -4,7 +4,7 @@ A data-centre-inspired portfolio focused on **observability and monitoring**. Sc
 
 ## Explore
 
-- **Cinematic infrastructure hero:** a full-screen original data-centre aisle. Pointer movement and scrolling scrub the camera and reveal telemetry; an accessible slider provides direct control. Blur-to-clear text, a typed signal line, and pill actions adapt the supplied motion reference to the portfolio.
+- **Cinematic infrastructure hero:** a full-screen original data-centre aisle rendered in real-time 3D (Three.js) from a Blender-built model with baked lighting. Cabinets power on row by row, LEDs show activity, and signal routes draw through the room. Pointer movement and scrolling walk the camera and reveal telemetry, an investigated cabinet and its recovery; an accessible slider provides direct control. Without WebGL (or with data saver on) the SVG aisle is shown instead. Blur-to-clear text, a typed signal line, and pill actions adapt the supplied motion reference to the portfolio.
 - **Follow the signals:** a bounded sticky desktop scene evolves from physical racks to telemetry, a slow dependency, and recovery. Stage buttons provide direct control; small screens and reduced motion use a compact layout.
 - **Signal Lab:** investigate a slow model lookup through calculated sample metrics, traces, and correlated logs, adjust the example alert threshold, and recover the synthetic service.
 - **Hardware-model foundation:** an optional disclosure retains entity inspection, validation, revision comparison, and JSON export.
@@ -32,6 +32,16 @@ npm audit
 
 The production build generates `out/` for GitHub Pages and uses `/nikhil-sai-nethi-portfolio/` as its base path. Serve that directory at the matching URL prefix when testing the production export locally. `next start` is not used with static export.
 
+### Rebuilding the 3D model
+
+`public/models/datacentre.glb` is generated, not hand-edited. With [Blender](https://www.blender.org/) 4.2 or newer installed:
+
+```bash
+npm run model
+```
+
+This runs `tools/blender/build_datacentre.py` headless (geometry, Cycles light bake into vertex colours, glTF export) and compresses the result with meshopt. Set `BLENDER` to the Blender binary if it is not at the default macOS path, `SAMPLES` to change bake quality, and `PREVIEW=/path/to.png` to also save a Cycles render of the scene.
+
 The existing GitHub Actions workflow publishes `out/` when changes reach `main`. The production URL is [nikhilsainethi.github.io/nikhil-sai-nethi-portfolio](https://nikhilsainethi.github.io/nikhil-sai-nethi-portfolio/).
 
 ## Implementation map
@@ -41,8 +51,12 @@ The existing GitHub Actions workflow publishes `out/` when changes reach `main`.
 | `components/infrastructure/InfrastructureShell.tsx` | Navigation, theme, motion preferences, static fallback, footer |
 | `components/infrastructure/InfrastructurePortfolio.tsx` | Observability hero, featured experience, profile, optional model lab, and legacy pages |
 | `components/infrastructure/CinematicHero.tsx` | Full-screen introduction, pointer/scroll interaction, accessible scene slider, experience highlights |
-| `components/infrastructure/CinematicInfrastructure.tsx` | Original perspective server aisle and layered telemetry illustration |
+| `components/infrastructure/CinematicInfrastructure.tsx` | SVG server aisle: first paint and the fallback when WebGL is unavailable |
+| `components/infrastructure/DatacentreCanvas.tsx` | Lazy-loads the WebGL aisle, feeds it progress/pointer/visibility, falls back safely |
+| `components/infrastructure/three/createDatacentreScene.ts` | Three.js scene: instanced cabinets, LED and signal shaders, floor reflections, bloom, render loop |
+| `tools/blender/build_datacentre.py` | Generates and light-bakes the data-centre model in Blender |
 | `lib/cinematic-scene.ts` | Bounded scene timeline and perspective projection |
+| `lib/datacentre-scene.ts` | Camera walk, cabinet slot parsing, and render-resolution rules for the WebGL aisle |
 | `components/infrastructure/ObservabilityStory.tsx` | Scroll-driven infrastructure and telemetry narrative |
 | `components/infrastructure/ObservabilityLab.tsx` | Interactive synthetic monitoring and diagnosis UI |
 | `lib/observability.ts` | Deterministic request fixtures and calculated monitoring metrics |

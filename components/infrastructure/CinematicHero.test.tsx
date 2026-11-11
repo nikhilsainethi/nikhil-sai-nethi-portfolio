@@ -11,6 +11,10 @@ vi.mock("./CinematicInfrastructure", () => ({
   CinematicInfrastructure: () => <div aria-hidden="true" />,
 }));
 
+vi.mock("./DatacentreCanvas", () => ({
+  DatacentreCanvas: () => <canvas aria-hidden="true" />,
+}));
+
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();

@@ -4,6 +4,7 @@ import { useRef, useState, type PointerEvent } from "react";
 import { useMotionValue, useMotionValueEvent, useScroll } from "framer-motion";
 import { useInfrastructureMotion } from "./InfrastructureShell";
 import { CinematicInfrastructure } from "./CinematicInfrastructure";
+import { DatacentreCanvas } from "./DatacentreCanvas";
 import styles from "./CinematicHero.module.css";
 
 const bound = (value: number) => Math.min(1, Math.max(0, value));
@@ -60,6 +61,7 @@ export function CinematicHero() {
             progress={progress}
             motionEnabled={enabled}
           />
+          <DatacentreCanvas progress={progress} motionEnabled={enabled} />
         </div>
         <div className={styles.shade} aria-hidden="true" />
         <div className={styles.topline}>
