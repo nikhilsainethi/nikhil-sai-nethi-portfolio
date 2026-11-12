@@ -979,11 +979,11 @@ summary:focus-visible {
   color: var(--infra-muted);
   font-size: 8px;
 }
-.infra-timeline .is-incoming .infra-eyebrow,
-.infra-timeline .is-incoming h3 {
+.infra-timeline .is-current .infra-eyebrow,
+.infra-timeline .is-current h3 {
   color: var(--infra-accent);
 }
-.is-incoming .infra-timeline-track > span {
+.is-current .infra-timeline-track > span {
   color: var(--infra-accent);
   border-color: var(--infra-accent);
 }

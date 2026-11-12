@@ -3,6 +3,13 @@
   margin: 110px auto 0;
   color: var(--infra-text);
 }
+/* Over the 3D world the introduction sits on glass; the console is already solid. */
+:global(html[data-world="on"]) .heading {
+  padding: 30px 32px;
+  border: 1px solid #a9c9c624;
+  border-radius: 14px;
+  background: #070d10d1;
+}
 .heading {
   display: flex;
   align-items: end;

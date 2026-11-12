@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef, useState, type PointerEvent } from "react";
-import { useMotionValue, useMotionValueEvent, useScroll } from "framer-motion";
+import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useInfrastructureMotion } from "./InfrastructureShell";
 import { CinematicInfrastructure } from "./CinematicInfrastructure";
-import { DatacentreCanvas } from "./DatacentreCanvas";
+import { useHeroProgress } from "./WorldCanvas";
 import styles from "./CinematicHero.module.css";
 
 const bound = (value: number) => Math.min(1, Math.max(0, value));
@@ -15,7 +15,7 @@ export function CinematicHero() {
   const hero = useRef<HTMLElement>(null);
   const pointerX = useRef<number | null>(null);
   const previousScroll = useRef(0);
-  const progress = useMotionValue(0.28);
+  const progress = useHeroProgress();
   const [position, setPosition] = useState(28);
   const { scrollYProgress } = useScroll({
     target: hero,
@@ -48,6 +48,7 @@ export function CinematicHero() {
       <section
         ref={hero}
         id="overview"
+        data-world-anchor="hero"
         className={styles.hero}
         aria-label="Portfolio introduction"
         data-motion={enabled ? "on" : "off"}
@@ -61,12 +62,11 @@ export function CinematicHero() {
             progress={progress}
             motionEnabled={enabled}
           />
-          <DatacentreCanvas progress={progress} motionEnabled={enabled} />
         </div>
         <div className={styles.shade} aria-hidden="true" />
         <div className={styles.topline}>
           <span>
-            <i /> INCOMING · GOOGLE
+            <i /> GOOGLE · SINCE SEP 2026
           </span>
           <span>PLATFORM INFRASTRUCTURE / 01</span>
         </div>
@@ -84,9 +84,9 @@ export function CinematicHero() {
             I build the visibility that makes infrastructure understandable.
           </p>
           <p className={styles.role}>
-            Incoming Platform Infrastructure Engineer at Google.
+            Platform Infrastructure Engineer at Google.
             <br />
-            Observability & monitoring · UHM-M.
+            Infrastructure deployments for UHM-M models · NPI.
           </p>
           <div className={styles.terminal}>
             <span className={styles.srOnly}>
@@ -160,7 +160,7 @@ export function CinematicHero() {
           <style>{`.${styles.copy} *, .${styles.typed} { animation:none !important; opacity:1 !important; filter:none !important; clip-path:none !important; } .${styles.scrubber}, .${styles.interactionHint} { display:none !important; }`}</style>
         </noscript>
       </section>
-      <div className={`infra-wrap ${styles.experience}`}>
+      <div className={`infra-wrap ${styles.experience}`} data-world-anchor="preview">
         <div className={styles.experienceHeading}>
           <span>THE EXPERIENCE BEHIND THE PERSPECTIVE</span>
           <a href="#work">Selected engineering work ↗</a>

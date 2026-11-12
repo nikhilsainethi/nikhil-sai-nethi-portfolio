@@ -11,10 +11,6 @@ vi.mock("./CinematicInfrastructure", () => ({
   CinematicInfrastructure: () => <div aria-hidden="true" />,
 }));
 
-vi.mock("./DatacentreCanvas", () => ({
-  DatacentreCanvas: () => <canvas aria-hidden="true" />,
-}));
-
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
@@ -51,7 +47,7 @@ describe("cinematic portfolio introduction", () => {
       screen.getByRole("link", { name: /Follow the signals/ }),
     ).toHaveAttribute("href", "#infrastructure-story");
     expect(
-      screen.getByText(/Incoming Platform Infrastructure Engineer/),
+      screen.getByText(/Platform Infrastructure Engineer at Google/),
     ).toBeVisible();
   });
 

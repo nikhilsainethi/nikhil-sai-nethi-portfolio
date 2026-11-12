@@ -15,7 +15,7 @@ import { AISLE } from "@/lib/datacentre-scene";
 
 export type Uniforms = Record<string, IUniform>;
 
-/** Loads public/models/datacentre.glb (meshopt-compressed, built by tools/blender). */
+/** Loads public/models/world.glb (meshopt-compressed, built by tools/blender). */
 export async function loadDatacentreModel(url: string) {
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
@@ -56,7 +56,7 @@ export const OUTPUT_FRAGMENT = /* glsl */ `
  * Per instance: `aSeed`, and `aAlert` = 1 for the cabinet under investigation.
  * Uniforms: uTime, uBoot, uInvestigation, uRecovery, uFocus (dims other cabinets).
  */
-export function ledMaterial(shared: Uniforms, fog: Uniforms) {
+export function ledMaterial(shared: Uniforms, fog: Uniforms, { sweep = true, gain = 2.6 } = {}) {
   return new ShaderMaterial({
     side: DoubleSide,
     uniforms: { ...shared, ...fog },
@@ -83,10 +83,12 @@ export function ledMaterial(shared: Uniforms, fog: Uniforms) {
         tint = mix(tint, vec3(0.5, 1.0, 0.42), recovered);
         level = mix(level, 1.0, recovered);
         level *= mix(1.0, 0.3 + 0.7 * aAlert, uFocus);
-        // Power-on sweep: cabinets wake up from the camera towards the door.
+        ${sweep
+          ? `// Power-on sweep: cabinets wake up from the camera towards the door.
         float along = (${AISLE.rowStartZ.toFixed(2)} - world.z) / ${(AISLE.rowStartZ - AISLE.rowEndZ).toFixed(2)};
-        float powered = smoothstep(0.0, 0.12, uBoot * 1.25 - along - 0.08 * fract(phase * 3.7));
-        vColor = tint * level * powered * 2.6;
+        float powered = smoothstep(0.0, 0.12, uBoot * 1.25 - along - 0.08 * fract(phase * 3.7));`
+          : "float powered = 1.0;"}
+        vColor = tint * level * powered * ${gain.toFixed(2)};
         gl_Position = projectionMatrix * mvPosition;
         ${FOG_VERTEX}
       }`,

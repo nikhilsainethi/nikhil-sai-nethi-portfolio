@@ -5,6 +5,9 @@
   border-bottom: 1px solid var(--infra-border);
   background: var(--infra-bg);
 }
+/* Over the 3D world the section stays a solid panel (its own diagram is the
+   subject here), with the tunnel just visible moving behind it. */
+:global(html[data-world="on"]) .story { background: #070c0fe0; margin-top: 0; }
 .story[data-pinned="on"] { height: 290vh; }
 .sticky { width: min(1360px, 88%); margin: 0 auto; padding: 38px 0 24px; }
 .story[data-pinned="on"] .sticky {

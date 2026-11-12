@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../components/infrastructure/infrastructure.css";
+@import "../components/infrastructure/world.css";
 
 @theme inline {
   --font-sans: var(--font-space-grotesk);

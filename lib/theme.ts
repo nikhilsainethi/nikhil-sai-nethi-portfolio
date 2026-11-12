@@ -54,5 +54,14 @@ export function getThemeInitializationScript() {
   } catch (error) {
     document.documentElement.dataset.mode = defaultTheme;
   }
+  // The 3D world needs WebGL 2. Knowing this before first paint lets the page
+  // lay itself out for the world (or not) without shifting later.
+  try {
+    const saveData = navigator.connection && navigator.connection.saveData;
+    const supported = Boolean(window.WebGL2RenderingContext && document.createElement("canvas").getContext("webgl2"));
+    document.documentElement.dataset.webgl = supported && !saveData ? "yes" : "no";
+  } catch (error) {
+    document.documentElement.dataset.webgl = "no";
+  }
 })();`;
 }

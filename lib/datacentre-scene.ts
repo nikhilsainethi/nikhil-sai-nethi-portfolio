@@ -2,7 +2,7 @@ import { cinematicFrame } from "./cinematic-scene";
 
 /**
  * Pure maths for the WebGL hero. The geometry itself is authored in
- * tools/blender/build_datacentre.py; the numbers here mirror that file
+ * tools/blender/build_world.py; the numbers here mirror that file
  * (Three.js is Y-up, and the aisle runs towards -Z).
  */
 export const AISLE = {

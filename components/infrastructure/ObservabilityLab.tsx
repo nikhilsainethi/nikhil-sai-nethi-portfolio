@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   useInfrastructureMotion,
@@ -33,6 +33,10 @@ export function ObservabilityLab({
   const reducedMotion = useSystemReducedMotion();
   const animate = motionEnabled && siteMotion && !reducedMotion;
   const [scenario, setScenario] = useState<SignalScenario>("healthy");
+  // The 3D world behind the page reacts to the incident (see WorldCanvas).
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("infra:lab-scenario", { detail: scenario }));
+  }, [scenario]);
   const [view, setView] = useState<SignalView>("Metrics");
   const [selectedId, setSelectedId] = useState("req-20");
   const [threshold, setThreshold] = useState(250);
@@ -66,6 +70,7 @@ export function ObservabilityLab({
   return (
     <section
       id="observability-lab"
+      data-world-anchor="lab"
       className={styles.section}
       aria-labelledby="signal-lab-title"
       data-motion={animate}

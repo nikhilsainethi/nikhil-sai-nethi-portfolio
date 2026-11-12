@@ -171,7 +171,7 @@ export function createSocialImage(kicker: string) {
               marginBottom: "22px",
             }}
           >
-            INCOMING AT GOOGLE
+            PLATFORM INFRASTRUCTURE AT GOOGLE
           </div>
           <div
             style={{

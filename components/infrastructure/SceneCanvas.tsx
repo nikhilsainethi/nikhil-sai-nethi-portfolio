@@ -3,6 +3,7 @@
 import { memo, useEffect, useRef, useState } from "react";
 import type { MotionValue } from "framer-motion";
 import { withBasePath } from "@/lib/site";
+import { webglAvailable } from "./WorldCanvas";
 import styles from "./SceneCanvas.module.css";
 
 /** What every WebGL scene exposes to this component. */
@@ -22,7 +23,7 @@ type SceneOptions = {
   progress: number;
   onContextLost: () => void;
 };
-export type SceneName = "aisle" | "story";
+export type SceneName = "story";
 
 type Props = {
   scene: SceneName;
@@ -32,23 +33,13 @@ type Props = {
 };
 type State = "idle" | "ready" | "unavailable";
 
-const MODEL_URL = withBasePath("/models/datacentre.glb");
+const MODEL_URL = withBasePath("/models/world.glb");
 
 // Each scene (and Three.js with it) is a separate chunk, fetched only in the browser.
 const loaders: Record<SceneName, () => Promise<(options: SceneOptions) => Promise<SceneHandle>>> = {
-  aisle: () => import("./three/createDatacentreScene").then((module) => module.createDatacentreScene),
   story: () => import("./three/createStoryScene").then((module) => module.createStoryScene),
 };
 
-function canUseWebGL() {
-  try {
-    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-    if (saveData) return false;
-    return Boolean(document.createElement("canvas").getContext("webgl2"));
-  } catch {
-    return false;
-  }
-}
 
 /**
  * A real-time 3D layer drawn over an SVG scene once it is ready. If WebGL is
@@ -63,7 +54,7 @@ function SceneCanvasLayer({ scene: name, progress, motionEnabled, testId }: Prop
 
   useEffect(() => {
     const element = canvas.current;
-    if (!element || !canUseWebGL()) return;
+    if (!element || !webglAvailable()) return;
     const surface = element.closest("section") ?? element;
     let cancelled = false;
     let onScreen = true;

@@ -1,16 +1,17 @@
 # Nikhil Sai Nethi — Infrastructure Portfolio
 
-A data-centre-inspired portfolio focused on **observability and monitoring**. Scroll through infrastructure becoming telemetry, explore production reliability experience, and investigate a synthetic incident. The Google UHM-M role is presented as **incoming**; the demos are independent personal illustrations.
+A data-centre-inspired portfolio focused on **observability and monitoring**. Scroll through infrastructure becoming telemetry, explore production reliability experience, and investigate a synthetic incident. The Google UHM-M role is presented as **current** (since September 2026); the demos are independent personal illustrations.
 
 ## Explore
 
-- **Cinematic infrastructure hero:** a full-screen original data-centre aisle rendered in real-time 3D (Three.js) from a Blender-built model with baked lighting. Cabinets power on row by row, LEDs show activity, and signal routes draw through the room. Pointer movement and scrolling walk the camera and reveal telemetry, an investigated cabinet and its recovery; an accessible slider provides direct control. Without WebGL (or with data saver on) the SVG aisle is shown instead. Blur-to-clear text, a typed signal line, and pill actions adapt the supplied motion reference to the portfolio.
-- **Follow the signals:** a bounded sticky desktop scene evolves from physical racks to telemetry, a slow dependency, and recovery. The racks are a 3D diorama of the same Blender cabinets, drawn under the SVG overlay and kept registered to it; signal beams rise into the metric, log and trace cards, and request packets slow down at the slow dependency. It follows the light and dark themes. Stage buttons provide direct control; small screens and reduced motion use a compact layout.
-- **Signal Lab:** investigate a slow model lookup through calculated sample metrics, traces, and correlated logs, adjust the example alert threshold, and recover the synthetic service.
+- **One continuous shot:** in the dark theme a real-time 3D world (Three.js, modelled and light-baked in Blender) sits behind the whole page, and scrolling moves the camera through it: the cold aisle, sliding doors, a tunnel, a sixteen-tier core of cabinets around a glowing spine, and out onto the roof where the signal leaves as a beam. Sections are glass panels over it, with open stretches between them where the move itself is the content. A thread of light and a packet on it run the whole route.
+- **Hero aisle:** cabinets power on row by row, LEDs show activity, and signal routes draw through the room. Pointer movement and the accessible slider walk the camera and reveal telemetry, an investigated cabinet and its recovery.
+- **Follow the signals:** a bounded sticky desktop scene evolves from physical racks to telemetry, a slow dependency, and recovery. The racks are a 3D diorama of the same Blender cabinets, drawn under the SVG overlay and kept registered to it. It follows the light and dark themes.
+- **Selected experience:** each case study has its own exhibit on a platform in the core: a wall of live dashboards, a lattice mast, a floating document index, and a migration rail through a test gate.
+- **Signal Lab:** investigate a slow model lookup through calculated sample metrics, traces, and correlated logs, adjust the example alert threshold, and recover the synthetic service. Injecting the fault turns the core behind the page red until it recovers.
 - **Hardware-model foundation:** an optional disclosure retains entity inspection, validation, revision comparison, and JSON export.
-- **Experience first:** a primary experience CTA, three visible experience highlights, and a featured Moody’s observability case study that opens by default. Nokia diagnostics, developer tooling, and Verisk migration work remain available.
-- **Engineer profile:** career timeline, education, certifications, résumé, and contact links.
-- Responsive layouts, dark/light themes, native anchor navigation, system reduced-motion support, a manual motion toggle, and a readable no-JavaScript fallback.
+- **Engineer profile:** career timeline, education, certifications, résumé, and contact links, on the roof under the night sky.
+- **Fallbacks:** without WebGL 2, with data saver on, or if the model fails to load, the page is the plain layout with the SVG aisle. The light theme keeps the 3D aisle in the hero only. With reduced motion (system setting or the header toggle) the camera does not fly: it cuts between still frames. Responsive layouts, native anchor navigation, and a readable no-JavaScript fallback.
 
 ## Run locally
 
@@ -34,13 +35,13 @@ The production build generates `out/` for GitHub Pages and uses `/nikhil-sai-net
 
 ### Rebuilding the 3D model
 
-`public/models/datacentre.glb` is generated, not hand-edited. With [Blender](https://www.blender.org/) 4.2 or newer installed:
+`public/models/world.glb` is generated, not hand-edited. With [Blender](https://www.blender.org/) 4.2 or newer installed:
 
 ```bash
 npm run model
 ```
 
-This runs `tools/blender/build_datacentre.py` headless (geometry, Cycles light bake into vertex colours, glTF export) and compresses the result with meshopt (`@gltf-transform/cli`, fetched by `npx` at a pinned version when the script runs, so it is not part of `npm ci`). Set `BLENDER` to the Blender binary if it is not at the default macOS path, `SAMPLES` to change bake quality, and `PREVIEW=/path/to.png` to also save a Cycles render of the scene.
+This runs `tools/blender/build_world.py` headless (geometry for every zone, Cycles light bake into vertex colours, glTF export) and compresses the result with meshopt (`@gltf-transform/cli`, fetched by `npx` at a pinned version when the script runs, so it is not part of `npm ci`). Dimensions shared between the model and the web code live in `tools/blender/world-layout.json`. Set `BLENDER` to the Blender binary if it is not at the default macOS path, `SAMPLES` to change bake quality, and `PREVIEW_DIR=/some/folder` to also save Cycles renders of each zone.
 
 The existing GitHub Actions workflow publishes `out/` when changes reach `main`. The production URL is [nikhilsainethi.github.io/nikhil-sai-nethi-portfolio](https://nikhilsainethi.github.io/nikhil-sai-nethi-portfolio/).
 
@@ -52,13 +53,17 @@ The existing GitHub Actions workflow publishes `out/` when changes reach `main`.
 | `components/infrastructure/InfrastructurePortfolio.tsx` | Observability hero, featured experience, profile, optional model lab, and legacy pages |
 | `components/infrastructure/CinematicHero.tsx` | Full-screen introduction, pointer/scroll interaction, accessible scene slider, experience highlights |
 | `components/infrastructure/CinematicInfrastructure.tsx` | SVG server aisle: first paint and the fallback when WebGL is unavailable |
-| `components/infrastructure/SceneCanvas.tsx` | Lazy-loads a WebGL scene, feeds it progress/pointer/visibility/theme, falls back safely (`DatacentreCanvas.tsx` names the two scenes) |
-| `components/infrastructure/three/createDatacentreScene.ts` | Three.js scene: instanced cabinets, LED and signal shaders, floor reflections, bloom, render loop |
+| `components/infrastructure/WorldCanvas.tsx` | Mounts the 3D world behind the page, maps scroll to the camera route, handles themes, reduced motion and fallback |
+| `components/infrastructure/three/world/` | The world scene: `createWorldScene` (renderer, camera, loop) and one module per zone (`aisle`, `tunnel`, `core`, `roof`, `thread`) |
+| `components/infrastructure/world.css` | Glass-panel layout and interludes used only while the world is running |
+| `components/infrastructure/SceneCanvas.tsx` | Lazy-loads the story diorama, feeds it progress/pointer/visibility/theme, falls back safely |
 | `components/infrastructure/three/createStoryScene.ts` | Three.js diorama for the story: orthographic camera registered to the SVG, signal beams, request flow |
 | `components/infrastructure/three/shared.ts` | Model loading and the LED / alert shaders used by both scenes |
-| `tools/blender/build_datacentre.py` | Generates and light-bakes the data-centre model in Blender |
+| `tools/blender/build_world.py` | Generates and light-bakes the whole world in Blender |
 | `lib/cinematic-scene.ts` | Bounded scene timeline and perspective projection |
-| `lib/datacentre-scene.ts` | Camera walk, cabinet slot parsing, and render-resolution rules for the WebGL aisle |
+| `lib/datacentre-scene.ts` | Hero aisle camera walk, cabinet slot parsing, and render-resolution rules |
+| `lib/world-path.ts` | The camera route (stops), scroll-to-route mapping, and reduced-motion stills |
+| `lib/world-layout.ts` | World dimensions shared with the Blender script |
 | `components/infrastructure/ObservabilityStory.tsx` | Scroll-driven infrastructure and telemetry narrative |
 | `components/infrastructure/ObservabilityLab.tsx` | Interactive synthetic monitoring and diagnosis UI |
 | `lib/observability-story.ts` | Story timeline and the SVG-to-3D registration maths |

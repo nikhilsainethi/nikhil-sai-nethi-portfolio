@@ -20,10 +20,15 @@
 .environment {
   overflow: hidden;
 }
-/* Once the WebGL aisle has faded in, stop painting the SVG fallback beneath it. */
-.environment:has(canvas[data-state="ready"]) > :first-child {
+/* Once the 3D world has faded in behind the page, the hero becomes a window
+   onto it: stop painting the SVG fallback and the hero's own backdrop. */
+:global(html[data-world]) .environment {
   visibility: hidden;
   transition: visibility 0s 1.3s;
+}
+:global(html[data-world]) .hero {
+  background: transparent;
+  transition: background 0s 1.3s;
 }
 .shade {
   z-index: -1;

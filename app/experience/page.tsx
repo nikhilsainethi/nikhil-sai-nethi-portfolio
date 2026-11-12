@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/site";
 export const metadata = createPageMetadata({
   title: "Experience",
   description:
-    "Engineering experience at Moody’s, Verisk, and Nokia, and an incoming platform infrastructure role focused on observability and monitoring for Google’s UHM-M team.",
+    "Platform infrastructure at Google, working on infrastructure deployments for UHM-M models, built on engineering experience at Moody’s, Verisk, and Nokia.",
   path: "/experience/",
 });
 export default function Page() {

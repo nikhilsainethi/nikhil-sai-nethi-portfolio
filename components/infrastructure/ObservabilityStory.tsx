@@ -298,7 +298,7 @@ export function ObservabilityStory() {
   }
 
   return (
-    <section id="infrastructure-story" className={styles.story} ref={sectionRef} data-pinned={pinned ? "on" : "off"} data-scroll={scrollEnabled ? "on" : "off"} data-motion={enabled && !reduced ? "on" : "off"} aria-labelledby="observability-story-title">
+    <section id="infrastructure-story" data-world-anchor="story" className={styles.story} ref={sectionRef} data-pinned={pinned ? "on" : "off"} data-scroll={scrollEnabled ? "on" : "off"} data-motion={enabled && !reduced ? "on" : "off"} aria-labelledby="observability-story-title">
       <div className={styles.sticky}>
         <header className={styles.header}>
           <div>

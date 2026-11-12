@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import { heroPortraitPath, resumePath } from "@/lib/site";
 import { useInfrastructureMotion } from "./InfrastructureShell";
 import { CinematicHero } from "./CinematicHero";
 import { ModelLab } from "./ModelLab";
 import ObservabilityStory from "./ObservabilityStory";
+import { HeroProgressProvider, WorldCanvas } from "./WorldCanvas";
 import { ObservabilityLab } from "./ObservabilityLab";
 
 export { CinematicHero as HeroSection } from "./CinematicHero";
@@ -144,12 +145,12 @@ export function WorkSection() {
           <h2>
             Built from experience.
             <br />
-            <span className="infra-muted">Applied to what’s next.</span>
+            <span className="infra-muted">Applied every day.</span>
           </h2>
         </div>
         <p>
           Production observability at Moody’s. Hardware-facing diagnosis at
-          Nokia. Cloud workflows at Verisk. The foundation for my next chapter.
+          Nokia. Cloud workflows at Verisk. The foundation for the work I do now.
         </p>
       </div>
       <div className="infra-work-list">
@@ -158,6 +159,7 @@ export function WorkSection() {
             <motion.article
               layout={enabled}
               key={p.id}
+              data-world-anchor={`project-${index}`}
               className={`infra-project ${open === p.id ? "is-expanded" : ""}`}
             >
               <button
@@ -220,16 +222,16 @@ export function WorkSection() {
 const history = [
   {
     company: "Google",
-    role: "Incoming Platform Infrastructure Engineer",
-    date: "NEXT CHAPTER",
+    role: "Platform Infrastructure Engineer",
+    date: "SEP 2026 — PRESENT",
     description:
-      "Joining the UHM-M team with a focus on observability and monitoring for hardware-modeling infrastructure.",
-    incoming: true,
+      "Infrastructure deployments for UHM-M models for NPI.",
+    current: true,
   },
   {
     company: "Moody’s Corporation",
     role: "Software Engineer",
-    date: "AUG 2024 — PRESENT",
+    date: "AUG 2024 — 2026",
     description:
       "SLI/SLO dashboards, distributed tracing, structured logs, alerting, and production incident response on Linux and Amazon EKS.",
   },
@@ -279,7 +281,11 @@ const capabilities = [
 
 export function AboutSection() {
   return (
-    <section className="infra-about infra-section infra-wrap" id="about">
+    <section
+      className="infra-about infra-section infra-wrap"
+      id="about"
+      data-world-anchor="about"
+    >
       <div className="infra-section-heading">
         <div>
           <p className="infra-eyebrow">04 / THE ENGINEER BEHIND THE SYSTEMS</p>
@@ -325,10 +331,10 @@ export function AboutSection() {
           {history.map((h, i) => (
             <article
               key={h.company}
-              className={h.incoming ? "is-incoming" : ""}
+              className={h.current ? "is-current" : ""}
             >
               <div className="infra-timeline-track">
-                <span>{h.incoming ? "↗" : `0${i}`}</span>
+                <span>{h.current ? "●" : `0${i}`}</span>
               </div>
               <div>
                 <span className="infra-eyebrow">{h.date}</span>
@@ -411,7 +417,11 @@ export function CapabilitiesSection() {
 
 export function ContactSection() {
   return (
-    <section className="infra-contact infra-section" id="contact">
+    <section
+      className="infra-contact infra-section"
+      id="contact"
+      data-world-anchor="contact"
+    >
       <div className="infra-wrap">
         <div className="infra-contact-top">
           <p className="infra-eyebrow">05 / LET’S CONNECT</p>
@@ -459,14 +469,65 @@ export function ContactSection() {
   );
 }
 
+/**
+ * A stretch of page with nothing in front of the 3D world, so the camera's
+ * move between two places can be seen. Only laid out when the world is shown.
+ */
+function Interlude({
+  anchor,
+  title,
+  line,
+}: {
+  anchor: string;
+  title: string;
+  line: string;
+}) {
+  return (
+    <div
+      className={`world-interlude world-interlude-${anchor}`}
+      data-world-anchor={`interlude-${anchor}`}
+      aria-hidden="true"
+    >
+      <p>
+        <strong>{title}</strong>
+        <span>{line}</span>
+      </p>
+    </div>
+  );
+}
+
 export function InfrastructurePortfolio() {
   const enabled = useInfrastructureMotion();
+  const heroProgress = useMotionValue(0.28);
   return (
     <main id="main">
-      <CinematicHero />
+      <HeroProgressProvider value={heroProgress}>
+        <WorldCanvas progress={heroProgress} motionEnabled={enabled} />
+        <CinematicHero />
+      </HeroProgressProvider>
+      <Interlude
+        anchor="door"
+        title="Through the doors."
+        line="The aisle is the surface. The signal goes deeper."
+      />
       <ObservabilityStory />
+      <Interlude
+        anchor="core"
+        title="The core."
+        line="Sixteen tiers of machines, and one path for everything they report."
+      />
       <WorkSection />
+      <Interlude
+        anchor="ring"
+        title="Top of the core."
+        line="Everything below is talking. The next part is listening."
+      />
       <ObservabilityLab />
+      <Interlude
+        anchor="roof"
+        title="Above the machine."
+        line="Where the signal leaves the building."
+      />
       <AboutSection />
       <div className="infra-wrap infra-foundation-wrap">
         <details className="infra-foundation">

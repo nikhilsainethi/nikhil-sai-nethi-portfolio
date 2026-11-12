@@ -224,7 +224,7 @@ export async function createStoryScene({
     });
     const rack = model.getObjectByName(`Rack${variant}`);
     const leds = model.getObjectByName(`RackLeds${variant}`);
-    if (!rack || !leds) throw new Error(`datacentre.glb is missing cabinet ${variant}`);
+    if (!rack || !leds) throw new Error(`world.glb is missing cabinet ${variant}`);
     for (const mesh of childMeshes(rack)) {
       const material = track((mesh.material as MeshStandardMaterial).clone());
       material.metalness = Math.min(material.metalness, 0.45);

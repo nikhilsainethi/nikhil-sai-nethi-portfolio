@@ -1,0 +1,56 @@
+{
+  "_comment": "Shared by tools/blender/build_world.py (which builds the model) and lib/world-layout.ts (which places cameras and instances). Blender axes: X across the aisle, Y down the aisle, Z up. Metres.",
+  "aisle": {
+    "rackWidth": 0.6,
+    "rackDepth": 1.0,
+    "rackHeight": 2.2,
+    "rackPitch": 0.62,
+    "racksPerSide": 16,
+    "rowStartY": -1.6,
+    "halfWidth": 1.15,
+    "roomHalfX": 3.0,
+    "roomY0": -3.0,
+    "roomY1": 10.2,
+    "ceiling": 3.0,
+    "doorHalf": 0.85,
+    "doorHeight": 2.35
+  },
+  "tunnel": {
+    "length": 18.0,
+    "floorHalf": 1.1,
+    "halfWidth": 1.7,
+    "ceilHalf": 0.9,
+    "shoulder": 0.5,
+    "haunch": 2.0,
+    "height": 2.6,
+    "bay": 1.5
+  },
+  "core": {
+    "radius": 10.6,
+    "rackFront": 9.4,
+    "deckInner": 8.3,
+    "spineRadius": 1.3,
+    "landingRadius": 2.7,
+    "tierHeight": 2.75,
+    "tierMin": -6,
+    "tierMax": 10,
+    "sectors": 16,
+    "racksPerSector": 5,
+    "platformInner": 4.4,
+    "platformHalfAngleDeg": 19,
+    "exhibitRadius": 6.3,
+    "platforms": [
+      { "name": "observability", "tier": 2, "sector": 3, "accent": [0.84, 0.98, 0.6] },
+      { "name": "networking", "tier": 4, "sector": 7, "accent": [0.44, 0.86, 0.9] },
+      { "name": "knowledge", "tier": 6, "sector": 11, "accent": [0.72, 0.64, 1.0] },
+      { "name": "migration", "tier": 8, "sector": 15, "accent": [1.0, 0.74, 0.42] }
+    ]
+  },
+  "roof": {
+    "underside": 30.25,
+    "top": 30.6,
+    "oculusRadius": 4.0,
+    "radius": 14.0,
+    "parapetHeight": 0.7
+  }
+}

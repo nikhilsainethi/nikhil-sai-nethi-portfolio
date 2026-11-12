@@ -1,0 +1,172 @@
+/*
+ * The page as a set of glass panels over the 3D world.
+ *
+ * Nothing here applies unless the world is running behind the whole page
+ * (html[data-world="on"], set by WorldCanvas in the dark theme once WebGL is
+ * ready). Without it the page looks exactly as it does in infrastructure.css.
+ */
+
+#main {
+  position: relative;
+  isolation: isolate; /* lets the world canvas sit at z-index -1, under the content */
+}
+
+/* ---- interludes: open stretches where the camera's move is the content */
+.world-interlude {
+  display: none;
+}
+html[data-mode="dark"][data-webgl="yes"] .world-interlude {
+  display: flex;
+  align-items: flex-end;
+  width: min(1360px, 88%);
+  margin-inline: auto;
+  padding-bottom: 14vh;
+  pointer-events: none;
+}
+html[data-mode="dark"][data-webgl="yes"] .world-interlude-door {
+  height: 105vh;
+}
+html[data-mode="dark"][data-webgl="yes"] .world-interlude-core {
+  height: 170vh;
+}
+html[data-mode="dark"][data-webgl="yes"] .world-interlude-ring {
+  height: 85vh;
+}
+html[data-mode="dark"][data-webgl="yes"] .world-interlude-roof {
+  height: 170vh;
+}
+.world-interlude p {
+  position: sticky;
+  bottom: 12vh;
+  margin: 0;
+  max-width: 420px;
+  display: grid;
+  gap: 10px;
+  text-shadow: 0 1px 18px #02060899;
+}
+.world-interlude strong {
+  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+  color: #f1f3e9;
+}
+.world-interlude span {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #b6c7c4;
+}
+
+/* ---- glass */
+html[data-world="on"] {
+  --world-glass: #070d10d1;
+  --world-glass-strong: #070d10ed;
+  --world-edge: #a9c9c624;
+}
+html[data-world="on"] body {
+  background: #04090c;
+}
+
+/* hero highlights strip */
+html[data-world="on"] .infra-experience-preview {
+  padding: 26px 28px;
+  margin-top: 26px;
+  border: 1px solid var(--world-edge);
+  border-radius: 14px;
+  background: var(--world-glass);
+}
+
+/* selected work: a column of cards, leaving the exhibits in view beside them */
+html[data-world="on"] .infra-work .infra-section-heading {
+  max-width: 760px;
+  padding: 30px 32px;
+  border: 1px solid var(--world-edge);
+  border-radius: 14px;
+  background: var(--world-glass);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 26vh;
+}
+html[data-world="on"] .infra-work .infra-section-heading > p {
+  max-width: 520px;
+}
+html[data-world="on"] .infra-work-list {
+  border-top: 0;
+  width: min(720px, 56%);
+}
+html[data-world="on"] .infra-project {
+  margin-bottom: 52vh;
+  border: 1px solid var(--world-edge);
+  border-radius: 14px;
+  background: var(--world-glass);
+  overflow: hidden;
+}
+html[data-world="on"] .infra-project:last-child {
+  margin-bottom: 12vh;
+}
+html[data-world="on"] .infra-project:hover,
+html[data-world="on"] .infra-project.is-expanded {
+  background: var(--world-glass-strong);
+}
+html[data-world="on"] .infra-project-trigger {
+  padding: 28px 24px 28px 6px;
+  gap: 18px;
+}
+html[data-world="on"] .infra-case-content {
+  padding-inline: 86px 28px;
+}
+
+/* profile */
+html[data-world="on"] .infra-about {
+  padding: 64px clamp(22px, 4vw, 56px) 40px;
+  border: 1px solid var(--world-edge);
+  border-radius: 18px;
+  background: var(--world-glass);
+}
+html[data-world="on"] .infra-foundation {
+  padding-inline: clamp(18px, 3vw, 40px);
+  border: 1px solid var(--world-edge);
+  border-radius: 14px;
+  background: var(--world-glass);
+}
+
+/* contact: type over the night sky and the beam */
+html[data-world="on"] .infra-contact {
+  margin-top: 60vh;
+  padding: 90px 0 110px;
+  background: linear-gradient(180deg, #04090c00 0%, #04090c99 100%);
+  border-color: transparent;
+}
+html[data-world="on"] .infra-contact::before {
+  display: none;
+}
+html[data-world="on"] .infra-footer {
+  position: relative;
+  padding: 26px 30px 70px;
+  border-radius: 14px 14px 0 0;
+  background: var(--world-glass);
+}
+
+@media (max-width: 900px) {
+  html[data-world="on"] .infra-work-list {
+    width: 100%;
+  }
+  html[data-world="on"] .infra-project {
+    margin-bottom: 62vh;
+  }
+  html[data-world="on"] .infra-case-content {
+    padding-inline: 22px;
+  }
+  html[data-world="on"] .infra-work .infra-section-heading {
+    padding: 24px 22px;
+    margin-bottom: 40vh;
+  }
+  html[data-mode="dark"][data-webgl="yes"] .world-interlude-core,
+  html[data-mode="dark"][data-webgl="yes"] .world-interlude-roof {
+    height: 150vh;
+  }
+  .world-interlude span {
+    font-size: 14px;
+  }
+}
