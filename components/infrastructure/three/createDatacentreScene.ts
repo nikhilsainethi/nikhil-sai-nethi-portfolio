@@ -17,7 +17,6 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
-  Object3D,
   PerspectiveCamera,
   PlaneGeometry,
   PMREMGenerator,
@@ -35,8 +34,6 @@ import {
   Float32BufferAttribute,
 } from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -49,6 +46,17 @@ import {
   pixelRatioFor,
   type Slot,
 } from "@/lib/datacentre-scene";
+import {
+  FOG_FRAGMENT,
+  FOG_VERTEX,
+  alertPanelMaterial,
+  childMeshes,
+  fogUniforms,
+  ledMaterial,
+  loadDatacentreModel,
+  seeded,
+  type Uniforms,
+} from "./shared";
 
 /**
  * The hero's WebGL data-centre aisle.
@@ -85,69 +93,16 @@ type Options = {
 const FOG_COLOR = 0x04111a;
 const FOG_DENSITY = 0.062;
 const BOOT_SECONDS = 2.6;
+const fog = fogUniforms(FOG_COLOR, FOG_DENSITY);
 const PLAYBACK_INTENSITY = 2.5;
 
-const fogUniforms = {
-  uFogColor: { value: new Color(FOG_COLOR) },
-  uFogDensity: { value: FOG_DENSITY },
-};
-const FOG_VERTEX = /* glsl */ `vFogDepth = -mvPosition.z;`;
-const FOG_FRAGMENT = /* glsl */ `
-  float fogFactor = 1.0 - exp(-uFogDensity * uFogDensity * vFogDepth * vFogDepth);
-  gl_FragColor.rgb *= 1.0 - fogFactor;`;
-
-function ledMaterial(shared: Record<string, { value: number }>) {
-  return new ShaderMaterial({
-    side: DoubleSide,
-    uniforms: { ...shared, ...fogUniforms },
-    vertexShader: /* glsl */ `
-      attribute vec3 color;
-      attribute float aSeed;
-      attribute float aAlert;
-      uniform float uTime, uBoot, uInvestigation, uRecovery;
-      varying vec3 vColor;
-      varying float vFogDepth;
-      void main() {
-        vec4 world = modelMatrix * instanceMatrix * vec4(position, 1.0);
-        vec4 mvPosition = viewMatrix * world;
-        float phase = uv.y + aSeed;
-        float breathe = 0.55 + 0.45 * sin(uTime * 1.7 + phase * 6.2831);
-        float tick = floor(uTime * (4.0 + 7.0 * fract(phase * 7.13)) + phase * 91.7);
-        float flicker = step(0.4, fract(sin(tick * 12.9898 + phase * 78.233) * 43758.5453));
-        float level = uv.x < 0.25 ? 1.0 : (uv.x < 0.75 ? breathe : 0.12 + 0.88 * flicker);
-        vec3 tint = color;
-        float investigating = aAlert * uInvestigation;
-        float recovered = aAlert * uRecovery;
-        tint = mix(tint, vec3(1.0, 0.5, 0.1), investigating);
-        level = mix(level, 0.55 + 0.45 * sin(uTime * 8.0 + phase * 3.0), investigating * 0.85);
-        tint = mix(tint, vec3(0.5, 1.0, 0.42), recovered);
-        level = mix(level, 1.0, recovered);
-        // Power-on sweep: cabinets wake up from the camera towards the door.
-        float along = (${AISLE.rowStartZ.toFixed(2)} - world.z) / ${(AISLE.rowStartZ - AISLE.rowEndZ).toFixed(2)};
-        float powered = smoothstep(0.0, 0.12, uBoot * 1.25 - along - 0.08 * fract(phase * 3.7));
-        vColor = tint * level * powered * 2.6;
-        gl_Position = projectionMatrix * mvPosition;
-        ${FOG_VERTEX}
-      }`,
-    fragmentShader: /* glsl */ `
-      uniform vec3 uFogColor;
-      uniform float uFogDensity;
-      varying vec3 vColor;
-      varying float vFogDepth;
-      void main() {
-        gl_FragColor = vec4(vColor, 1.0);
-        ${FOG_FRAGMENT}
-      }`,
-  });
-}
-
-function signalMaterial(shared: Record<string, { value: number }>, offset: number) {
+function signalMaterial(shared: Uniforms, offset: number) {
   return new ShaderMaterial({
     transparent: true,
     depthWrite: false,
     blending: AdditiveBlending,
     side: DoubleSide,
-    uniforms: { ...shared, ...fogUniforms, uOffset: { value: offset } },
+    uniforms: { ...shared, ...fog, uOffset: { value: offset } },
     vertexShader: /* glsl */ `
       varying vec2 vUv;
       varying float vFogDepth;
@@ -176,40 +131,7 @@ function signalMaterial(shared: Record<string, { value: number }>, offset: numbe
   });
 }
 
-function alertPanelMaterial(shared: Record<string, { value: number }>) {
-  return new ShaderMaterial({
-    transparent: true,
-    depthWrite: false,
-    blending: AdditiveBlending,
-    side: DoubleSide,
-    uniforms: shared,
-    vertexShader: /* glsl */ `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }`,
-    fragmentShader: /* glsl */ `
-      uniform float uTime, uInvestigation, uRecovery;
-      varying vec2 vUv;
-      void main() {
-        vec2 edge = min(vUv, 1.0 - vUv) * vec2(0.6, 2.2);   // metres from the border
-        float border = 1.0 - smoothstep(0.006, 0.014, min(edge.x, edge.y));
-        float corner = (1.0 - smoothstep(0.0, 0.11, edge.x)) * (1.0 - smoothstep(0.0, 0.11, edge.y));
-        float sweep = fract(uTime * 0.45);
-        float scan = (1.0 - smoothstep(0.0, 0.035, abs(vUv.y - sweep))) * uInvestigation;
-        float fill = 0.05 + 0.03 * sin(vUv.y * 190.0);
-        vec3 amber = vec3(1.0, 0.56, 0.16);
-        vec3 green = vec3(0.56, 1.0, 0.5);
-        float strength = max(uInvestigation, uRecovery * 0.75);
-        vec3 color = mix(amber, green, clamp(uRecovery * 1.4, 0.0, 1.0));
-        float shape = border * 1.6 + corner * 1.2 + scan * 0.9 + fill;
-        gl_FragColor = vec4(color * shape * strength * 1.6, 1.0);
-      }`,
-  });
-}
-
-function dustMaterial(shared: Record<string, { value: number }>, pixelRatio: { value: number }) {
+function dustMaterial(shared: Uniforms, pixelRatio: { value: number }) {
   return new ShaderMaterial({
     transparent: true,
     depthWrite: false,
@@ -238,20 +160,6 @@ function dustMaterial(shared: Record<string, { value: number }>, pixelRatio: { v
   });
 }
 
-/** Seeded pseudo-random number in 0..1, so the scene is identical on every visit. */
-function seeded(index: number) {
-  const value = Math.sin(index * 127.1 + 311.7) * 43758.5453;
-  return value - Math.floor(value);
-}
-
-function childMeshes(root: Object3D) {
-  const meshes: Mesh[] = [];
-  root.traverse((child) => {
-    if ((child as Mesh).isMesh) meshes.push(child as Mesh);
-  });
-  return meshes;
-}
-
 export async function createDatacentreScene({
   canvas,
   modelUrl,
@@ -276,11 +184,9 @@ export async function createDatacentreScene({
     return item;
   };
 
-  let gltf;
+  let model;
   try {
-    const loader = new GLTFLoader();
-    loader.setMeshoptDecoder(MeshoptDecoder);
-    gltf = await loader.loadAsync(modelUrl);
+    model = await loadDatacentreModel(modelUrl);
   } catch (error) {
     renderer.dispose();
     throw error;
@@ -297,14 +203,13 @@ export async function createDatacentreScene({
   const playback = new AmbientLight(0xbfe6f2, PLAYBACK_INTENSITY);
   scene.add(playback);
 
-  const model = gltf.scene;
-  model.updateMatrixWorld(true);
   const shared = {
     uTime: { value: 0 },
     uBoot: { value: 0 },
     uTelemetry: { value: 0 },
     uInvestigation: { value: 0 },
     uRecovery: { value: 0 },
+    uFocus: { value: 0 },
   };
   const pixelRatioUniform = { value: 1 };
 
@@ -374,7 +279,7 @@ export async function createDatacentreScene({
       scene.add(instances);
     }
 
-    const material = track(ledMaterial(shared));
+    const material = track(ledMaterial(shared, fog));
     for (const mesh of childMeshes(leds)) {
       const geometry = track(mesh.geometry);
       const seeds = new Float32Array(placed.length);
@@ -407,7 +312,7 @@ export async function createDatacentreScene({
   const alertLight = new PointLight(0xff8a2a, 0, 6, 1.8);
   const alertColor = { amber: new Color(0xff8a2a), green: new Color(0x8cff7a) };
   if (alertMatrix) {
-    const panel = new Mesh(track(new PlaneGeometry(0.6, AISLE.rackHeight)), track(alertPanelMaterial(shared)));
+    const panel = new Mesh(track(new PlaneGeometry(0.6, AISLE.rackHeight)), track(alertPanelMaterial(shared, 0.6, AISLE.rackHeight)));
     // Cabinet-local space after export: front faces +Z, origin at the front foot.
     panel.position.set(0, AISLE.rackHeight / 2, 0.03);
     const holder = new Group();

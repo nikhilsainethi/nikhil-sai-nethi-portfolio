@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useMotionValue, type MotionValue } from "framer-motion";
+import { storyFrame } from "@/lib/observability-story";
+import { StoryCanvas } from "./DatacentreCanvas";
 import { useInfrastructureMotion, useSystemReducedMotion } from "./InfrastructureShell";
 import styles from "./ObservabilityStory.module.css";
 
@@ -59,21 +62,23 @@ type InitialAnchorRequest = {
   detach: () => void;
 };
 
-/** Scrub a few composited layers; nothing runs continuously between scroll events. */
-function paintProgress(scene: HTMLDivElement | null, progress: number) {
+/**
+ * Scrub a few composited layers; nothing runs continuously between scroll events.
+ * `webgl` carries the same progress to the 3D diorama under the drawing.
+ */
+function paintProgress(scene: HTMLDivElement | null, progress: number, webgl: MotionValue<number>) {
+  webgl.set(progress);
   if (!scene) return;
-  const signals = clamp((progress - 0.12) / 0.2);
-  const trace = clamp((progress - 0.43) / 0.17);
-  const recovery = clamp((progress - 0.75) / 0.15);
-  scene.style.setProperty("--signals", signals.toFixed(3));
-  scene.style.setProperty("--trace", trace.toFixed(3));
-  scene.style.setProperty("--recovery", recovery.toFixed(3));
-  scene.style.setProperty("--rack-scale", (1 - signals * 0.15).toFixed(3));
-  scene.style.setProperty("--rack-x", `${(-18 * signals - 12 * trace).toFixed(2)}px`);
-  scene.style.setProperty("--rack-y", `${(44 * signals).toFixed(2)}px`);
-  scene.style.setProperty("--signal-y", `${(24 * (1 - signals)).toFixed(2)}px`);
-  scene.style.setProperty("--trace-y", `${(30 * (1 - trace)).toFixed(2)}px`);
-  scene.style.setProperty("--floor-y", `${(14 * signals).toFixed(2)}px`);
+  const frame = storyFrame(progress);
+  scene.style.setProperty("--signals", frame.signals.toFixed(3));
+  scene.style.setProperty("--trace", frame.trace.toFixed(3));
+  scene.style.setProperty("--recovery", frame.recovery.toFixed(3));
+  scene.style.setProperty("--rack-scale", frame.rackScale.toFixed(3));
+  scene.style.setProperty("--rack-x", `${frame.rackX.toFixed(2)}px`);
+  scene.style.setProperty("--rack-y", `${frame.rackY.toFixed(2)}px`);
+  scene.style.setProperty("--signal-y", `${frame.signalY.toFixed(2)}px`);
+  scene.style.setProperty("--trace-y", `${frame.traceY.toFixed(2)}px`);
+  scene.style.setProperty("--floor-y", `${frame.floorY.toFixed(2)}px`);
 }
 
 function InfrastructureDrawing({ stage }: { stage: number }) {
@@ -184,6 +189,7 @@ export function ObservabilityStory() {
   const sectionRef = useRef<HTMLElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(stageProgress[0]);
+  const webglProgress = useMotionValue(stageProgress[0]);
   const motionOnMount = useRef(enabled);
   const initialAnchor = useRef<InitialAnchorRequest | null>(null);
   const stage = stages[active];
@@ -236,7 +242,7 @@ export function ObservabilityStory() {
 
   useEffect(() => {
     if (!scrollEnabled) {
-      paintProgress(sceneRef.current, progressRef.current);
+      paintProgress(sceneRef.current, progressRef.current, webglProgress);
       return;
     }
     const section = sectionRef.current;
@@ -251,7 +257,7 @@ export function ObservabilityStory() {
       const distance = Math.max(1, rect.height - (window.innerHeight - stickyInset));
       const progress = clamp((stickyInset - rect.top) / distance);
       progressRef.current = progress;
-      paintProgress(sceneRef.current, progress);
+      paintProgress(sceneRef.current, progress, webglProgress);
       setActive(Math.min(3, Math.floor(progress * 4)));
     };
     const schedule = () => {
@@ -274,13 +280,13 @@ export function ObservabilityStory() {
       document.removeEventListener("visibilitychange", schedule);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [scrollEnabled, active]);
+  }, [scrollEnabled, active, webglProgress]);
 
   function selectStage(index: number) {
     if (!scrollEnabled || !sectionRef.current) {
       setActive(index);
       progressRef.current = stageProgress[index];
-      paintProgress(sceneRef.current, progressRef.current);
+      paintProgress(sceneRef.current, progressRef.current, webglProgress);
       return;
     }
     const rect = sectionRef.current.getBoundingClientRect();
@@ -318,7 +324,10 @@ export function ObservabilityStory() {
 
           <div className={styles.scene} ref={sceneRef} data-stage={active}>
             <div className={styles.sceneTopline}><span><i />{stage.status}</span><span>CONCEPTUAL SCENE</span></div>
-            <InfrastructureDrawing stage={active} />
+            <div className={styles.stage}>
+              <StoryCanvas progress={webglProgress} motionEnabled={enabled && !reduced} />
+              <InfrastructureDrawing stage={active} />
+            </div>
             <div className={styles.sceneCaption}><span>{stage.signal}</span><small>Synthetic data · No live telemetry</small></div>
           </div>
         </div>

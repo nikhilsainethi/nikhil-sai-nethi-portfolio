@@ -7,6 +7,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ObservabilityStory from "./ObservabilityStory";
 
 const motionPreference = vi.hoisted(() => ({ enabled: true }));
+vi.mock("./DatacentreCanvas", () => ({
+  StoryCanvas: () => <canvas aria-hidden="true" />,
+}));
 vi.mock("./InfrastructureShell", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./InfrastructureShell")>();
   return { ...actual, useInfrastructureMotion: () => motionPreference.enabled };

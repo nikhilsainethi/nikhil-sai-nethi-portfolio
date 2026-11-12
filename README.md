@@ -5,7 +5,7 @@ A data-centre-inspired portfolio focused on **observability and monitoring**. Sc
 ## Explore
 
 - **Cinematic infrastructure hero:** a full-screen original data-centre aisle rendered in real-time 3D (Three.js) from a Blender-built model with baked lighting. Cabinets power on row by row, LEDs show activity, and signal routes draw through the room. Pointer movement and scrolling walk the camera and reveal telemetry, an investigated cabinet and its recovery; an accessible slider provides direct control. Without WebGL (or with data saver on) the SVG aisle is shown instead. Blur-to-clear text, a typed signal line, and pill actions adapt the supplied motion reference to the portfolio.
-- **Follow the signals:** a bounded sticky desktop scene evolves from physical racks to telemetry, a slow dependency, and recovery. Stage buttons provide direct control; small screens and reduced motion use a compact layout.
+- **Follow the signals:** a bounded sticky desktop scene evolves from physical racks to telemetry, a slow dependency, and recovery. The racks are a 3D diorama of the same Blender cabinets, drawn under the SVG overlay and kept registered to it; signal beams rise into the metric, log and trace cards, and request packets slow down at the slow dependency. It follows the light and dark themes. Stage buttons provide direct control; small screens and reduced motion use a compact layout.
 - **Signal Lab:** investigate a slow model lookup through calculated sample metrics, traces, and correlated logs, adjust the example alert threshold, and recover the synthetic service.
 - **Hardware-model foundation:** an optional disclosure retains entity inspection, validation, revision comparison, and JSON export.
 - **Experience first:** a primary experience CTA, three visible experience highlights, and a featured Moody’s observability case study that opens by default. Nokia diagnostics, developer tooling, and Verisk migration work remain available.
@@ -52,13 +52,16 @@ The existing GitHub Actions workflow publishes `out/` when changes reach `main`.
 | `components/infrastructure/InfrastructurePortfolio.tsx` | Observability hero, featured experience, profile, optional model lab, and legacy pages |
 | `components/infrastructure/CinematicHero.tsx` | Full-screen introduction, pointer/scroll interaction, accessible scene slider, experience highlights |
 | `components/infrastructure/CinematicInfrastructure.tsx` | SVG server aisle: first paint and the fallback when WebGL is unavailable |
-| `components/infrastructure/DatacentreCanvas.tsx` | Lazy-loads the WebGL aisle, feeds it progress/pointer/visibility, falls back safely |
+| `components/infrastructure/SceneCanvas.tsx` | Lazy-loads a WebGL scene, feeds it progress/pointer/visibility/theme, falls back safely (`DatacentreCanvas.tsx` names the two scenes) |
 | `components/infrastructure/three/createDatacentreScene.ts` | Three.js scene: instanced cabinets, LED and signal shaders, floor reflections, bloom, render loop |
+| `components/infrastructure/three/createStoryScene.ts` | Three.js diorama for the story: orthographic camera registered to the SVG, signal beams, request flow |
+| `components/infrastructure/three/shared.ts` | Model loading and the LED / alert shaders used by both scenes |
 | `tools/blender/build_datacentre.py` | Generates and light-bakes the data-centre model in Blender |
 | `lib/cinematic-scene.ts` | Bounded scene timeline and perspective projection |
 | `lib/datacentre-scene.ts` | Camera walk, cabinet slot parsing, and render-resolution rules for the WebGL aisle |
 | `components/infrastructure/ObservabilityStory.tsx` | Scroll-driven infrastructure and telemetry narrative |
 | `components/infrastructure/ObservabilityLab.tsx` | Interactive synthetic monitoring and diagnosis UI |
+| `lib/observability-story.ts` | Story timeline and the SVG-to-3D registration maths |
 | `lib/observability.ts` | Deterministic request fixtures and calculated monitoring metrics |
 | `components/infrastructure/RackScene.tsx` | Retained standalone interactive isometric illustration |
 | `components/infrastructure/ModelLab.tsx` | Interactive model inspection and validation UI |

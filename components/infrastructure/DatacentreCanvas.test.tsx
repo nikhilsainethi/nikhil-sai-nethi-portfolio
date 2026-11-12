@@ -2,15 +2,19 @@ import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import { motionValue } from "framer-motion";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { DatacentreCanvas } from "./DatacentreCanvas";
+import { DatacentreCanvas, StoryCanvas } from "./DatacentreCanvas";
 
 const createDatacentreScene = vi.hoisted(() => vi.fn());
 vi.mock("./three/createDatacentreScene", () => ({ createDatacentreScene }));
+const createStoryScene = vi.hoisted(() => vi.fn());
+vi.mock("./three/createStoryScene", () => ({ createStoryScene }));
 
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
   createDatacentreScene.mockReset();
+  createStoryScene.mockReset();
+  delete document.documentElement.dataset.mode;
 });
 
 function fakeScene() {
@@ -92,5 +96,21 @@ describe("WebGL data-centre canvas", () => {
         "unavailable",
       ),
     );
+  });
+
+  it("loads the story diorama separately and re-themes it when the page theme changes", async () => {
+    allowWebGL();
+    const scene = { ...fakeScene(), setTheme: vi.fn() };
+    createStoryScene.mockResolvedValue(scene);
+    render(<StoryCanvas progress={motionValue(0.04)} motionEnabled />);
+    await vi.waitFor(() =>
+      expect(screen.getByTestId("story-canvas")).toHaveAttribute(
+        "data-state",
+        "ready",
+      ),
+    );
+    expect(createDatacentreScene).not.toHaveBeenCalled();
+    document.documentElement.dataset.mode = "light";
+    await vi.waitFor(() => expect(scene.setTheme).toHaveBeenCalled());
   });
 });
