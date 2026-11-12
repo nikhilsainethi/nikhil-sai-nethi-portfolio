@@ -19,10 +19,8 @@ export function ScrambleHeading({ text, className, style }: ScrambleHeadingProps
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!visible || reduceMotion) {
-      setDisplay(text);
-      return;
-    }
+    // Before the reveal, and with reduced motion, the plain text is rendered below.
+    if (!visible || reduceMotion) return;
 
     let frame = 0;
     const id = setInterval(() => {
@@ -47,7 +45,7 @@ export function ScrambleHeading({ text, className, style }: ScrambleHeadingProps
 
   return (
     <span ref={ref} className={className} style={style} aria-label={text}>
-      {display}
+      {!visible || reduceMotion ? text : display}
     </span>
   );
 }

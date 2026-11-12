@@ -54,8 +54,7 @@ export function OperatorBadge() {
     timers.current = [];
 
     // Reactive transition: the effect deliberately exists to fire on each
-    // section change. eslint-disable-next-line is the honest answer here.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // section change.
     setPhase("scanning");
     timers.current.push(
       window.setTimeout(() => setPhase("locked"), 650),

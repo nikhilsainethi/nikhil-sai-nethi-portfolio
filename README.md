@@ -40,7 +40,7 @@ The production build generates `out/` for GitHub Pages and uses `/nikhil-sai-net
 npm run model
 ```
 
-This runs `tools/blender/build_datacentre.py` headless (geometry, Cycles light bake into vertex colours, glTF export) and compresses the result with meshopt. Set `BLENDER` to the Blender binary if it is not at the default macOS path, `SAMPLES` to change bake quality, and `PREVIEW=/path/to.png` to also save a Cycles render of the scene.
+This runs `tools/blender/build_datacentre.py` headless (geometry, Cycles light bake into vertex colours, glTF export) and compresses the result with meshopt (`@gltf-transform/cli`, fetched by `npx` at a pinned version when the script runs, so it is not part of `npm ci`). Set `BLENDER` to the Blender binary if it is not at the default macOS path, `SAMPLES` to change bake quality, and `PREVIEW=/path/to.png` to also save a Cycles render of the scene.
 
 The existing GitHub Actions workflow publishes `out/` when changes reach `main`. The production URL is [nikhilsainethi.github.io/nikhil-sai-nethi-portfolio](https://nikhilsainethi.github.io/nikhil-sai-nethi-portfolio/).
 
