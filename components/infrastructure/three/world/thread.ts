@@ -12,6 +12,7 @@ import {
   Vector3,
 } from "three";
 import { CORE_CENTRE_Z, PLATFORMS, TUNNEL_END_Z, TUNNEL_START_Z, WORLD } from "@/lib/world-layout";
+import { stopIndex } from "@/lib/world-path";
 import { FOG_FRAGMENT, FOG_VERTEX, OUTPUT_FRAGMENT, type Uniforms } from "../shared";
 import type { Frame, Part, WorldContext } from "./context";
 
@@ -65,25 +66,28 @@ export function buildThread(context: WorldContext): Part {
   const atHeight = (height: number) => first((p) => p.y > height, spine);
   const roofTop = WORLD.roof.top;
   // where the packet is for each stop of the camera route (lib/world-path)
-  const schedule: [number, number][] = [
-    [0, 0],
-    [1, 0],
-    [2, mouth * 0.2],
-    [3, mouth * 0.45],
-    [4, mouth * 0.8],
-    [5, mouth + (spine - mouth) * 0.25],
-    [6, mouth + (spine - mouth) * 0.7],
-    [7, atHeight(4.5)],
-    [8, atHeight(PLATFORMS[0].height + 3)],
-    [10, atHeight(PLATFORMS[1].height + 3)],
-    [12, atHeight(PLATFORMS[2].height + 3)],
-    [14, atHeight(PLATFORMS[3].height + 3)],
-    [15, atHeight(roofTop - 2.5)],
-    [16, atHeight(roofTop + 3)],
-    [18, atHeight(roofTop + 9)],
-    [19, atHeight(roofTop + 16)],
-    [20, atHeight(roofTop + 44)],
-  ];
+  const schedule: [number, number][] = (
+    [
+      ["hero", 0],
+      ["approach", 0],
+      ["threshold", mouth * 0.2],
+      ["tunnel-in", mouth * 0.45],
+      ["tunnel-mid", mouth * 0.8],
+      ["tunnel-out", mouth + (spine - mouth) * 0.25],
+      ["core-reveal", mouth + (spine - mouth) * 0.7],
+      ["core-rise", atHeight(4.5)],
+      ["exhibit-1", atHeight(PLATFORMS[0].height + 3)],
+      ["exhibit-2", atHeight(PLATFORMS[1].height + 3)],
+      ["exhibit-3", atHeight(PLATFORMS[2].height + 3)],
+      ["exhibit-4", atHeight(PLATFORMS[3].height + 3)],
+      ["control-ring", atHeight(roofTop - 2.5)],
+      ["oculus", atHeight(roofTop + 3)],
+      ["above-oculus", atHeight(roofTop + 7)],
+      ["roof-a", atHeight(roofTop + 10)],
+      ["roof-b", atHeight(roofTop + 16)],
+      ["beacon", atHeight(roofTop + 44)],
+    ] as const
+  ).map(([name, fraction]) => [stopIndex(name), fraction]);
   const fractionAt = (u: number) => {
     for (let i = 1; i < schedule.length; i += 1) {
       const [u0, f0] = schedule[i - 1];

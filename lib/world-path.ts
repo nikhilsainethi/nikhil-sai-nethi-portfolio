@@ -51,7 +51,7 @@ function exhibitStop(index: number): Stop {
     fov: 54,
     shift: 0.17,
     fog: 0.02,
-    light: 3.4,
+    light: 3.0,
   };
 }
 
@@ -68,12 +68,25 @@ function helixStop(index: number): Stop {
     fov: 56,
     shift: 0.08,
     fog: 0.02,
-    light: 3.4,
+    light: 3.0,
   };
+}
+
+/** A point `distance` metres from `from`, heading towards core angle `heading`, `rise` metres higher. */
+function ahead(from: Vec3, heading: number, distance: number, rise: number): Vec3 {
+  return [from[0] + Math.sin(heading) * distance, from[1] + rise, from[2] + Math.cos(heading) * distance];
 }
 
 const topTier = core.tierMax * core.tierHeight;
 const roofTop = WORLD.roof.top;
+
+// The top of the route keeps one heading (towards the tunnel side, core angle 0)
+// from the last exhibit to the roof, so the view tilts and pulls back but never
+// swings round: look down the shaft, tilt up through the oculus, rise beside
+// the beam, then dolly back across the roof.
+const TOP_SIDE = degrees(180);
+const TOP_HEADING = degrees(0);
+const crossOver = corePoint(3.5, degrees(258), topTier - 1.3 + EYE);
 
 export const STOPS: Stop[] = [
   // 0: replaced at run time by the hero's own view
@@ -82,9 +95,10 @@ export const STOPS: Stop[] = [
   { name: "threshold", zone: "aisle", position: [0, 1.5, TUNNEL_START_Z + 1.0], target: [0, 1.45, -19], fov: 52, shift: 0, fog: 0.05, light: 2.5 },
   { name: "tunnel-in", zone: "tunnel", position: [0, 1.5, TUNNEL_START_Z - 1.6], target: [0, 1.5, -23], fov: 56, shift: 0, fog: 0.045, light: 3.0 },
   { name: "tunnel-mid", zone: "tunnel", position: [0.22, 1.46, (TUNNEL_START_Z + TUNNEL_END_Z) / 2], target: [-0.1, 1.52, -31], fov: 58, shift: 0, fog: 0.04, light: 3.0 },
-  { name: "tunnel-out", zone: "tunnel", position: [0, 1.5, TUNNEL_END_Z + 1.9], target: [0, 2.4, CORE_CENTRE_Z], fov: 58, shift: 0, fog: 0.03, light: 3.2 },
-  { name: "core-reveal", zone: "core", position: [0.3, 1.72, TUNNEL_END_Z - 3.4], target: at(9.5), fov: 62, shift: 0, fog: 0.018, light: 3.4 },
-  { name: "core-depth", zone: "core", position: [1.95, 2.0, TUNNEL_END_Z - 5.4], target: [3.4, -12, CORE_CENTRE_Z + 1.2], fov: 62, shift: 0, fog: 0.018, light: 3.4 },
+  { name: "tunnel-out", zone: "tunnel", position: [0, 1.5, TUNNEL_END_Z + 1.9], target: [0, 2.6, CORE_CENTRE_Z], fov: 58, shift: 0, fog: 0.03, light: 3.0 },
+  { name: "core-reveal", zone: "core", position: [0.3, 1.72, TUNNEL_END_Z - 3.4], target: at(8.0), fov: 62, shift: 0, fog: 0.018, light: 3.0 },
+  // leave the bridge and start to climb, already turning towards the first exhibit
+  { name: "core-rise", zone: "core", position: corePoint(4.3, degrees(18), 3.4), target: corePoint(5.6, PLATFORMS[0].angle, PLATFORMS[0].height + 1.6), fov: 60, shift: 0.06, fog: 0.018, light: 3.0 },
   exhibitStop(0),
   helixStop(0),
   exhibitStop(1),
@@ -92,16 +106,17 @@ export const STOPS: Stop[] = [
   exhibitStop(2),
   helixStop(2),
   exhibitStop(3),
-  { name: "control-ring", zone: "core", position: corePoint(5.9, degrees(28), topTier + 1.25), target: [-1.2, 2.5, CORE_CENTRE_Z - 2.2], fov: 60, shift: 0, fog: 0.016, light: 3.4 },
-  { name: "oculus", zone: "core", position: corePoint(3.0, degrees(62), topTier - 0.1), target: corePoint(0.5, degrees(62), topTier + 16), fov: 60, shift: 0, fog: 0.012, light: 3.4 },
-  { name: "above-oculus", zone: "roof", position: corePoint(3.05, degrees(66), roofTop + 2.9), target: corePoint(60, degrees(118), roofTop + 9), fov: 58, shift: 0, fog: 0.004, light: 5.0 },
-  { name: "roof-a", zone: "roof", position: corePoint(11.9, degrees(46), roofTop + 1.75), target: at(roofTop + 6.5), fov: 56, shift: 0.14, fog: 0.0035, light: 5.0 },
-  { name: "roof-b", zone: "roof", position: corePoint(12.5, degrees(12), roofTop + 1.6), target: at(roofTop + 11), fov: 56, shift: 0.14, fog: 0.0035, light: 5.0 },
-  { name: "beacon", zone: "roof", position: corePoint(12.9, degrees(-8), roofTop + 1.5), target: at(roofTop + 46), fov: 64, shift: 0, fog: 0.003, light: 5.0 },
+  { name: "cross-over", zone: "core", position: crossOver, target: ahead(crossOver, TOP_HEADING, 7, -1.6), fov: 58, shift: 0.04, fog: 0.018, light: 3.0 },
+  { name: "control-ring", zone: "core", position: corePoint(5.7, TOP_SIDE, topTier + 1.25), target: corePoint(2.4, degrees(52), topTier - 2.3), fov: 62, shift: 0, fog: 0.016, light: 3.0 },
+  { name: "oculus", zone: "core", position: corePoint(3.3, TOP_SIDE, topTier + 0.2), target: corePoint(3.7, TOP_HEADING, roofTop + 1.4), fov: 62, shift: 0, fog: 0.012, light: 3.0 },
+  { name: "above-oculus", zone: "roof", position: corePoint(3.1, TOP_SIDE, roofTop + 2.9), target: corePoint(46, TOP_HEADING, roofTop + 10), fov: 58, shift: 0, fog: 0.0026, light: 5.0 },
+  { name: "roof-a", zone: "roof", position: corePoint(11.3, TOP_SIDE, roofTop + 1.75), target: at(roofTop + 7.5), fov: 56, shift: 0.14, fog: 0.0024, light: 5.0 },
+  { name: "roof-b", zone: "roof", position: corePoint(11.6, degrees(168), roofTop + 1.6), target: at(roofTop + 12), fov: 56, shift: 0.14, fog: 0.0024, light: 5.0 },
+  { name: "beacon", zone: "roof", position: corePoint(11.6, degrees(148), roofTop + 1.5), target: at(roofTop + 46), fov: 64, shift: 0, fog: 0.0022, light: 5.0 },
 ];
 
 export const LAST_STOP = STOPS.length - 1;
-const stopIndex = (name: string) => {
+export const stopIndex = (name: string) => {
   const index = STOPS.findIndex((stop) => stop.name === name);
   if (index < 0) throw new Error(`Unknown stop "${name}"`);
   return index;
@@ -120,7 +135,7 @@ export const ANCHORS: { anchor: string; at: number; u: number }[] = [
   { anchor: "story", at: 0.5, u: stopIndex("tunnel-mid") },
   { anchor: "story", at: 0.92, u: stopIndex("tunnel-out") },
   { anchor: "interlude-core", at: 0.3, u: stopIndex("core-reveal") },
-  { anchor: "interlude-core", at: 0.82, u: stopIndex("core-depth") },
+  { anchor: "interlude-core", at: 0.82, u: stopIndex("core-rise") },
   { anchor: "project-0", at: 0.5, u: stopIndex("exhibit-1") },
   { anchor: "project-1", at: 0.5, u: stopIndex("exhibit-2") },
   { anchor: "project-2", at: 0.5, u: stopIndex("exhibit-3") },

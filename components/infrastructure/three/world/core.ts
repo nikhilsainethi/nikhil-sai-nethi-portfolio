@@ -32,6 +32,7 @@ import {
   sectorHasRacks,
   sectorIsOpen,
 } from "@/lib/world-layout";
+import { stopIndex } from "@/lib/world-path";
 import { FOG_FRAGMENT, FOG_VERTEX, OUTPUT_FRAGMENT, childMeshes, ledMaterial, seeded, type Uniforms } from "../shared";
 import { addBaked, glowMaterial, instanced, setLedAttributes, takeNode, type Frame, type Part, type WorldContext } from "./context";
 
@@ -44,6 +45,8 @@ import { addBaked, glowMaterial, instanced, setLedAttributes, takeNode, type Fra
 const CENTRE = new Vector3(0, 0, CORE_CENTRE_Z);
 const ALERT_RED = new Color(1.0, 0.3, 0.2);
 const RESTORE_GREEN = new Color(0.5, 1.0, 0.55);
+// Once the camera is out on the roof only the top of the spine can be seen through the oculus.
+const DENSE_UNTIL = stopIndex("above-oculus") + 0.7;
 
 function sectorMatrix(tier: number, sector: number) {
   return new Matrix4()
@@ -82,7 +85,7 @@ function flowMaterial(uniforms: Uniforms, fog: Uniforms) {
         vec3 warm = vec3(1.0, 0.74, 0.4);
         vec3 tint = mix(warm, vec3(1.0, 0.3, 0.2), uAlert);
         tint = mix(tint, vec3(0.5, 1.0, 0.55), uRestore);
-        gl_FragColor = vec4(tint * (0.4 + 1.7 * dash), 1.0);
+        gl_FragColor = vec4(tint * (0.35 + 1.25 * dash), 1.0);
         ${FOG_FRAGMENT}
         ${OUTPUT_FRAGMENT}
       }`,
@@ -209,8 +212,8 @@ export function buildCore(context: WorldContext): Part {
     material.metalness = Math.min(material.metalness, 0.4);
     dense.add(instanced(context, mesh, material, railed));
   }
-  const ringLight = glowMaterial(context, new Color(0.74, 0.88, 1.0), 1.25);
-  const edgeLight = glowMaterial(context, new Color(0.32, 1.0, 0.84), 1.35);
+  const ringLight = glowMaterial(context, new Color(0.74, 0.88, 1.0), 0.8);
+  const edgeLight = glowMaterial(context, new Color(0.32, 1.0, 0.84), 1.0);
   for (const mesh of childMeshes(takeNode(context, "CoreGlowSector"))) {
     const isRing = (mesh.material as MeshStandardMaterial).name === "core_ring";
     dense.add(instanced(context, mesh, (isRing ? ringLight : edgeLight).material, everywhere));
@@ -250,7 +253,7 @@ export function buildCore(context: WorldContext): Part {
   const platformGlow = takeNode(context, "CorePlatformGlow");
   for (const mesh of childMeshes(platformGlow)) {
     track(mesh.geometry);
-    mesh.material = glowMaterial(context, (mesh.material as MeshStandardMaterial).emissive, 1.5).material;
+    mesh.material = glowMaterial(context, (mesh.material as MeshStandardMaterial).emissive, 1.1).material;
   }
   platformGlow.removeFromParent();
   group.add(platformGlow);
@@ -351,7 +354,7 @@ export function buildCore(context: WorldContext): Part {
     update({ time, pose, alert, recovery }: Frame) {
       group.visible = pose.u > 1.4;
       if (!group.visible) return;
-      dense.visible = pose.u < 17.7;
+      dense.visible = pose.u < DENSE_UNTIL;
 
       ringLight.material.color.copy(ringLight.base).lerp(ALERT_RED, alert * 0.85).lerp(RESTORE_GREEN, recovery * 0.5);
       edgeLight.material.color.copy(edgeLight.base).lerp(ALERT_RED, alert * 0.9).lerp(RESTORE_GREEN, recovery * 0.6);

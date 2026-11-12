@@ -6,6 +6,7 @@ import {
   STOPS,
   journeyAt,
   nearestStill,
+  stopIndex,
   worldPose,
   zoneLabel,
 } from "./world-path";
@@ -87,7 +88,7 @@ describe("camera route", () => {
 
   it("never flies through the spine or the cabinets while inside the core", () => {
     const top = WORLD.roof.underside;
-    for (let u = 6; u <= 16; u += 0.02) {
+    for (let u = stopIndex("core-reveal"); u <= stopIndex("oculus"); u += 0.02) {
       const { position } = worldPose(u);
       if (position[1] > top - 0.2) continue;
       const radius = radiusFromSpine(position);
@@ -99,7 +100,7 @@ describe("camera route", () => {
   });
 
   it("leaves through the oculus, clear of its rim and railing", () => {
-    for (let u = 16; u <= 18; u += 0.01) {
+    for (let u = stopIndex("oculus"); u <= stopIndex("roof-a"); u += 0.01) {
       const { position } = worldPose(u);
       const radius = radiusFromSpine(position);
       const height = position[1];
@@ -108,10 +109,32 @@ describe("camera route", () => {
     }
   });
 
+  it("turns the view gently: no leg of the route swings it round", () => {
+    const direction = (u: number) => {
+      const { position, target } = worldPose(u);
+      const d = [target[0] - position[0], target[1] - position[1], target[2] - position[2]];
+      const length = Math.hypot(d[0], d[1], d[2]);
+      return d.map((value) => value / length);
+    };
+    for (let leg = 1; leg < LAST_STOP; leg += 1) {
+      let turned = 0;
+      let previous = direction(leg);
+      for (let step = 1; step <= 40; step += 1) {
+        const next = direction(leg + step / 40);
+        const dot = previous[0] * next[0] + previous[1] * next[1] + previous[2] * next[2];
+        turned += (Math.acos(Math.min(1, Math.max(-1, dot))) * 180) / Math.PI;
+        previous = next;
+      }
+      expect(turned, `${STOPS[leg].name} to ${STOPS[leg + 1].name}`).toBeLessThan(80);
+    }
+  });
+
   it("climbs steadily from platform to platform", () => {
-    const heights = [8, 10, 12, 14].map((u) => worldPose(u).position[1]);
+    const heights = ["exhibit-1", "exhibit-2", "exhibit-3", "exhibit-4", "control-ring"].map(
+      (name) => worldPose(stopIndex(name)).position[1],
+    );
     expect(heights).toEqual([...heights].sort((a, b) => a - b));
-    expect(worldPose(20).position[1]).toBeGreaterThan(WORLD.roof.top);
+    expect(worldPose(LAST_STOP).position[1]).toBeGreaterThan(WORLD.roof.top);
   });
 
   it("returns a finite pose for out-of-range or invalid progress", () => {
@@ -125,10 +148,10 @@ describe("camera route", () => {
 
   it("names where the camera is", () => {
     expect(zoneLabel(worldPose(0))).toBe("Cold aisle");
-    expect(zoneLabel(worldPose(4))).toBe("Tunnel");
-    expect(zoneLabel(worldPose(10))).toBe("Core");
-    expect(zoneLabel(worldPose(15))).toBe("Control ring");
-    expect(zoneLabel(worldPose(20))).toBe("Roof");
+    expect(zoneLabel(worldPose(stopIndex("tunnel-mid")))).toBe("Tunnel");
+    expect(zoneLabel(worldPose(stopIndex("exhibit-2")))).toBe("Core");
+    expect(zoneLabel(worldPose(stopIndex("control-ring")))).toBe("Control ring");
+    expect(zoneLabel(worldPose(LAST_STOP))).toBe("Roof");
   });
 });
 
@@ -168,7 +191,7 @@ describe("scroll to journey mapping", () => {
 
   it("picks the nearest still for reduced-motion cuts", () => {
     expect(nearestStill(0.2)).toBe(0);
-    expect(nearestStill(8.1)).toBe(8);
+    expect(nearestStill(stopIndex("exhibit-1") + 0.1)).toBe(stopIndex("exhibit-1"));
     expect(nearestStill(Number.NaN)).toBe(0);
     expect(STILLS).toContain(LAST_STOP);
   });

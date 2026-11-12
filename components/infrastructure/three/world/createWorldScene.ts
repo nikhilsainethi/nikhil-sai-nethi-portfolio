@@ -21,7 +21,7 @@ import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { pixelRatioFor } from "@/lib/datacentre-scene";
-import { LAST_STOP, worldPose, zoneLabel } from "@/lib/world-path";
+import { LAST_STOP, stopIndex, worldPose, zoneLabel } from "@/lib/world-path";
 import { fogUniforms, loadDatacentreModel, type Uniforms } from "../shared";
 import { buildAisle } from "./aisle";
 import type { Frame, Part, WorldContext } from "./context";
@@ -69,15 +69,19 @@ type Options = {
 
 const BOOT_SECONDS = 2.6;
 // fog colour along the route: [stop, colour]
+const AISLE_FOG = new Color(0x04111a);
+const TUNNEL_FOG = new Color(0x03080d);
+const CORE_FOG = new Color(0x070a10);
+const NIGHT_FOG = new Color(0x060b14);
 const FOG_COLOURS: [number, Color][] = [
-  [0, new Color(0x04111a)],
-  [2.2, new Color(0x04111a)],
-  [3.4, new Color(0x03080d)],
-  [5, new Color(0x03080d)],
-  [6.4, new Color(0x070a10)],
-  [16, new Color(0x070a10)],
-  [17.5, new Color(0x05080f)],
-  [LAST_STOP, new Color(0x05080f)],
+  [0, AISLE_FOG],
+  [stopIndex("threshold") + 0.2, AISLE_FOG],
+  [stopIndex("tunnel-in") + 0.4, TUNNEL_FOG],
+  [stopIndex("tunnel-out"), TUNNEL_FOG],
+  [stopIndex("core-reveal") + 0.4, CORE_FOG],
+  [stopIndex("oculus"), CORE_FOG],
+  [stopIndex("above-oculus"), NIGHT_FOG],
+  [LAST_STOP, NIGHT_FOG],
 ];
 
 function fogColourAt(u: number, out: Color) {
@@ -151,7 +155,7 @@ export async function createWorldScene({
   const renderTarget = track(new WebGLRenderTarget(1, 1, { type: HalfFloatType, samples: 4 }));
   const composer = new EffectComposer(renderer, renderTarget);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new Vector2(1, 1), 0.5, 0.6, 0.95);
+  const bloom = new UnrealBloomPass(new Vector2(1, 1), 0.4, 0.55, 0.96);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 

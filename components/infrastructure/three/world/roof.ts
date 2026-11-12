@@ -18,6 +18,7 @@ import {
   Vector3,
 } from "three";
 import { CORE_CENTRE_Z, WORLD } from "@/lib/world-layout";
+import { stopIndex } from "@/lib/world-path";
 import { FOG_FRAGMENT, FOG_VERTEX, OUTPUT_FRAGMENT, childMeshes, seeded, type Uniforms } from "../shared";
 import { addBaked, glowMaterial, takeNode, type Frame, type Part, type WorldContext } from "./context";
 
@@ -25,6 +26,8 @@ import { addBaked, glowMaterial, takeNode, type Frame, type Part, type WorldCont
 
 const EMITTER_Y = WORLD.roof.underside - 0.05;
 const BEAM_HEIGHT = 190;
+const ROOF_FROM = stopIndex("control-ring") - 0.2;
+const SKY_FROM = stopIndex("tunnel-out") + 0.2;
 
 function skyMaterial(uniforms: Uniforms) {
   return new ShaderMaterial({
@@ -70,7 +73,7 @@ function skyMaterial(uniforms: Uniforms) {
         float rays = 0.55 + 0.45 * noise(vec2(sphere.x * 26.0, up * 3.0 - uTime * 0.05));
         vec3 aurora = mix(vec3(0.2, 0.95, 0.7), vec3(0.75, 1.0, 0.45), noise(vec2(sphere.x * 1.4, 4.0)));
         aurora = mix(aurora, vec3(1.0, 0.3, 0.25), uAlert);
-        color += aurora * band * rays * smoothstep(0.38, 0.8, curtain) * 0.34;
+        color += aurora * band * rays * smoothstep(0.38, 0.8, curtain) * 0.26;
         gl_FragColor = vec4(color, 1.0);
         ${OUTPUT_FRAGMENT}
       }`,
@@ -107,7 +110,7 @@ function beamMaterial(uniforms: Uniforms, core: boolean) {
         float fade = pow(max(1.0 - vUv.y, 0.0), 1.6) * smoothstep(0.0, 0.012, vUv.y);
         vec3 tint = mix(vec3(0.72, 1.0, 0.62), vec3(1.0, 0.32, 0.22), uAlert);
         tint = mix(tint, vec3(0.6, 1.0, 0.7), uRestore);
-        gl_FragColor = vec4(tint * body * flow * fade * ${core ? "2.0" : "0.2"}, 1.0);
+        gl_FragColor = vec4(tint * body * flow * fade * ${core ? "1.25" : "0.11"}, 1.0);
         ${OUTPUT_FRAGMENT}
       }`,
   });
@@ -142,17 +145,18 @@ function skylineMaterial(uniforms: Uniforms, fog: Uniforms) {
       varying float vFogDepth;
       float hash(vec2 p) { return fract(sin(dot(p, vec2(41.3, 289.1))) * 43758.5453); }
       void main() {
-        vec3 color = vec3(0.012, 0.018, 0.024);
+        // darker towards the street, a touch of sky light on the upper floors
+        vec3 color = vec3(0.01, 0.016, 0.024) * (0.5 + 0.9 * clamp(vLocal.y, 0.0, 1.0));
         if (abs(vNormal.y) < 0.5) {
           // windows: a grid in metres on each wall, a few of them lit
           float across = (abs(vNormal.x) > 0.5 ? vLocal.z * vScale.z : vLocal.x * vScale.x);
-          vec2 grid = vec2(across / 2.1, vLocal.y * vScale.y / 3.0);
+          vec2 grid = vec2(across / 2.6, vLocal.y * vScale.y / 3.4);
           vec2 cell = floor(grid);
           vec2 inside = fract(grid);
-          float lit = step(0.86, hash(cell + vSeed * 91.0));
+          float lit = step(0.8, hash(cell + vSeed * 91.0));
           float window = step(0.28, inside.x) * step(inside.x, 0.72) * step(0.34, inside.y) * step(inside.y, 0.66);
           vec3 glow = mix(vec3(1.0, 0.74, 0.42), vec3(0.55, 0.85, 1.0), step(0.6, hash(cell.yx + vSeed)));
-          color += glow * lit * window * 0.6;
+          color += glow * lit * window * 0.5;
         }
         gl_FragColor = vec4(color, 1.0);
         ${FOG_FRAGMENT}
@@ -194,7 +198,7 @@ export function buildRoof(context: WorldContext, camera: PerspectiveCamera): Par
   // ---- the beam: the signal leaving the building
   const beams = new Group();
   scene.add(beams);
-  for (const [radius, core] of [[0.7, false], [0.13, true]] as const) {
+  for (const [radius, core] of [[0.5, false], [0.1, true]] as const) {
     const geometry = track(new CylinderGeometry(radius * 1.5, radius, BEAM_HEIGHT, 28, 1, true));
     geometry.translate(0, BEAM_HEIGHT / 2, 0);
     const beam = new Mesh(geometry, track(beamMaterial(shared, core)));
@@ -209,7 +213,7 @@ export function buildRoof(context: WorldContext, camera: PerspectiveCamera): Par
   sky.frustumCulled = false;
   scene.add(sky);
 
-  const TOWERS = 150;
+  const TOWERS = 190;
   const towerGeometry = track(new BoxGeometry(1, 1, 1));
   towerGeometry.translate(0, 0.5, 0);
   const seeds = new Float32Array(TOWERS);
@@ -218,10 +222,10 @@ export function buildRoof(context: WorldContext, camera: PerspectiveCamera): Par
   const scale = new Vector3();
   for (let i = 0; i < TOWERS; i += 1) {
     const angle = seeded(i * 3 + 11) * Math.PI * 2;
-    const distance = 120 + 330 * Math.pow(seeded(i * 3 + 12), 0.8);
-    const height = 30 + 120 * Math.pow(seeded(i * 3 + 13), 2.2) * (distance < 190 ? 0.5 : 1);
-    scale.set(12 + 22 * seeded(i * 5 + 1), height, 12 + 22 * seeded(i * 5 + 2));
-    tower.makeScale(scale.x, scale.y, scale.z).setPosition(Math.sin(angle) * distance, -34, CORE_CENTRE_Z + Math.cos(angle) * distance);
+    const distance = 230 + 520 * Math.pow(seeded(i * 3 + 12), 0.9);
+    const height = 55 + 210 * Math.pow(seeded(i * 3 + 13), 2.4) * (distance < 330 ? 0.55 : 1);
+    scale.set(22 + 44 * seeded(i * 5 + 1), height, 22 + 44 * seeded(i * 5 + 2));
+    tower.makeScale(scale.x, scale.y, scale.z).setPosition(Math.sin(angle) * distance, -70, CORE_CENTRE_Z + Math.cos(angle) * distance);
     towers.setMatrixAt(i, tower);
     seeds[i] = seeded(i + 50);
   }
@@ -232,12 +236,12 @@ export function buildRoof(context: WorldContext, camera: PerspectiveCamera): Par
 
   return {
     update({ time, pose }: Frame) {
-      const outside = pose.u > 15.2;
+      const outside = pose.u > ROOF_FROM;
       group.visible = outside;
       towers.visible = outside;
       // The sky and beam are also seen from inside the core, up through the oculus.
-      sky.visible = pose.u > 5.2;
-      beams.visible = pose.u > 5.2;
+      sky.visible = pose.u > SKY_FROM;
+      beams.visible = pose.u > SKY_FROM;
       if (sky.visible) sky.position.copy(camera.position);
       if (!outside) return;
       mastLight.material.color.copy(mastLight.base).multiplyScalar(Math.sin(time * 2.1) > 0.3 ? 1 : 0.1);

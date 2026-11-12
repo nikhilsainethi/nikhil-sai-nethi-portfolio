@@ -8,7 +8,9 @@
   padding: 30px 32px;
   border: 1px solid #a9c9c624;
   border-radius: 14px;
-  background: #070d10d1;
+  background: #060b0ed6;
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  backdrop-filter: blur(14px) saturate(1.15);
 }
 .heading {
   display: flex;
