@@ -42,6 +42,8 @@ function scrollTo(y: number) {
 }
 
 let removeLandmarks = () => {};
+/** Simulates the browser reporting that an observed element changed size. */
+let layoutChanged = () => {};
 
 beforeEach(() => {
   document.documentElement.dataset.webgl = "yes";
@@ -49,6 +51,9 @@ beforeEach(() => {
   vi.stubGlobal(
     "ResizeObserver",
     class {
+      constructor(callback: () => void) {
+        layoutChanged = callback;
+      }
       observe() {}
       disconnect() {}
     },
@@ -100,6 +105,16 @@ describe("world canvas", () => {
     await vi.waitFor(() => expect(scene.setJourney).toHaveBeenLastCalledWith(LAST_STOP));
     scrollTo(0);
     await vi.waitFor(() => expect(scene.setJourney).toHaveBeenLastCalledWith(0));
+  });
+
+  it("re-reads the landmarks when the page's layout shifts without a scroll", async () => {
+    const { scene } = await mount();
+    // Content above the viewport grows (say a case study opens): the same scroll
+    // position is now further along the route even though nothing scrolled.
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 1e7 });
+    layoutChanged();
+    await vi.waitFor(() => expect(scene.setJourney).toHaveBeenLastCalledWith(LAST_STOP));
+    expect(scene.resize).toHaveBeenCalled();
   });
 
   it("keeps the world to the hero in the light theme and resumes the journey in the dark one", async () => {

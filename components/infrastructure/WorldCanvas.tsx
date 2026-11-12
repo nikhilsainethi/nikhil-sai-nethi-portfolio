@@ -178,6 +178,10 @@ function WorldCanvasLayer({ progress, motionEnabled }: Props) {
         });
         resizeObserver.observe(element);
         if (hero) resizeObserver.observe(hero);
+        // The page's height changes without a scroll when a case study opens or
+        // the story section pins: re-read the landmarks so the camera stays in step.
+        const main = element.closest("main");
+        if (main) resizeObserver.observe(main);
         cleanups.push(() => resizeObserver.disconnect());
 
         if (hero) {
